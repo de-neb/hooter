@@ -1,4 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Source+Code+Pro:wght@900&display=swap");
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 html,
 body {
   width: 100%;
@@ -12,6 +17,10 @@ body {
   font-family: "Source Code Pro", monospace;
 }
 
+.btn-max-width {
+  max-width: 300px;
+}
+
 .greet {
   text-align: start;
   font-weight: 900;
@@ -21,5 +30,84 @@ body {
 .tos {
   font-size: 10px;
   text-align: start;
+}
+
+.bg-container {
+  padding: 0;
+  position: relative;
+  min-height: 45vh;
+  overflow: hidden;
+}
+
+.logo-color {
+  fill: #b4846c;
+}
+
+.logo-sm {
+  width: 48px;
+  height: 48px;
+}
+
+.logo-lg {
+  height: 50%;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  margin: auto;
+}
+
+.logo-lg .logo-color {
+  fill: #fffbfb;
+}
+
+.parallax {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(100%, #7d5a50), color-stop(0%, black)), url(https://abs.twimg.com/sticky/illustrations/lohp_en_850x623.png);
+  background-image: linear-gradient(0deg, #7d5a50 100%, black 0%), url(https://abs.twimg.com/sticky/illustrations/lohp_en_850x623.png);
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: multiply;
+  z-index: -1;
+  position: absolute;
+  -webkit-filter: grayscale(80%) !important;
+          filter: grayscale(80%) !important;
+}
+
+.footer-links {
+  text-decoration: none;
+  font-size: 12px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.footer-links .link-text {
+  display: inline-block;
+  white-space: nowra;
+}
+
+.btn-secondary {
+  background: #b4846c !important;
+  border: none !important;
+  font-weight: bold !important;
+}
+
+.btn-secondary:hover {
+  background: #906a56 !important;
+}
+
+.btn-outline-secondary {
+  border: 1px solid #b4846c !important;
+  color: #b4846c !important;
+  font-weight: bold !important;
+}
+
+.btn-outline-secondary:hover {
+  background: #f0e6e2 !important;
 }
 /*# sourceMappingURL=main.css.map */
