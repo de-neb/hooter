@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Source+Code+Pro:wght@900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;800&display=swap");
 // variables
 $teak: #b4846c;
 $dark-teak: #906a56;
@@ -10,17 +9,28 @@ $cofee: #7d5a50;
 }
 
 html,
-body {
+body,
+#app {
   width: 100%;
   height: 100%;
+  margin: 0;
 }
 
 //login page
+.login-main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-container {
+  max-width: 600px;
+  min-width: 45vw;
+}
+
 .horizontal {
   width: 40%;
   height: 1px;
   background-color: #6c757d49;
-  font-family: "Source Code Pro", monospace;
 }
 .btn-max-width {
   max-width: 300px;
@@ -28,8 +38,13 @@ body {
 
 .greet {
   text-align: start;
-  font-weight: 900;
+  font-weight: 800;
   font-size: 45px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.sub-greet {
+  font-family: "Open Sans", sans-serif;
 }
 
 .tos {
@@ -41,6 +56,7 @@ body {
   padding: 0;
   position: relative;
   min-height: 45vh;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -54,7 +70,7 @@ body {
 }
 
 .logo-lg {
-  height: 50%;
+  height: 70%;
   display: block;
   position: absolute;
   top: 50%;
@@ -71,19 +87,14 @@ body {
   height: 100%;
   top: 0;
   bottom: 0;
-  background-image: linear-gradient(
-      0deg,
-      rgb(125, 90, 80) 100%,
-      rgb(0, 0, 0) 0%
-    ),
-    url(https://abs.twimg.com/sticky/illustrations/lohp_en_850x623.png);
+  background-image: url(https://raw.githubusercontent.com/de-neb/hooter/main/src/assets/boot.png);
   background-position: top;
   background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: multiply;
   z-index: -1;
   position: absolute;
-  filter: grayscale(80%) !important;
+  filter: brightness(80%) !important;
 }
 
 .footer-links {
@@ -112,5 +123,41 @@ body {
   font-weight: bold !important;
   &:hover {
     background: $light-teak !important;
+  }
+}
+
+//media queries
+
+@media (min-width: 516px) {
+  .greet {
+    font-size: 61px;
+  }
+  .sub-greet {
+    font-size: 29px;
+  }
+}
+
+@media (min-width: 1015px) {
+  .logo-lg {
+    height: 40%;
+  }
+  .login-main-container {
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    flex-wrap: wrap;
+  }
+
+  .right-container {
+    order: 2;
+    min-width: 45vw;
+  }
+  .bg-container {
+    flex: 1;
+    order: 1;
+  }
+  .footer {
+    order: 3;
+    min-width: 100%;
   }
 }
