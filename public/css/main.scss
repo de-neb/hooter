@@ -105,6 +105,9 @@ body,
   .link-text {
     display: inline-block;
     white-space: nowra;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -142,22 +145,25 @@ body,
     height: 40%;
   }
   .login-main-container {
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     height: 100%;
-    flex-wrap: wrap;
   }
-
-  .right-container {
-    order: 2;
-    min-width: 45vw;
-  }
-  .bg-container {
+  .top-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
     flex: 1;
-    order: 1;
+    .right-container {
+      order: 2;
+    }
+    .bg-container {
+      order: 1;
+      flex: 1;
+    }
   }
-  .footer {
-    order: 3;
-    min-width: 100%;
+  .bottom-child {
+    width: 100%;
   }
 }
