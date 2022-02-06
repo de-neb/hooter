@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -10,6 +12,10 @@ body,
   width: 100%;
   height: 100%;
   margin: 0;
+}
+
+.open-sans {
+  font-family: "Open Sans", sans-serif;
 }
 
 .home-main-container {
@@ -126,14 +132,24 @@ body,
   background: #906a56 !important;
 }
 
-.btn-outline-secondary {
+.btn-outline-teak {
   border: 1px solid #b4846c !important;
   color: #b4846c !important;
   font-weight: bold !important;
 }
 
-.btn-outline-secondary:hover {
+.btn-outline-teak:hover {
   background: #f0e6e2 !important;
+}
+
+.btn-outline-secondary {
+  border: 1px solid #d2dbe0 !important;
+  font-weight: 600 !important;
+  color: #494949 !important;
+}
+
+.btn-outline-secondary:hover {
+  background: #d2dbe0 !important;
 }
 
 @media (min-width: 516px) {
@@ -189,6 +205,106 @@ body,
             flex: 1;
   }
   .bottom-child {
+    width: 100%;
+  }
+}
+
+.login-backdrop {
+  background: #b0b0b0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.modal-container {
+  background: #ffff;
+  height: 650px;
+  min-height: 400px;
+  max-width: 80vw;
+  width: 600px;
+  border-radius: 16px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding-bottom: 45px;
+}
+
+.modal-top {
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 15px;
+}
+
+.modal-top .logo-sm-login {
+  height: 1.75rem;
+}
+
+.modal-top .circle-x {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  -webkit-transform: translate(-20%, -50%);
+          transform: translate(-20%, -50%);
+}
+
+.modal-top .circle-x:hover {
+  background: #eeeded;
+}
+
+.modal-body-cstm {
+  min-width: 364px;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+  margin: auto;
+  padding: 0px 30px 46px !important;
+}
+
+.modal-body-cstm .sign-up-text {
+  text-align: left;
+  font-size: 14px;
+}
+
+.underline-hover {
+  text-decoration: none;
+}
+
+.underline-hover:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 769px) {
+  .border-none {
+    border-radius: 0;
+  }
+  .modal-top {
+    max-width: 650px;
+    margin: 0 auto;
     width: 100%;
   }
 }
