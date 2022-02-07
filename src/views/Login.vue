@@ -1,5 +1,5 @@
 <template>
-  <div class="login-backdrop">
+  <div class="low-opacity-backdrop">
     <div
       class="
         modal-container modal-fullscreen-md-down

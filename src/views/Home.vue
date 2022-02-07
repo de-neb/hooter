@@ -33,8 +33,9 @@
             <button
               type="button"
               class="btn btn-secondary rounded-pill btn-max-width"
+              @click="showSignupForm"
             >
-              Sign up with email
+              Sign up with username or email
             </button>
             <div class="tos mb-3 btn-max-width">
               <span
@@ -82,6 +83,9 @@
         >
       </footer>
     </div>
+
+    <!-- sign up view -->
+    <router-view v-if="isSignUpVisible" />
   </div>
 </template>
 
@@ -112,11 +116,17 @@ export default {
         "Directory",
         "Settings",
       ],
+      isSignUpVisible: false,
     };
   },
   methods: {
     goToLogin() {
       this.$router.push("/login");
+    },
+    showSignupForm() {
+      this.isSignUpVisible = true;
+      console.log(this.isSignUpVisible);
+      this.$router.push("/signup");
     },
   },
 };
