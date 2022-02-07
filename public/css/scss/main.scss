@@ -15,6 +15,10 @@ body,
   font-family: "Open Sans", sans-serif;
 }
 
+.text-teak {
+  color: $teak !important;
+}
+
 //home page
 @import "home";
 @import "login";

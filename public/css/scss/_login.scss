@@ -66,6 +66,44 @@
   }
 }
 
+.hover-dark {
+  &:hover {
+    background: #212529e1 !important;
+  }
+}
+
+.eye-container {
+  $eye-size: 24px;
+  position: absolute;
+  bottom: 20px;
+  transform: translateY(50%);
+  right: 10px;
+  height: $eye-size;
+  width: $eye-size;
+  &:hover {
+    background: $pattens-blue;
+    border-radius: 50%;
+  }
+  .eye-checkbox {
+    width: $eye-size;
+    height: $eye-size;
+    opacity: 0;
+    margin-left: calc(-1 * (#{$eye-size} / 2));
+    position: absolute;
+    z-index: 3;
+    cursor: pointer;
+  }
+  .eye {
+    position: absolute;
+    z-index: 1;
+    margin-left: calc(-1 * (#{$eye-size} / 2));
+  }
+}
+
+.padding-right {
+  padding-right: 35px !important;
+}
+
 @media (max-width: 769px) {
   .border-none {
     border-radius: 0;

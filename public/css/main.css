@@ -18,6 +18,10 @@ body,
   font-family: "Open Sans", sans-serif;
 }
 
+.text-teak {
+  color: #b4846c !important;
+}
+
 .home-main-container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -296,6 +300,45 @@ body,
 
 .underline-hover:hover {
   text-decoration: underline;
+}
+
+.hover-dark:hover {
+  background: #212529e1 !important;
+}
+
+.eye-container {
+  position: absolute;
+  bottom: 20px;
+  -webkit-transform: translateY(50%);
+          transform: translateY(50%);
+  right: 10px;
+  height: 24px;
+  width: 24px;
+}
+
+.eye-container:hover {
+  background: #d2dbe0;
+  border-radius: 50%;
+}
+
+.eye-container .eye-checkbox {
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  margin-left: calc(-1 * (24px / 2));
+  position: absolute;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.eye-container .eye {
+  position: absolute;
+  z-index: 1;
+  margin-left: calc(-1 * (24px / 2));
+}
+
+.padding-right {
+  padding-right: 35px !important;
 }
 
 @media (max-width: 769px) {
