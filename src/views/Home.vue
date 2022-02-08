@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Logo from "../components/Logo.vue";
 export default {
   components: {
@@ -116,7 +117,6 @@ export default {
         "Directory",
         "Settings",
       ],
-      isSignUpVisible: false,
     };
   },
   methods: {
@@ -124,10 +124,13 @@ export default {
       this.$router.push("/login");
     },
     showSignupForm() {
-      this.isSignUpVisible = true;
+      this.$store.commit("changeSignUpState");
       console.log(this.isSignUpVisible);
       this.$router.push("/signup");
     },
+  },
+  computed: {
+    ...mapState(["isSignUpVisible"]),
   },
 };
 </script>
