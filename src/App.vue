@@ -2,6 +2,21 @@
   <router-view />
 </template>
 
+<script>
+export default {
+  watch: {
+    "$route.path"(routePath) {
+      const app = document.getElementById("app");
+      if (routePath === "/signup") {
+        app.classList.add("position-fixed");
+      } else {
+        app.classList.remove("position-fixed");
+      }
+    },
+  },
+};
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
