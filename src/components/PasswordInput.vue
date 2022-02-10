@@ -4,9 +4,10 @@
       :type="isRevealed ? 'text' : 'password'"
       name="inputPassword"
       class="form-control padding-right"
-      autofocus=""
       placeholder="Password"
       v-model="password"
+      @input="emitPassword"
+      required
     />
     <label for="inputPassword" class="form-label">Password</label>
     <div class="eye-container">
@@ -30,7 +31,13 @@ export default {
   data() {
     return {
       isRevealed: false,
+      password: null,
     };
+  },
+  methods: {
+    emitPassword() {
+      this.$emit("emit-password", this.password);
+    },
   },
 };
 </script>
