@@ -75,6 +75,7 @@
         >Forgot password?</a
       >
     </div>
+
     <div class="d-grid px-4 pt-2 pb-4" v-if="toNextStep">
       <button
         type="button"

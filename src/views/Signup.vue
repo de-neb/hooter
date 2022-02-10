@@ -2,7 +2,7 @@
   <ModalForm :noPadding="true">
     <div
       class="modal-body-cstm m-0 flex-grow-1 d-flex flex-column gap-1"
-      v-if="!isThirdStep"
+      v-if="!isFinalStep && isFirstStep"
     >
       <h5 class="my-3 text-start fw-bold">Create your account</h5>
       <div class="form-floating my-2">
@@ -29,7 +29,7 @@
       </div>
 
       <!--first step  -->
-      <div class="d-flex flex-column" v-if="!isNextStep && !isThirdStep">
+      <div class="d-flex flex-column" v-if="!isNextStep && !isFinalStep">
         <input
           type="checkbox"
           id="user-input"
@@ -58,51 +58,13 @@
         </p>
 
         <!-- birth date  -->
-        <div class="input-group gap-3 flex-nowrap">
-          <!-- date month -->
-          <div class="form-floating my-2 flex-grow-1">
-            <select class="form-select" id="month-selector" v-model="month">
-              <option v-for="(month, i) in monthsArr" :key="month" :value="++i">
-                {{ month }}
-              </option>
-            </select>
-            <label for="month-selector">Month</label>
-          </div>
-
-          <!-- date day -->
-          <div class="form-floating my-2 flex-grow-1">
-            <select class="form-select" id="day-selector" v-model="day">
-              <option
-                v-for="day in daysArr"
-                :key="month + '-' + day"
-                :value="day"
-              >
-                {{ day }}
-              </option>
-            </select>
-            <label for="day-selector">Day</label>
-          </div>
-
-          <!-- date year -->
-          <div class="form-floating my-2 flex-grow-1">
-            <select class="form-select" id="year-selector" v-model="year">
-              <option
-                v-for="year in yearArr"
-                :key="month + '-' + year"
-                :value="year"
-              >
-                {{ year }}
-              </option>
-            </select>
-            <label for="year-selector">Year</label>
-          </div>
-        </div>
+        <DateInput @date-input-filled="handleDateValues" />
       </div>
       <!-- second step confirm details-->
 
       <div
         class="d-flex flex-column flex-grow-1"
-        v-else-if="isNextStep && !isThirdStep"
+        v-else-if="isNextStep && !isFinalStep"
       >
         <div class="form-floating mt-2 mb-5">
           <input
@@ -110,8 +72,8 @@
             name="birthdate"
             class="form-control"
             placeholder="Birth date"
-            autofocus=""
-            :value="`${shortMonth} ${day}, ${year}`"
+            @focus="showFirstStep"
+            :value="`${monthShortName} ${day}, ${year}`"
           /><label for="birtdate">Birth date</label>
         </div>
 
@@ -128,7 +90,7 @@
           <button
             type="button"
             class="btn btn-dark btn-lg rounded-pill m-0 fw-bold"
-            :disabled="!allInputsFilled"
+            :disabled="isSetToDisable"
             @click="showNextStep(false, true)"
           >
             Next
@@ -140,13 +102,13 @@
     <!-- third step password-->
     <div
       class="modal-body-cstm m-0 flex-grow-1 d-flex flex-column gap-2"
-      v-if="isThirdStep"
+      v-if="isFinalStep"
     >
       <h5 class="my-3 text-start fw-bold">You'll need a password</h5>
       <h6 class="text-secondary text-start mb-3">
         Make sure it’s 8 characters or more.
       </h6>
-      <PasswordInput />
+      <PasswordInput @emit-password="(val) => (password = val)" />
     </div>
 
     <!-- next button -->
@@ -154,7 +116,7 @@
       <button
         type="button"
         class="btn btn-dark btn-md rounded-pill my-3"
-        :disabled="!allInputsFilled"
+        :disabled="isSetToDisable"
         @click="showNextStep(true, false)"
       >
         Next
@@ -164,23 +126,25 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import ModalForm from "../components/ModalForm.vue";
 import PasswordInput from "../components/PasswordInput.vue";
+import DateInput from "../components/DateInput.vue";
 export default {
   components: {
     ModalForm,
     PasswordInput,
+    DateInput,
   },
   data() {
     return {
       name: null,
       userIdentifier: null,
-      month: null,
-      day: null,
-      year: null,
       isInputUsername: false,
+      isFirstStep: true,
       isNextStep: false,
-      isThirdStep: false,
+      isFinalStep: false,
+      password: null,
     };
   },
   methods: {
@@ -189,48 +153,34 @@ export default {
     },
     showNextStep(bool1, bool2) {
       this.isNextStep = bool1;
-      this.isThirdStep = bool2;
+      this.isFinalStep = bool2;
     },
-    getMonth(format) {
-      return Array.from(Array(12), (e, i) => {
-        return new Date(25e8 * ++i).toLocaleString("en-US", { month: format });
-      });
+    showFirstStep() {
+      this.isFirstStep = true;
+      this.isNextStep = false;
     },
   },
   computed: {
-    shortMonth() {
-      return this.getMonth("short")[this.month];
-    },
-    monthsArr() {
-      return this.getMonth("long");
-    },
-    daysArr() {
-      const days = new Date(2000, this.month, 0).getDate();
-      return Array.from(Array(days), (e, i) => ++i);
-    },
-    yearArr() {
-      const currentYear = new Date().getFullYear();
-      const yearRange = currentYear - 1902;
-      const resultArr = Array.from(
-        Array(yearRange),
-        (e, i) => 1902 + i
-      ).reverse();
-
-      if (this.month === 2 && this.day === 29) {
-        return resultArr.filter(
-          (year) => (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
-        );
-      }
-      return resultArr;
-    },
     userInput() {
       return this.isInputUsername ? "username" : "email";
     },
-    allInputsFilled() {
-      return (
-        this.name && this.userIdentifier && this.month && this.day && this.year
-      );
+    isSetToDisable() {
+      if (this.isFinalStep && this.password) {
+        return false;
+      } else if (this.isFirstStep && !this.isFinalStep) {
+        if (
+          this.name &&
+          this.userIdentifier &&
+          this.monthShortName &&
+          this.day &&
+          this.year
+        ) {
+          return false;
+        }
+      }
+      return true;
     },
+    ...mapState(["monthShortName", "day", "year"]),
   },
 };
 </script>

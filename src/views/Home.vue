@@ -125,7 +125,6 @@ export default {
     },
     showSignupForm() {
       this.$store.commit("changeSignUpState");
-      console.log(this.isSignUpVisible);
       this.$router.push("/signup");
     },
   },
