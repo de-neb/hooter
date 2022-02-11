@@ -362,6 +362,35 @@ select {
   padding-right: 35px !important;
 }
 
+.username-input {
+  padding-right: 1.7rem !important;
+  padding-left: 1.7rem !important;
+}
+
+.username-input:focus ~ .alt-email {
+  opacity: 1;
+}
+
+.username-input:valid ~ .alt-email {
+  opacity: 1;
+}
+
+.input-icon-style, .alt-email, .check-circle {
+  position: absolute;
+  bottom: 11px;
+  color: #b4846c;
+  font-size: 1.1rem !important;
+}
+
+.alt-email {
+  opacity: 0;
+  left: 10px;
+}
+
+.check-circle {
+  right: 10px;
+}
+
 @media (max-width: 769px) {
   .border-none {
     border-radius: 0;

@@ -4,7 +4,7 @@
       class="modal-body-cstm m-0 flex-grow-1 d-flex flex-column gap-1"
       v-if="!isFinalStep && isFirstStep"
     >
-      <h5 class="my-3 text-start fw-bold">Create your account</h5>
+      <h4 class="my-3 text-start fw-bold">Create your account</h4>
       <div class="form-floating my-2">
         <input
           type="text"
@@ -30,12 +30,7 @@
 
       <!--first step  -->
       <div class="d-flex flex-column" v-if="!isNextStep && !isFinalStep">
-        <input
-          type="checkbox"
-          id="user-input"
-          v-model="isInputUsername"
-          hidden
-        />
+        <input type="checkbox" id="user-input" v-model="isInputEmail" hidden />
         <label
           for="user-input"
           class="
@@ -48,7 +43,7 @@
             w-fit-content
           "
           @click="emptyUserField"
-          >Use {{ isInputUsername ? "email" : "username" }} instead</label
+          >Use {{ !isInputEmail ? "email" : "username" }} instead</label
         >
 
         <h6 class="text-start fw-bold mt-4 mb-0">Date of Birth</h6>
@@ -72,7 +67,7 @@
             name="birthdate"
             class="form-control"
             placeholder="Birth date"
-            @focus="showFirstStep"
+            @focus="showPrevStepToEdit"
             :value="`${monthShortName} ${day}, ${year}`"
           /><label for="birtdate">Birth date</label>
         </div>
@@ -91,7 +86,7 @@
             type="button"
             class="btn btn-dark btn-lg rounded-pill m-0 fw-bold"
             :disabled="isSetToDisable"
-            @click="showNextStep(false, true)"
+            @click="handleSteps"
           >
             Next
           </button>
@@ -104,22 +99,71 @@
       class="modal-body-cstm m-0 flex-grow-1 d-flex flex-column gap-2"
       v-if="isFinalStep"
     >
-      <h5 class="my-3 text-start fw-bold">You'll need a password</h5>
+      <h4 class="my-3 text-start fw-bold">You'll need a password</h4>
       <h6 class="text-secondary text-start mb-3">
         Make sure it’s 8 characters or more.
       </h6>
       <PasswordInput @emit-password="(val) => (password = val)" />
     </div>
 
+    <!-- optional step set username -->
+    <div
+      class="modal-body-cstm m-0 flex-grow-1 d-flex flex-column gap-2"
+      v-else-if="isOptionalStep"
+    >
+      <h4 class="my-3 text-start fw-bold">What should we call you?</h4>
+      <h6 class="text-secondary text-start mb-3">
+        Your @username is unique you can always change it later.
+      </h6>
+      <div class="form-floating my-2">
+        <input
+          type="text"
+          class="form-control username-input"
+          name="set-username"
+          placeholder="Username"
+          v-model="setUsername"
+          minlength="6"
+          required
+        /><label for="set-username">Username</label>
+        <span class="material-icons-outlined alt-email"> alternate_email </span>
+        <span class="material-icons check-circle"> check_circle </span>
+      </div>
+    </div>
+
     <!-- next button -->
-    <div class="d-grid px-4 pt-2 pb-4" v-if="!isNextStep">
+    <div
+      class="d-grid px-4 pt-2 pb-4"
+      v-if="(isFirstStep || isFinalStep || isOptionalStep) && !isNextStep"
+    >
+      <!-- proceed next step -->
       <button
         type="button"
         class="btn btn-dark btn-md rounded-pill my-3"
+        v-if="isFirstStep && !isFinalStep"
         :disabled="isSetToDisable"
-        @click="showNextStep(true, false)"
+        @click="handleSteps"
       >
         Next
+      </button>
+      <!-- set up username  -->
+      <button
+        type="button"
+        class="btn btn-dark btn-md rounded-pill my-3"
+        v-else-if="isFinalStep && isInputEmail"
+        :disabled="!password"
+        @click="handleOptionalStep"
+      >
+        Next
+      </button>
+      <!-- finish button -->
+      <button
+        type="button"
+        class="btn btn-dark btn-md rounded-pill my-3"
+        v-else-if="isOptionalStep || !isInputEmail"
+        :disabled="!password"
+        @click="finishSignUp"
+      >
+        Finish
       </button>
     </div>
   </ModalForm>
@@ -140,11 +184,13 @@ export default {
     return {
       name: null,
       userIdentifier: null,
-      isInputUsername: false,
+      isInputEmail: false,
       isFirstStep: true,
       isNextStep: false,
       isFinalStep: false,
+      isOptionalStep: false,
       password: null,
+      setUsername: null,
     };
   },
   methods: {
@@ -155,14 +201,37 @@ export default {
       this.isNextStep = bool1;
       this.isFinalStep = bool2;
     },
-    showFirstStep() {
+    showPrevStepToEdit() {
       this.isFirstStep = true;
       this.isNextStep = false;
+    },
+    handleOptionalStep() {
+      this.isOptionalStep = true;
+      this.isFirstStep = false;
+      this.isFinalStep = false;
+    },
+    handleSteps() {
+      if (this.isFirstStep && !this.isNextStep) {
+        this.isNextStep = true;
+      } else if (this.isNextStep && this.isFirstStep) {
+        this.isFinalStep = true;
+        this.isFirstStep = false;
+        this.isNextStep = false;
+      } else if (this.isFinalStep) {
+        this.isFinalStep = false;
+        this.isNextStep = false;
+        this.isFirstStep = false;
+      } else if (this.isInputEmail && this.isFinalStep) {
+        this.isOptionalStep = true;
+      }
+    },
+    finishSignUp() {
+      this.$router.push("/");
     },
   },
   computed: {
     userInput() {
-      return this.isInputUsername ? "username" : "email";
+      return this.isInputEmail ? "email" : "username";
     },
     isSetToDisable() {
       if (this.isFinalStep && this.password) {
@@ -177,6 +246,8 @@ export default {
         ) {
           return false;
         }
+      } else if (this.isOptionalStep && this.setUsername) {
+        return false;
       }
       return true;
     },

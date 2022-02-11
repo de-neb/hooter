@@ -19,13 +19,13 @@
       v-else-if="!isLoading"
     >
       <div class="modal-top">
-        <div class="flex-fill position-relative">
+        <div class="flex-fill position-relative h-100">
           <button type="button" class="btn circle-x" @click="closeLogin">
             <span class="material-icons align-middle"> close </span>
           </button>
         </div>
         <Logo class="logo-sm-login" />
-        <div class="flex-fill"></div>
+        <div class="flex-fill h-100"></div>
       </div>
       <!-- content here -->
       <slot></slot>
