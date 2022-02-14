@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -40,6 +41,105 @@ select {
 
 .btn-lg {
   height: 50px !important;
+}
+
+.icons-bg-circle {
+  font-size: 1.8rem !important;
+}
+
+.icons-bg-circle:hover::after {
+  content: "";
+  background: #eeeded;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 0;
+  left: 50%;
+  margin: -20px 0 0 -20px;
+  z-index: -1;
+}
+
+.icons-bg-circle:hover::after:hover {
+  background: #eeeded;
+}
+
+.active-icon::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #b4846c;
+}
+
+.sparkle {
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  line-height: 2rem !important;
+  width: 32px;
+  height: 32px;
+  top: 50%;
+  left: 60%;
+  margin-left: calc(-1 *32px/ 2);
+  margin-top: calc(-1 *32px/ 2);
+  -webkit-transform: scale(-1, 1);
+          transform: scale(-1, 1);
+}
+
+.sparkle:hover {
+  background: #eeeded;
+}
+
+.profile-icon {
+  height: calc(30px);
+  width: calc(30px);
+  border-radius: 50%;
+  background-color: #b4846c;
+  color: #fff;
+  position: relative;
+}
+
+.uname-first-letter {
+  margin: 0px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
+.home-header {
+  padding: 0 !important;
+  background-color: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+}
+
+.home-footer {
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+}
+
+.filler {
+  height: 50px;
+  width: 100%;
 }
 
 .home-main-container {
@@ -285,12 +385,12 @@ select {
 }
 
 .modal-top .circle-x {
-  width: 34px;
-  height: 34px;
   border-radius: 50%;
   padding: 0;
   margin: 0;
   position: absolute;
+  width: 34px;
+  height: 34px;
   top: 50%;
   left: 0;
   -webkit-transform: translate(-20%, -50%);

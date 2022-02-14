@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 .low-opacity-backdrop {
   background: rgba(0, 0, 0, 0.4);
@@ -33,18 +34,12 @@
     height: 1.75rem;
   }
   .circle-x {
+    @include circle-hover;
     width: 34px;
     height: 34px;
-    border-radius: 50%;
-    padding: 0;
-    margin: 0;
-    position: absolute;
     top: 50%;
     left: 0;
     transform: translate(-20%, -50%);
-    &:hover {
-      background: #eeeded;
-    }
   }
 }
 

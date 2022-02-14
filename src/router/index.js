@@ -18,6 +18,28 @@ const routes = [
     name: "Login",
     component: () => import("../views/Login.vue"),
   },
+  {
+    path: "/home",
+    name: "Home",
+    component: () => import("../views/Home.vue"),
+    children: [
+      {
+        path: "/messages",
+        name: "Messages",
+        component: () => import("../views/Messages.vue"),
+      },
+      {
+        path: "/notifications",
+        name: "Notifications",
+        component: () => import("../views/Notifications.vue"),
+      },
+      {
+        path: "/explore",
+        name: "Explore",
+        component: () => import("../views/Explore.vue"),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
