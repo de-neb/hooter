@@ -1,20 +1,49 @@
 <template>
   <div class="container p-0">
     <header class="home-header">
-      <nav class="navbar navbar-expand-lg navbar-light p-0">
-        <div class="container-sm justify-content-evenly h-100">
-          <div class="row w-100 align-items-center">
-            <div class="col text-start p-0 my-2">
+      <nav
+        class="
+          navbar navbar-expand-lg navbar-light
+          p-0
+          align-items-stretch
+          h-100
+        "
+      >
+        <div class="container-sm justify-content-evenly">
+          <div class="row w-100 align-items-center h-100 gap-3">
+            <div class="col text-start p-0">
               <div class="profile-icon">
-                <h6 class="uname-first-letter">P</h6>
+                <a
+                  data-bs-toggle="offcanvas"
+                  href="#profile-offcanvas"
+                  role="button"
+                  aria-controls="offcanvasWithBothOptions"
+                >
+                  <h6 class="uname-first-letter text-light">P</h6>
+                </a>
               </div>
             </div>
-            <div class="col-9 p-0 my-2">
-              <h6 class="my-2 text-start fw-bold">Home</h6>
+            <div class="col-9 p-0">
+              <h6
+                class="my-2 text-start fw-bold"
+                v-if="$route.path != '/explore'"
+              >
+                {{ $route.name }}
+              </h6>
+              <div class="search-box text-secondary" v-else>
+                <span class="material-icons-outlined search-icon">
+                  search
+                </span>
+                <input
+                  type="text"
+                  class="search-input"
+                  placeholder="Search Hooter"
+                />
+              </div>
             </div>
-            <div class="col p-0 position-relative h-100 my-2">
-              <span class="material-icons-outlined sparkle">
-                auto_awesome
+            <div class="col p-0 position-relative h-100">
+              <span class="material-icons-outlined sparkle fs-4">
+                {{ $route.path == "/explore" ? "settings" : "auto_awesome" }}
               </span>
             </div>
           </div>
@@ -24,56 +53,75 @@
     <main class="flex-grow-1">
       <div class="filler"></div>
       <h1>some content...</h1>
-      <img src="../assets/bg-hooter.png" alt="" class="img-fluid" />
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex ducimus
-        nihil atque. Dolor maxime laudantium provident, voluptatum placeat ab
-        excepturi perspiciatis, obcaecati facilis incidunt minima mollitia!
-        Exercitationem ullam magni laborum ut nostrum obcaecati nesciunt!
-        Placeat, beatae error? Temporibus labore iure similique nihil odio
-        facilis maxime perspiciatis, eum quia sunt voluptatibus nostrum pariatur
-        optio necessitatibus! Perferendis recusandae adipisci at, rerum
-        molestias autem earum! Numquam quos optio at id quis sunt praesentium
-        nobis cumque velit corporis error magnam corrupti, hic sapiente
-        assumenda quas obcaecati iure soluta commodi eos neque sit quasi
-        nostrum! Nostrum reprehenderit assumenda necessitatibus eius et,
-        laboriosam pariatur dicta. Sed voluptas aut, debitis quaerat impedit
-        voluptatum porro. Quam iusto omnis exercitationem, architecto expedita
-        mollitia, quaerat dicta, aspernatur quo similique fugiat! Nihil
-        similique ea voluptate iste. Blanditiis atque illum nam! Molestiae,
-        eligendi veniam! Assumenda officia repellendus fugiat ipsa eos
-        consequuntur vitae consectetur eligendi quae maiores blanditiis nulla,
-        voluptates molestiae officiis perferendis molestias, sapiente nihil
-        labore quaerat dolores temporibus. Saepe magnam quisquam placeat cumque
-        laudantium. Rerum et cumque delectus neque a? Doloribus, dicta? Porro,
-        suscipit eaque? Repellendus quidem laboriosam qui maiores, aliquam
-        aliquid iusto vitae impedit rem soluta repellat recusandae aperiam
-        facilis molestiae sit pariatur id asperiores rerum? Ea commodi
-        recusandae voluptates est aspernatur ducimus saepe. Distinctio provident
-        sed sapiente fugit, molestias dolore quidem facilis. Odio iste similique
-        at facere? Cum obcaecati, enim magni, non saepe iure, ex facere ducimus
-        dicta unde recusandae labore et magnam aperiam nisi aspernatur amet!
-        Earum dignissimos fugit labore vitae nostrum cum eum eligendi quidem,
-        vero sed. Repellat, labore? Aut in, alias natus architecto libero minus
-        excepturi incidunt fugit odio repudiandae dolorem eum nostrum, eveniet
-        modi. Maiores, explicabo qui soluta consectetur recusandae minima
-        officia quis. Perferendis hic, quia nam, nostrum architecto dignissimos
-        recusandae est, corporis et nesciunt itaque delectus? Suscipit
-        laudantium, nobis cum consectetur labore libero tempore.
-      </p>
+      <slot name="main"></slot>
       <div class="filler"></div>
     </main>
+    <aside
+      class="offcanvas offcanvas-start w-75"
+      id="profile-offcanvas"
+      data-bs-scroll="true"
+      tabindex="-1"
+      aria-labelledby="offcanvasWithBothOptionsLabel"
+    >
+      <div class="offcanvas-header">
+        <h6 class="offcanvas-title fw-bold">Account info</h6>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body pb-5 px-0 pt-0">
+        <div class="container p-2">
+          <div class="profile-icon">
+            <h5 class="uname-first-letter text-light">P</h5>
+          </div>
+        </div>
+        <div class="container p-15px text-start">
+          <h6 class="m-0 fw-bold">User Name</h6>
+          <h6 class="m-0 text-secondary">@username</h6>
+        </div>
+        <div class="container p-15px text-start">
+          <span>{1} following</span>
+          <span>{0} followers</span>
+        </div>
+        <div
+          class="d-flex flex-nowrap p-15px text-start gap-2"
+          v-for="(link, i) in profileNavLinks"
+          :key="`${link}-${i}`"
+        >
+          <span class="material-icons-outlined sm-icon">{{ link.icon }}</span>
+          <h6 class="text-start m-0 flex-grow-1">{{ link.name }}</h6>
+        </div>
+        <div class="container p-15px text-start">
+          <h6 class="m-0">Log out</h6>
+        </div>
+      </div>
+    </aside>
+    <aside class="compose">
+      <router-link to="/compose" class="position-relative">
+        <img src="../assets/feather.svg" />
+      </router-link>
+    </aside>
+
     <footer class="home-footer">
-      <nav class="container p-0">
+      <nav class="container pt-1 px-0">
         <ul class="row flex-nowrap list-unstyled m-0">
           <li
-            class="col h-100 my-2"
+            class="col h-100"
             v-for="(page, i) in footerPages"
             :key="page.name + '-' + i"
           >
             <router-link
               :to="page.link"
-              class="text-dark position-relative h-100"
+              class="
+                text-dark
+                position-relative
+                h-100
+                center-item
+                text-decoration-none
+              "
             >
               <span class="icons-bg-circle" :class="iconClass(page.link)">
                 {{ page.name }}
@@ -106,6 +154,52 @@ export default {
         {
           name: "email",
           link: "/messages",
+        },
+      ],
+      profileNavLinks: [
+        {
+          icon: "person",
+          name: "Profile",
+        },
+        {
+          icon: "article",
+          name: "Lists",
+        },
+        {
+          icon: "topic",
+          name: "Topics",
+        },
+        {
+          icon: "turned_in_not",
+          name: "Bookmarks",
+        },
+        {
+          icon: "bolt",
+          name: "Moments",
+        },
+        {
+          icon: "wysiwyg",
+          name: "Newsletters",
+        },
+        {
+          icon: "rocket_launch",
+          name: "Hooter for Professionals",
+        },
+        {
+          icon: "north_east",
+          name: "Hooter Ads",
+        },
+        {
+          icon: "analytics",
+          name: "Analytics",
+        },
+        {
+          icon: "settings",
+          name: "Settings and Privacy",
+        },
+        {
+          icon: "help_outline",
+          name: "Help Center",
         },
       ],
       isActive: false,

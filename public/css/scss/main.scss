@@ -39,7 +39,48 @@ select {
   height: 50px !important;
 }
 
-//home page
+.btn-secondary {
+  background: $teak !important;
+  border: none !important;
+  font-weight: bold !important;
+  &:hover {
+    background: $dark-teak !important;
+  }
+}
+
+.btn-outline-teak {
+  border: 1px solid $teak !important;
+  color: $teak !important;
+  font-weight: bold !important;
+  &:hover {
+    background: $light-teak !important;
+  }
+}
+
+.btn-outline-secondary {
+  border: 1px solid $pattens-blue !important;
+  font-weight: 600 !important;
+  color: $black !important;
+  &:hover {
+    background: $pattens-blue !important;
+  }
+}
+
+.material-icons,
+.material-icons-outlined {
+  line-height: inherit !important;
+}
+
+.p-15px {
+  padding: 15px !important;
+}
+
+.center-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @import "home";
 @import "main-content";
 @import "login-signup";

@@ -9,7 +9,7 @@
     @include circle-hover;
     width: 40px;
     height: 40px;
-    top: 0;
+    top: 50%;
     left: 50%;
     margin: -20px 0 0 -20px;
     z-index: -1;
@@ -82,4 +82,56 @@
 .filler {
   height: 50px;
   width: 100%;
+}
+
+.compose {
+  position: fixed;
+  width: 53px;
+  height: 53px;
+  bottom: 69px;
+  right: 19px;
+  background-color: $teak;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-box {
+  height: 24px;
+  background-color: $porcelain;
+  border-radius: 100px;
+  display: flex;
+  flex-wrap: no-wrap;
+
+  .search-icon {
+    line-height: 1 !important   ;
+    width: 41px;
+    font-size: 18px;
+    text-align: right;
+    align-self: center;
+  }
+  .search-input {
+    height: 100%;
+    padding: 4px 11px;
+    margin: 0;
+    background: none;
+    appearance: none;
+    outline: none;
+    border: none;
+    font-size: 13px;
+  }
+  &:focus-within {
+    background: #ffff;
+    border: 1px solid $teak;
+  }
+}
+
+.sm-icon {
+  line-height: 1 !important;
+  font-size: 17px !important;
+}
+
+.compose-input-text {
+  height: 114px;
 }

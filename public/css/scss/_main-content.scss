@@ -96,33 +96,6 @@
   }
 }
 
-.btn-secondary {
-  background: $teak !important;
-  border: none !important;
-  font-weight: bold !important;
-  &:hover {
-    background: $dark-teak !important;
-  }
-}
-
-.btn-outline-teak {
-  border: 1px solid $teak !important;
-  color: $teak !important;
-  font-weight: bold !important;
-  &:hover {
-    background: $light-teak !important;
-  }
-}
-
-.btn-outline-secondary {
-  border: 1px solid $pattens-blue !important;
-  font-weight: 600 !important;
-  color: $black !important;
-  &:hover {
-    background: $pattens-blue !important;
-  }
-}
-
 //home media queries
 
 @media (min-width: 516px) {

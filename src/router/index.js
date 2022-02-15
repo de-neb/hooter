@@ -40,6 +40,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/compose",
+    name: "Compose",
+    component: () => import("../views/ComposeHoot.vue"),
+  },
 ];
 
 const router = createRouter({
