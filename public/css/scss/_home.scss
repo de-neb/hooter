@@ -40,13 +40,16 @@
   transform: scale(-1, 1);
 }
 
-.profile-icon {
-  height: calc(#{$dp-icon-size - 2});
-  width: calc(#{$dp-icon-size - 2});
-  border-radius: 50%;
-  background-color: $teak;
-  color: #fff;
-  position: relative;
+.profile-icon-sm {
+  height: $dp-icon-sm;
+  width: $dp-icon-sm;
+  @include profile-icon;
+}
+
+.profile-icon-lg {
+  height: $dp-icon-lg;
+  width: $dp-icon-lg;
+  @include profile-icon;
 }
 
 .uname-first-letter {
@@ -133,5 +136,34 @@
 }
 
 .compose-input-text {
-  height: 114px;
+  min-height: 114px;
+  max-height: 252px;
+  resize: none;
+  overflow: scroll;
+  border: none;
+  padding: 11px 0 11px 0;
+  outline: none;
+  &::placeholder {
+    font-size: 1.3rem;
+  }
+}
+
+.btn-sm {
+  width: 22px;
+  height: 22px;
+  &:hover {
+    background-color: $light-teak;
+  }
+}
+
+.circle-indicator {
+  width: 20px;
+  height: 20px;
+  transform: rotate(270deg);
+}
+
+.progress {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
 }

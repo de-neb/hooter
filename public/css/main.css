@@ -147,9 +147,18 @@ select {
   background: #eeeded;
 }
 
-.profile-icon {
-  height: calc(30px);
-  width: calc(30px);
+.profile-icon-sm {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-color: #b4846c;
+  color: #fff;
+  position: relative;
+}
+
+.profile-icon-lg {
+  height: 44px;
+  width: 44px;
   border-radius: 50%;
   background-color: #b4846c;
   color: #fff;
@@ -257,7 +266,51 @@ select {
 }
 
 .compose-input-text {
-  height: 114px;
+  min-height: 114px;
+  max-height: 252px;
+  resize: none;
+  overflow: scroll;
+  border: none;
+  padding: 11px 0 11px 0;
+  outline: none;
+}
+
+.compose-input-text::-webkit-input-placeholder {
+  font-size: 1.3rem;
+}
+
+.compose-input-text:-ms-input-placeholder {
+  font-size: 1.3rem;
+}
+
+.compose-input-text::-ms-input-placeholder {
+  font-size: 1.3rem;
+}
+
+.compose-input-text::placeholder {
+  font-size: 1.3rem;
+}
+
+.btn-sm {
+  width: 22px;
+  height: 22px;
+}
+
+.btn-sm:hover {
+  background-color: #f0e6e2;
+}
+
+.circle-indicator {
+  width: 20px;
+  height: 20px;
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
+}
+
+.progress {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 .home-main-container {

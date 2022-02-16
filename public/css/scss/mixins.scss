@@ -7,3 +7,10 @@
     background: #eeeded;
   }
 }
+
+@mixin profile-icon {
+  border-radius: 50%;
+  background-color: $teak;
+  color: #fff;
+  position: relative;
+}

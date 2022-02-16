@@ -12,7 +12,7 @@
         <div class="container-sm justify-content-evenly">
           <div class="row w-100 align-items-center h-100 gap-3">
             <div class="col text-start p-0">
-              <div class="profile-icon">
+              <div class="profile-icon-sm">
                 <a
                   data-bs-toggle="offcanvas"
                   href="#profile-offcanvas"
