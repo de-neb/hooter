@@ -90,8 +90,16 @@
                   </span>
                 </button>
               </div>
-              <div class="col-3 d-flex justify-content-end align-items-center">
-                <div class="circle-indicator">
+              <div
+                class="col-3 d-flex justify-content-between align-items-center"
+              >
+                <div
+                  class="circle-indicator"
+                  :class="{ 'circle-lg': characterLeft <= 20 }"
+                >
+                  <span class="limit-counter" v-if="characterLeft <= 20">{{
+                    characterLeft
+                  }}</span>
                   <svg
                     height="100%"
                     viewBox="0 0 20 20"
@@ -104,17 +112,15 @@
                       fill="none"
                       stroke-width="2"
                       r="9"
-                      stroke="#EFF3F4"
+                      :stroke="characterLeft < 0 ? red : '#EFF3F4'"
                     ></circle>
                     <circle
                       cx="50%"
                       cy="50%"
                       r="9"
                       class="progress"
-                      :style="`stroke-dashoffset: ${
-                        56.5 - (hootText.length * 56.5) / 280
-                      }; stroke-dasharray: 56.5`"
-                      :stroke="'#b4846c'"
+                      :style="`stroke-dashoffset: ${charaCounter}; stroke-dasharray: 56.5`"
+                      :stroke="progressColor"
                     ></circle>
                   </svg>
                 </div>
@@ -141,6 +147,9 @@ export default {
     return {
       icons: ["insert_photo", "gif_box", "poll", "schedule", "location_on"],
       hootText: "",
+      teak: "#b4846c",
+      yellow: "#FFED8F",
+      red: "#FF4D4D",
     };
   },
   methods: {
@@ -150,6 +159,24 @@ export default {
         this.$refs.textarea.style.height =
           this.$refs.textarea.scrollHeight + "px";
       });
+    },
+  },
+  computed: {
+    progressColor() {
+      const len = 280 - this.hootText.length;
+      if (len > 20) {
+        return this.teak;
+      } else if (len <= 20 && len > 0) {
+        return this.yellow;
+      } else {
+        return this.red;
+      }
+    },
+    characterLeft() {
+      return 280 - this.hootText.length;
+    },
+    charaCounter() {
+      return Math.abs(56.5 - (this.hootText.length * 56.5) / 280);
     },
   },
 };
@@ -167,5 +194,11 @@ export default {
 .divider-sm {
   width: 1px;
   height: 100%;
+}
+
+.circle-lg {
+  transform: scale(1.6) rotate(270deg);
+  transform-origin: center;
+  transition: transform 0.3s;
 }
 </style>

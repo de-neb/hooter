@@ -303,14 +303,33 @@ select {
 .circle-indicator {
   width: 20px;
   height: 20px;
-  -webkit-transform: rotate(270deg);
-          transform: rotate(270deg);
+  -webkit-transform: scale(1) rotate(270deg);
+          transform: scale(1) rotate(270deg);
+  position: relative;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
 }
 
 .progress {
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
+}
+
+.limit-counter {
+  font-size: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%) !important;
+          transform: translate(-50%, -50%) !important;
+  -webkit-writing-mode: vertical-rl;
+      -ms-writing-mode: tb-rl;
+          writing-mode: vertical-rl;
 }
 
 .home-main-container {
