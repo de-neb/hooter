@@ -7,7 +7,7 @@
     </div>
     <div class="col-10 p-0">
       <div class="row-cols-1 d-flex flex-nowrap">
-        <div class="col-11">
+        <div class="col-11 d-flex">
           <textarea
             type="text"
             class="compose-input-text w-100"
@@ -15,7 +15,7 @@
             @input="autoHeight"
             @click="handleHeightAdjust"
             ref="textarea"
-            max-length="280"
+            max-length="textAreaCharLimit"
             v-model="hootText"
           />
         </div>
@@ -69,13 +69,13 @@
         >
           <div
             class="circle-indicator"
-            :class="{ 'circle-lg': characterLeft <= 20 }"
+            :class="{ 'circle-lg': charLeft <= 20 }"
           >
             <span
               class="limit-counter"
-              :class="characterLeft <= 0 ? 'text-danger' : 'text-dark'"
-              v-if="characterLeft <= 20"
-              >{{ characterLeft }}</span
+              :class="charLeft <= 0 ? 'text-danger' : 'text-dark'"
+              v-if="charLeft <= 20"
+              >{{ charLeft }}</span
             >
             <svg
               height="100%"
@@ -89,14 +89,14 @@
                 fill="none"
                 stroke-width="2"
                 r="9"
-                :stroke="characterLeft < 0 ? red : '#EFF3F4'"
+                :stroke="charLeft < 0 ? red : '#EFF3F4'"
               ></circle>
               <circle
                 cx="50%"
                 cy="50%"
                 r="9"
                 class="progress"
-                :style="`stroke-dashoffset: ${charaCounter}; stroke-dasharray: 56.5`"
+                :style="`stroke-dashoffset: ${charCounter}; stroke-dasharray: 56.5`"
                 :stroke="progressColor"
               ></circle>
             </svg>
@@ -126,6 +126,8 @@ export default {
       yellow: "#FFED8F",
       red: "#FF4D4D",
       minimizedHeight: 114,
+      textAreaHeight: 114,
+      textAreaCharLimit: 280,
     };
   },
   methods: {
@@ -134,6 +136,7 @@ export default {
         this.$refs.textarea.style.height = "114px";
         this.$refs.textarea.style.height =
           this.$refs.textarea.scrollHeight + "px";
+        this.textAreaHeight = this.$refs.textarea.scrollHeight;
       });
       this.handleHeightAdjust();
     },
@@ -143,44 +146,64 @@ export default {
         minimizedHeight: this.minimizedHeight,
       });
     },
+    heightTrack(text) {
+      const len = this.charLengths.length;
+      for (let i = 0; i < len; i++) {
+        if (text.length < this.charLengths[i]) {
+          this.minimizedHeight = this.textAreaSizes[i];
+          return;
+        }
+      }
+    },
     handleHeightAdjust() {
-      this.$emit("textarea-focused", this.minimizedHeight);
+      if (this.hootText) {
+        this.minimizedHeight = 45;
+      }
+
+      this.$emit("textarea-focused", {
+        minimizedH: this.minimizedHeight,
+        textAreaH: this.textAreaHeight,
+      });
     },
   },
   computed: {
     progressColor() {
-      const len = 280 - this.hootText.length;
-      if (len > 20) {
+      const len = this.textAreaCharLimit - this.hootText.length;
+      const cutoff = 20;
+      if (len > cutoff) {
         return this.teak;
-      } else if (len <= 20 && len > 0) {
+      } else if (len <= cutoff && len > 0) {
         return this.yellow;
       } else {
         return this.red;
       }
     },
-    characterLeft() {
-      return 280 - this.hootText.length;
+    charLeft() {
+      return this.textAreaCharLimit - this.hootText.length;
     },
-    charaCounter() {
-      return Math.abs(56.5 - (this.hootText.length * 56.5) / 280);
+    charCounter() {
+      const circumference = 56.5;
+      return Math.abs(
+        circumference -
+          (this.hootText.length * circumference) / this.textAreaCharLimit
+      );
+    },
+    charLengths() {
+      return Array.from(Array(this.textAreaCharLimit), (e, i) => ++i).filter(
+        (e) => e % 29 == 0
+      );
+    },
+    textAreaSizes() {
+      const result = [];
+      for (let i = 45; i < 252; i = i + 25) {
+        result.push(i);
+      }
+      return result;
     },
   },
   watch: {
     hootText(newVal) {
-      const charLengthArr = Array.from(Array(280), (e, i) => ++i).filter(
-        (e) => e % 29 == 0
-      );
-      const textAreaSizesArr = [];
-      for (let i = 45; i < 252; i = i + 23) {
-        textAreaSizesArr.push(i);
-      }
-
-      for (let i = 0; i < charLengthArr.length; i++) {
-        if (newVal.length < charLengthArr[i]) {
-          this.minimizedHeight = textAreaSizesArr[i];
-          return;
-        }
-      }
+      this.heightTrack(newVal);
     },
   },
 };

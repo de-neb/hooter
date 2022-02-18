@@ -37,16 +37,17 @@
     <main class="pb-2">
       <article
         class="container px-3 transition-minimize overflow-hidden"
-        v-for="(hoot, index) in hootArr"
+        v-for="(hoot, index) in hoots"
         :key="index + 'a'"
         :style="`height: ${
-          hoot.isMinimized ? hoot.minimizedHeight : hoot.minimumHeight
+          hoot.isMinimized ? hoot.minimizedHeight : hoot.height
         }px`"
       >
         <HootInput
           @add-another-hoot="handleHootAddition"
           @textarea-focused="
-            (updatedHeight) => handleTextareaFocus(updatedHeight, index)
+            ({ minimizedH, textAreaH }) =>
+              handleTextareaFocus(minimizedH, textAreaH, index)
           "
         ></HootInput>
       </article>
@@ -62,11 +63,11 @@ export default {
   },
   data() {
     return {
-      hootArr: [
+      hoots: [
         {
           text: "",
           isMinimized: false,
-          minimumHeight: "",
+          height: "",
           minimizedHeight: "",
         },
       ],
@@ -77,30 +78,31 @@ export default {
   },
   methods: {
     handleHootAddition({ textLength, minimizedHeight }) {
-      const lastHootIndex = this.hootArr.length - 1;
+      const lastHootIndex = this.hoots.length - 1;
       this.hootLength = textLength;
       this.isHootInputActive = true;
 
       //set height and minimized status of last hoot
-      this.hootArr[lastHootIndex].minimizedHeight = minimizedHeight + 8;
-      this.hootArr[lastHootIndex].isMinimized = true;
-      this.hootArr.push({
+      this.hoots[lastHootIndex].minimizedHeight = minimizedHeight + 8;
+      this.hoots[lastHootIndex].isMinimized = true;
+      this.hoots.push({
         text: "",
         isMinimized: false,
-        minimumHeight: "",
+        height: "",
         minimizedHeight: "",
       });
     },
-    handleTextareaFocus(updatedHeight, index) {
-      this.hootArr.forEach((hoot, i) => {
+    handleTextareaFocus(minimizedH, textAreaH, index) {
+      this.hoots.forEach((hoot, i) => {
         if (i === index) {
           hoot.isMinimized = false;
-          hoot.minimizedHeight = updatedHeight + 8;
+          hoot.height = textAreaH + 88;
         } else {
           hoot.isMinimized = true;
+          hoot.minimizedHeight = minimizedH;
         }
       });
-      console.log("focus", updatedHeight, index);
+      console.log("focus", minimizedH, textAreaH, index);
     },
   },
   computed: {},
