@@ -39,7 +39,7 @@
         class="container px-3 transition-minimize overflow-hidden"
         :class="{ 'low-opacity': hoot.isMinimized }"
         v-for="(hoot, index) in hoots"
-        :key="'hoot-' + index"
+        :key="hoot.id"
         :style="`height: ${
           hoot.isMinimized ? hoot.minimizedHeight : hoot.height
         }px`"
@@ -47,13 +47,14 @@
         <HootInput
           @add-another-hoot="
             ({ textLength, minimizedHeight }) =>
-              handleHootAddition(textLength, minimizedHeight, index)
+              handleHootAddition(textLength, minimizedHeight, hoot.id, index)
           "
           @textarea-focused="
             ({ minimizedH, textAreaH }) =>
-              handleTextareaFocus(minimizedH, textAreaH, index)
+              handleTextareaFocus(minimizedH, textAreaH, hoot.id)
           "
-          :id="'hoot-' + index"
+          :id="hoot.id"
+          :isMultipleHoot="isMultipleHoot(index, hoots.length - 1)"
         ></HootInput>
       </article>
     </main>
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import { v4 as uuid } from "uuid";
 import HootInput from "../components/HootInput.vue";
 export default {
   components: {
@@ -74,6 +76,7 @@ export default {
           isMinimized: false,
           height: "",
           minimizedHeight: "",
+          id: uuid(),
         },
       ],
       isHootInputActive: false,
@@ -82,25 +85,26 @@ export default {
     };
   },
   methods: {
-    handleHootAddition(textLength, minimizedHeight, index) {
-      const lastHootIndex = index;
+    handleHootAddition(textLength, minimizedHeight, id, index) {
       this.hootLength = textLength;
-      this.isHootInputActive = true;
-
       //set height and minimized status of last hoot
-
-      this.hoots[lastHootIndex].minimizedHeight = minimizedHeight;
-      this.hoots[lastHootIndex].isMinimized = true;
+      this.hoots.forEach((hoot) => {
+        if (hoot.id === id) {
+          hoot.minimizedHeight = minimizedHeight;
+          hoot.isMinimized = true;
+        }
+      });
       this.hoots.splice(index + 1, 0, {
         text: "",
         isMinimized: false,
         height: "",
         minimizedHeight: 45,
+        id: uuid(),
       });
     },
-    handleTextareaFocus(minimizedH, textAreaH, index) {
-      this.hoots.forEach((hoot, i) => {
-        if (i === index) {
+    handleTextareaFocus(minimizedH, textAreaH, id) {
+      this.hoots.forEach((hoot) => {
+        if (hoot.id === id) {
           hoot.isMinimized = false;
           hoot.height = textAreaH + 88;
           hoot.minimizedHeight = minimizedH;
@@ -109,8 +113,11 @@ export default {
         }
       });
     },
+    isMultipleHoot(index, lastIndex) {
+      if (index >= 0 && index != lastIndex) return true;
+      else return false;
+    },
   },
-  computed: {},
 };
 </script>
 

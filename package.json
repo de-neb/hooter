@@ -21,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",
     "popper.js": "^1.16.1",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.2"
@@ -48,9 +49,12 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "vue/valid-v-slot": ["error", {
-        "allowModifiers": true
-      }]
+      "vue/valid-v-slot": [
+        "error",
+        {
+          "allowModifiers": true
+        }
+      ]
     }
   },
   "browserslist": [

@@ -1,9 +1,10 @@
 <template>
   <div class="row justify-content-between m-0">
-    <div class="col-2 p-0">
-      <div class="profile-icon-lg">
+    <div class="col-2 pe-2 ps-0">
+      <div class="profile-icon-lg mb-1">
         <h3 class="uname-first-letter text-light">P</h3>
       </div>
+      <div class="vertical-line" v-if="isMultipleHoot"></div>
     </div>
     <div class="col-10 p-0">
       <div class="row-cols-1 d-flex flex-nowrap">
@@ -121,6 +122,7 @@
 export default {
   props: {
     id: String,
+    isMultipleHoot: Boolean,
   },
   data() {
     return {
@@ -151,14 +153,20 @@ export default {
       });
     },
     heightTrack(textLength) {
-      for (let i = 0; i < textLength; i++) {
-        if (textLength < this.charLengths[i]) {
-          this.minimizedHeight = this.textAreaSizes[i];
-          return;
+      if (textLength === 0) {
+        this.minimizedHeight = 45;
+      } else
+        for (let i = 0; i < textLength; i++) {
+          if (textLength < this.charLengths[i]) {
+            this.minimizedHeight = this.textAreaSizes[i];
+            return;
+          }
         }
-      }
     },
     handleHeightAdjust(eventName) {
+      if (this.hootText.length === 0) {
+        this.minimizedHeight = 45;
+      }
       this.$emit(eventName, {
         minimizedH: this.minimizedHeight,
         textAreaH: this.textAreaHeight,
