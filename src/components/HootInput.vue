@@ -12,11 +12,12 @@
             type="text"
             class="compose-input-text w-100"
             placeholder="What's happening?"
-            @input="autoHeight"
-            @click="handleHeightAdjust"
-            ref="textarea"
+            @input="autoHeight('textarea-' + id)"
+            @click="handleHeightAdjust('textarea-focused')"
+            :ref="'textarea-' + id"
             max-length="textAreaCharLimit"
             v-model="hootText"
+            v-focus
           />
         </div>
         <div class="col-1 p-0">
@@ -118,6 +119,9 @@
 
 <script>
 export default {
+  props: {
+    id: String,
+  },
   data() {
     return {
       icons: ["insert_photo", "gif_box", "poll", "schedule", "location_on"],
@@ -125,18 +129,18 @@ export default {
       teak: "#b4846c",
       yellow: "#FFED8F",
       red: "#FF4D4D",
-      minimizedHeight: 114,
+      minimizedHeight: "",
       textAreaHeight: 114,
       textAreaCharLimit: 280,
     };
   },
   methods: {
-    autoHeight() {
+    autoHeight(refName) {
       this.$nextTick(() => {
-        this.$refs.textarea.style.height = "114px";
-        this.$refs.textarea.style.height =
-          this.$refs.textarea.scrollHeight + "px";
-        this.textAreaHeight = this.$refs.textarea.scrollHeight;
+        this.$refs[refName].style.height = "114px";
+        this.$refs[refName].style.height =
+          this.$refs[refName].scrollHeight + "px";
+        this.textAreaHeight = this.$refs[refName].scrollHeight;
       });
       this.handleHeightAdjust();
     },
@@ -146,24 +150,22 @@ export default {
         minimizedHeight: this.minimizedHeight,
       });
     },
-    heightTrack(text) {
-      const len = this.charLengths.length;
-      for (let i = 0; i < len; i++) {
-        if (text.length < this.charLengths[i]) {
+    heightTrack(textLength) {
+      for (let i = 0; i < textLength; i++) {
+        if (textLength < this.charLengths[i]) {
           this.minimizedHeight = this.textAreaSizes[i];
           return;
         }
       }
     },
-    handleHeightAdjust() {
-      if (this.hootText) {
-        this.minimizedHeight = 45;
-      }
-
-      this.$emit("textarea-focused", {
+    handleHeightAdjust(eventName) {
+      this.$emit(eventName, {
         minimizedH: this.minimizedHeight,
         textAreaH: this.textAreaHeight,
       });
+    },
+    emitTextAreaValue(e) {
+      this.$emit("update:hootText", e.target.value);
     },
   },
   computed: {
@@ -203,7 +205,15 @@ export default {
   },
   watch: {
     hootText(newVal) {
-      this.heightTrack(newVal);
+      this.heightTrack(newVal.length);
+      this.handleHeightAdjust("textarea-focused");
+    },
+  },
+  directives: {
+    focus: {
+      mounted: function (el) {
+        el.focus();
+      },
     },
   },
 };

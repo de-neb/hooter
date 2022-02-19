@@ -34,21 +34,26 @@
       </nav>
     </div>
     <div class="filler-sm mb-1"></div>
-    <main class="pb-2">
+    <main class="pb-2 d-flex flex-column gap-2">
       <article
         class="container px-3 transition-minimize overflow-hidden"
+        :class="{ 'low-opacity': hoot.isMinimized }"
         v-for="(hoot, index) in hoots"
-        :key="index + 'a'"
+        :key="'hoot-' + index"
         :style="`height: ${
           hoot.isMinimized ? hoot.minimizedHeight : hoot.height
         }px`"
       >
         <HootInput
-          @add-another-hoot="handleHootAddition"
+          @add-another-hoot="
+            ({ textLength, minimizedHeight }) =>
+              handleHootAddition(textLength, minimizedHeight, index)
+          "
           @textarea-focused="
             ({ minimizedH, textAreaH }) =>
               handleTextareaFocus(minimizedH, textAreaH, index)
           "
+          :id="'hoot-' + index"
         ></HootInput>
       </article>
     </main>
@@ -77,19 +82,20 @@ export default {
     };
   },
   methods: {
-    handleHootAddition({ textLength, minimizedHeight }) {
-      const lastHootIndex = this.hoots.length - 1;
+    handleHootAddition(textLength, minimizedHeight, index) {
+      const lastHootIndex = index;
       this.hootLength = textLength;
       this.isHootInputActive = true;
 
       //set height and minimized status of last hoot
-      this.hoots[lastHootIndex].minimizedHeight = minimizedHeight + 8;
+
+      this.hoots[lastHootIndex].minimizedHeight = minimizedHeight;
       this.hoots[lastHootIndex].isMinimized = true;
-      this.hoots.push({
+      this.hoots.splice(index + 1, 0, {
         text: "",
         isMinimized: false,
         height: "",
-        minimizedHeight: "",
+        minimizedHeight: 45,
       });
     },
     handleTextareaFocus(minimizedH, textAreaH, index) {
@@ -97,12 +103,11 @@ export default {
         if (i === index) {
           hoot.isMinimized = false;
           hoot.height = textAreaH + 88;
+          hoot.minimizedHeight = minimizedH;
         } else {
           hoot.isMinimized = true;
-          hoot.minimizedHeight = minimizedH;
         }
       });
-      console.log("focus", minimizedH, textAreaH, index);
     },
   },
   computed: {},

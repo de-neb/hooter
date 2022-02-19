@@ -345,6 +345,10 @@ select {
   transition: min-height 0.2s linear, height 0.1s linear;
 }
 
+.low-opacity {
+  opacity: 0.5;
+}
+
 .home-main-container {
   display: -webkit-box;
   display: -ms-flexbox;
