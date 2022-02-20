@@ -95,6 +95,10 @@ select {
           align-items: center !important;
 }
 
+.sub-text {
+  font-size: 12px !important;
+}
+
 .icons-bg-circle {
   font-size: 1.8rem !important;
 }

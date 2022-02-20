@@ -1,46 +1,23 @@
 <template>
   <div class="position-relative">
-    <div class="home-header">
-      <nav class="row h-100 justify-content-between m-0 px-3 py-0">
-        <div
+    <TopNav>
+      <template #action-button>
+        <button
           class="
-            col-2
-            p-0
-            d-flex
-            align-items-center
-            justify-content-start
-            h-100
-            position-relative
+            btn btn-secondary
+            rounded-pill
+            fw-bold
+            text-light
+            px-3
+            py-1
+            text-nowrap
           "
         >
-          <router-link to="/home" class="position-relative">
-            <span
-              class="material-icons-outlined text-dark icons-bg-circle fs-5"
-            >
-              arrow_back
-            </span>
-          </router-link>
-        </div>
+          {{ hoots.length > 1 ? "Hoot all" : "Hoot" }}
+        </button>
+      </template>
+    </TopNav>
 
-        <div
-          class="col-3 p-0 d-flex justify-content-end align-items-center h-100"
-        >
-          <button
-            class="
-              btn btn-secondary
-              rounded-pill
-              fw-bold
-              text-light
-              px-3
-              py-1
-              text-nowrap
-            "
-          >
-            {{ hoots.length > 1 ? "Hoot all" : "Hoot" }}
-          </button>
-        </div>
-      </nav>
-    </div>
     <div class="filler-sm mb-1"></div>
     <main class="pb-2 d-flex flex-column gap-2">
       <article
@@ -75,9 +52,11 @@
 <script>
 import { v4 as uuid } from "uuid";
 import HootInput from "../components/HootInput.vue";
+import TopNav from "../components/TopNav.vue";
 export default {
   components: {
     HootInput,
+    TopNav,
   },
   data() {
     return {

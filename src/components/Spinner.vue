@@ -4,10 +4,6 @@
   </div>
 </template>
 
-<script>
-export default {};
-</script>
-
 <style scoped>
 .spinner-color {
   width: 1.5rem;

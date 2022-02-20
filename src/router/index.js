@@ -45,6 +45,11 @@ const routes = [
     name: "Compose",
     component: () => import("../views/ComposeHoot.vue"),
   },
+  {
+    path: "/user",
+    name: "User",
+    component: () => import("../views/UserProfile.vue"),
+  },
 ];
 
 const router = createRouter({
