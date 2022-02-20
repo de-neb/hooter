@@ -349,18 +349,12 @@ select {
 }
 
 .transition-minimize {
-  -webkit-transition: min-height 0.1s linear, height 0.1s linear;
-  transition: min-height 0.1s linear, height 0.1s linear;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .low-opacity {
   opacity: 0.5;
-}
-
-.delete-transition {
-  height: 0 !important;
-  -webkit-transition: height 0.1s linear !important;
-  transition: height 0.1s linear !important;
 }
 
 .home-main-container {

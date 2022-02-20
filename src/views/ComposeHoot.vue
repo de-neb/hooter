@@ -13,7 +13,7 @@
             position-relative
           "
         >
-          <router-link to="#" class="position-relative">
+          <router-link to="/home" class="position-relative">
             <span
               class="material-icons-outlined text-dark icons-bg-circle fs-5"
             >
@@ -26,9 +26,17 @@
           class="col-3 p-0 d-flex justify-content-end align-items-center h-100"
         >
           <button
-            class="btn btn-secondary rounded-pill fw-bold text-light px-3 py-1"
+            class="
+              btn btn-secondary
+              rounded-pill
+              fw-bold
+              text-light
+              px-3
+              py-1
+              text-nowrap
+            "
           >
-            Hoot
+            {{ hoots.length > 1 ? "Hoot all" : "Hoot" }}
           </button>
         </div>
       </nav>
@@ -57,6 +65,7 @@
           :id="hoot.id"
           :isMultipleHoot="isMultipleHoot(index, hoots.length - 1)"
           :areCloseConditionsMet="closeBtnConditions(index, hoot.isMinimized)"
+          :hootsLength="hoots.length"
         ></HootInput>
       </article>
     </main>
@@ -106,7 +115,11 @@ export default {
     deleteHoot(id) {
       this.hoots.forEach((hoot, index, hoots) => {
         if (hoot.id === id) {
-          hoots[index - 1].isMinimized = false;
+          if (index != 0) {
+            hoots[index - 1].isMinimized = false;
+          } else {
+            hoots[1].isMinimized = false;
+          }
           hoots.splice(index, 1);
         }
       });

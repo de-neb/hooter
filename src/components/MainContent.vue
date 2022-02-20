@@ -74,8 +74,8 @@
       </div>
       <div class="offcanvas-body pb-5 px-0 pt-0">
         <div class="container p-2">
-          <div class="profile-icon">
-            <h5 class="uname-first-letter text-light">P</h5>
+          <div class="profile-icon-lg mb-1">
+            <h3 class="uname-first-letter text-light">P</h3>
           </div>
         </div>
         <div class="container p-15px text-start">

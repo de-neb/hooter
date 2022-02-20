@@ -12,7 +12,7 @@
           <textarea
             type="text"
             class="compose-input-text w-100"
-            placeholder="What's happening?"
+            :placeholder="placeholder"
             @input="autoHeight('textarea-' + id)"
             @click="handleHeightAdjust('textarea-focused')"
             :ref="'textarea-' + id"
@@ -125,6 +125,7 @@ export default {
     id: String,
     isMultipleHoot: Boolean,
     areCloseConditionsMet: Boolean,
+    hootsLength: Number,
   },
   data() {
     return {
@@ -214,6 +215,9 @@ export default {
     },
     isCloseBtnShown() {
       return this.areCloseConditionsMet && this.hootText.length === 0;
+    },
+    placeholder() {
+      return this.hootsLength > 1 ? "Add another Hoot" : "What's happening?";
     },
   },
   watch: {
