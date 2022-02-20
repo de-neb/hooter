@@ -196,9 +196,14 @@
 }
 
 .transition-minimize {
-  transition: min-height 0.2s linear, height 0.1s linear;
+  transition: min-height 0.1s linear, height 0.1s linear;
 }
 
 .low-opacity {
   opacity: 0.5;
+}
+
+.delete-transition {
+  height: 0 !important;
+  transition: height 0.1s linear !important;
 }

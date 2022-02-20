@@ -84,15 +84,15 @@ select {
 }
 
 .center-item {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-pack: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
 }
 
 .icons-bg-circle {
@@ -349,12 +349,18 @@ select {
 }
 
 .transition-minimize {
-  -webkit-transition: min-height 0.2s linear, height 0.1s linear;
-  transition: min-height 0.2s linear, height 0.1s linear;
+  -webkit-transition: min-height 0.1s linear, height 0.1s linear;
+  transition: min-height 0.1s linear, height 0.1s linear;
 }
 
 .low-opacity {
   opacity: 0.5;
+}
+
+.delete-transition {
+  height: 0 !important;
+  -webkit-transition: height 0.1s linear !important;
+  transition: height 0.1s linear !important;
 }
 
 .home-main-container {

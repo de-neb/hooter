@@ -8,7 +8,7 @@
     </div>
     <div class="col-10 p-0">
       <div class="row-cols-1 d-flex flex-nowrap">
-        <div class="col-11 d-flex">
+        <div class="col-11 d-flex" :class="{ 'col-12': !isCloseBtnShown }">
           <textarea
             type="text"
             class="compose-input-text w-100"
@@ -21,12 +21,13 @@
             v-focus
           />
         </div>
-        <div class="col-1 p-0">
+        <div class="col-1 p-0" v-if="isCloseBtnShown">
           <button
-            class="btn btn-sm p-0 border rounded-circle position-relative"
+            class="btn btn-sm p-0 rounded-circle center-item"
+            @click="$emit('delete-hoot')"
           >
-            <span class="material-icons-outlined fs-5 lh-1 text-teak">
-              cancel
+            <span class="material-icons-outlined fs-6 lh-1 text-teak">
+              close
             </span>
           </button>
         </div>
@@ -105,11 +106,11 @@
           </div>
           <div class="divider-sm border mx-2"></div>
           <button
-            class="btn btn-sm p-0 border rounded-circle position-relative"
+            class="btn btn-sm p-0 border rounded-circle center-item"
             @click="addAnotherHoot"
           >
-            <span class="material-icons-outlined fs-5 lh-1 text-teak">
-              control_point
+            <span class="material-icons-outlined fs-6 lh-1 text-teak">
+              add
             </span>
           </button>
         </div>
@@ -123,6 +124,7 @@ export default {
   props: {
     id: String,
     isMultipleHoot: Boolean,
+    areCloseConditionsMet: Boolean,
   },
   data() {
     return {
@@ -210,6 +212,9 @@ export default {
       }
       return result;
     },
+    isCloseBtnShown() {
+      return this.areCloseConditionsMet && this.hootText.length === 0;
+    },
   },
   watch: {
     hootText(newVal) {
@@ -217,6 +222,7 @@ export default {
       this.handleHeightAdjust("textarea-focused");
     },
   },
+
   directives: {
     focus: {
       mounted: function (el) {

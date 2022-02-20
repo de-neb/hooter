@@ -43,18 +43,20 @@
         :style="`height: ${
           hoot.isMinimized ? hoot.minimizedHeight : hoot.height
         }px`"
+        :ref="'hoot-' + hoot.id"
       >
         <HootInput
           @add-another-hoot="
-            ({ textLength, minimizedHeight }) =>
-              handleHootAddition(textLength, minimizedHeight, hoot.id, index)
+            ({ minimizedHeight }) => addHoot(minimizedHeight, hoot.id, index)
           "
           @textarea-focused="
             ({ minimizedH, textAreaH }) =>
               handleTextareaFocus(minimizedH, textAreaH, hoot.id)
           "
+          @delete-hoot="deleteHoot(hoot.id)"
           :id="hoot.id"
           :isMultipleHoot="isMultipleHoot(index, hoots.length - 1)"
+          :areCloseConditionsMet="closeBtnConditions(index, hoot.isMinimized)"
         ></HootInput>
       </article>
     </main>
@@ -85,8 +87,7 @@ export default {
     };
   },
   methods: {
-    handleHootAddition(textLength, minimizedHeight, id, index) {
-      this.hootLength = textLength;
+    addHoot(minimizedHeight, id, index) {
       //set height and minimized status of last hoot
       this.hoots.forEach((hoot) => {
         if (hoot.id === id) {
@@ -100,6 +101,14 @@ export default {
         height: "",
         minimizedHeight: 45,
         id: uuid(),
+      });
+    },
+    deleteHoot(id) {
+      this.hoots.forEach((hoot, index, hoots) => {
+        if (hoot.id === id) {
+          hoots[index - 1].isMinimized = false;
+          hoots.splice(index, 1);
+        }
       });
     },
     handleTextareaFocus(minimizedH, textAreaH, id) {
@@ -116,6 +125,9 @@ export default {
     isMultipleHoot(index, lastIndex) {
       if (index >= 0 && index != lastIndex) return true;
       else return false;
+    },
+    closeBtnConditions(index, isMinimized) {
+      return this.hoots.length > 1 && index >= 0 && !isMinimized;
     },
   },
 };
