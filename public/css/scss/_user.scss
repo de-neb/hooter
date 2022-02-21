@@ -1,0 +1,21 @@
+@import "mixins";
+@import "variables";
+
+.profile-icon-xl {
+  @include profile-icon;
+  width: 25%;
+  height: 25%;
+}
+
+.active-tab {
+  border-bottom: 4px solid $dark-teak;
+}
+
+.tab-hover:hover {
+  background-color: $porcelain;
+}
+
+.profile-banner {
+  padding-bottom: 35%;
+  background-color: $porcelain;
+}

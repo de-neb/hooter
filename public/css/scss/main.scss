@@ -36,7 +36,8 @@ select {
 }
 
 .btn-lg,
-.filler-sm {
+.filler-sm,
+.tab-height {
   height: 50px !important;
 }
 
@@ -89,3 +90,4 @@ select {
 @import "home";
 @import "main-content";
 @import "login-signup";
+@import "user";

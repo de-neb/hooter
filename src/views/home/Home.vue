@@ -1,5 +1,8 @@
 <template>
   <MainContent>
+    <template #home-header>
+      <Header />
+    </template>
     <template #main>
       <router-view></router-view>
     </template>
@@ -7,10 +10,12 @@
 </template>
 
 <script>
-import MainContent from "../components/MainContent.vue";
+import Header from "@/components/home/Header.vue";
+import MainContent from "@/components/MainContent.vue";
 export default {
   components: {
     MainContent,
+    Header,
   },
 };
 </script>

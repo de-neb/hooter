@@ -1,9 +1,9 @@
 <template>
   <div class="container p-0">
-    <Header />
+    <slot name="home-header"> </slot>
+    <slot name="common-top-nav"> </slot>
     <main class="flex-grow-1">
       <div class="filler"></div>
-      <h1>some content...</h1>
       <slot name="main"></slot>
       <div class="filler"></div>
     </main>
@@ -19,10 +19,9 @@
 
 <script>
 import Footer from "../components/home/Footer.vue";
-import Header from "../components/home/Header.vue";
 import ProfileOffCanvas from "../components/home/ProfileOffCanvas.vue";
 export default {
-  components: { Footer, Header, ProfileOffCanvas },
+  components: { Footer, ProfileOffCanvas },
   data() {
     return {
       isActive: false,
@@ -31,6 +30,3 @@ export default {
   methods: {},
 };
 </script>
-
-<style>
-</style>

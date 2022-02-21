@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap");
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -40,7 +41,8 @@ select {
 }
 
 .btn-lg,
-.filler-sm {
+.filler-sm,
+.tab-height {
   height: 50px !important;
 }
 
@@ -700,5 +702,27 @@ select {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.profile-icon-xl {
+  border-radius: 50%;
+  background-color: #b4846c;
+  color: #fff;
+  position: relative;
+  width: 25%;
+  height: 25%;
+}
+
+.active-tab {
+  border-bottom: 4px solid #906a56;
+}
+
+.tab-hover:hover {
+  background-color: #eff3f4;
+}
+
+.profile-banner {
+  padding-bottom: 35%;
+  background-color: #eff3f4;
 }
 /*# sourceMappingURL=main.css.map */

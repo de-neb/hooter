@@ -21,22 +21,22 @@ const routes = [
   {
     path: "/home",
     name: "Home",
-    component: () => import("../views/Home.vue"),
+    component: () => import("../views/home/Home.vue"),
     children: [
       {
         path: "/messages",
         name: "Messages",
-        component: () => import("../views/Messages.vue"),
+        component: () => import("../views/home/Messages.vue"),
       },
       {
         path: "/notifications",
         name: "Notifications",
-        component: () => import("../views/Notifications.vue"),
+        component: () => import("../views/home/Notifications.vue"),
       },
       {
         path: "/explore",
         name: "Explore",
-        component: () => import("../views/Explore.vue"),
+        component: () => import("../views/home/Explore.vue"),
       },
     ],
   },
@@ -48,7 +48,24 @@ const routes = [
   {
     path: "/user",
     name: "User",
-    component: () => import("../views/UserProfile.vue"),
+    component: () => import("../views/user/UserProfile.vue"),
+    children: [
+      {
+        path: "/with-replies",
+        name: "HootsReplies",
+        component: () => import("../views/user/HootsReplies.vue"),
+      },
+      {
+        path: "/media",
+        name: "Media",
+        component: () => import("../views/user/Media.vue"),
+      },
+      {
+        path: "/likes",
+        name: "Like",
+        component: () => import("../views/user/Likes.vue"),
+      },
+    ],
   },
 ];
 
