@@ -10,6 +10,7 @@
 
 @mixin profile-icon {
   border-radius: 50%;
+  border: 3px solid #ffff;
   background-color: $teak;
   color: #fff;
   position: relative;

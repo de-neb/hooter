@@ -13,12 +13,14 @@
         <div class="row profile-banner">
           <img src="" alt="" class="img-fluid bg-secondary" />
         </div>
-        <div class="row justify-content-between p-3">
-          <div class="col p-0">
-            <div class="profile-icon-lg">
-              <a role="button" aria-controls="offcanvasWithBothOptions">
-                <h6 class="uname-first-letter text-light">P</h6>
-              </a>
+        <div class="row justify-content-between p-3 gap-2">
+          <div class="col-4 p-0">
+            <div class="dp-container">
+              <div class="profile-icon-xl">
+                <a role="button" aria-controls="offcanvasWithBothOptions">
+                  <h6 class="uname-first-letter text-light">P</h6>
+                </a>
+              </div>
             </div>
           </div>
           <div class="col-4 p-0">
@@ -70,6 +72,12 @@
           </ul>
         </div>
       </div>
+      <div
+        class="container border-top border-bottom"
+        v-if="$route.path == '/user'"
+      >
+        <Hoot />
+      </div>
       <router-view></router-view>
     </template>
   </MainContent>
@@ -78,10 +86,12 @@
 <script>
 import MainContent from "@/components/MainContent.vue";
 import TopNav from "@/components/TopNav.vue";
+import Hoot from "@/components/Hoot.vue";
 export default {
   components: {
     MainContent,
     TopNav,
+    Hoot,
   },
   data() {
     return {
