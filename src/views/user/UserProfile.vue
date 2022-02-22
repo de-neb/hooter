@@ -25,7 +25,13 @@
           </div>
           <div class="col-4 p-0">
             <button
-              class="btn btn-outline-secondary rounded-pill py-1 text-dark"
+              class="
+                btn btn-outline-secondary
+                rounded-pill
+                py-1
+                text-dark
+                float-end
+              "
             >
               Edit profile
             </button>
@@ -73,7 +79,7 @@
         </div>
       </div>
       <div
-        class="container border-top border-bottom"
+        class="container border-top border-bottom px-3"
         v-if="$route.path == '/user'"
       >
         <Hoot />

@@ -26,12 +26,10 @@
   margin-top: -49%;
 }
 
-.action-hover {
-  @include circle-hover;
-  width: 100%;
-  height: 100%;
-}
-
 .align-sub {
   vertical-align: sub;
+}
+
+.options-border {
+  border-radius: 32px 32px 0 0;
 }
