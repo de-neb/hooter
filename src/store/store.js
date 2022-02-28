@@ -7,6 +7,7 @@ export const store = createStore({
     month: null,
     year: null,
     monthShortName: "",
+    userDbUrl: process.env.VUE_APP_HOOT_JSON_DB,
   },
   mutations: {
     changeSignUpState(state) {
@@ -25,4 +26,5 @@ export const store = createStore({
       state.monthShortName = payload;
     },
   },
+  actions: {},
 });

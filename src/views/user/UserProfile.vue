@@ -123,6 +123,12 @@ export default {
           isActive: false,
         },
       ],
+      hoots: [
+        {
+          text: "",
+          date: "",
+        },
+      ],
     };
   },
   methods: {

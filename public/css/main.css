@@ -159,7 +159,6 @@ select {
   width: 32px;
   border-radius: 50%;
   border: 3px solid #ffff;
-  background-color: #b4846c;
   color: #fff;
   position: relative;
 }
@@ -169,9 +168,13 @@ select {
   width: 46px;
   border-radius: 50%;
   border: 3px solid #ffff;
-  background-color: #b4846c;
   color: #fff;
   position: relative;
+}
+
+.profile-icon-lg img {
+  -webkit-clip-path: circle(50%);
+          clip-path: circle(50%);
 }
 
 .uname-first-letter {
@@ -709,7 +712,6 @@ select {
 .profile-icon-xl {
   border-radius: 50%;
   border: 3px solid #ffff;
-  background-color: #b4846c;
   color: #fff;
   position: relative;
   width: 100%;

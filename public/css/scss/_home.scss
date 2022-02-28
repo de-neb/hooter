@@ -50,6 +50,9 @@
   height: $dp-icon-lg;
   width: $dp-icon-lg;
   @include profile-icon;
+  img {
+    clip-path: circle(50%);
+  }
 }
 
 .uname-first-letter {
