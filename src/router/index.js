@@ -24,6 +24,11 @@ const routes = [
     component: () => import("../views/home/Home.vue"),
     children: [
       {
+        path: "",
+        name: "Home",
+        component: () => import("../views/home/Index.vue"),
+      },
+      {
         path: "/messages",
         name: "Messages",
         component: () => import("../views/home/Messages.vue"),
