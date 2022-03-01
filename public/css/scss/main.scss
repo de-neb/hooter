@@ -87,6 +87,12 @@ select {
   font-size: 12px !important;
 }
 
+.profile-icon-lg,
+.profile-icon-xl,
+.profile-icon-sm {
+  background-color: $teak;
+}
+
 @import "home";
 @import "main-content";
 @import "login-signup";

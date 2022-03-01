@@ -101,6 +101,12 @@ select {
   font-size: 12px !important;
 }
 
+.profile-icon-lg,
+.profile-icon-xl,
+.profile-icon-sm {
+  background-color: #b4846c;
+}
+
 .icons-bg-circle {
   font-size: 1.8rem !important;
 }
