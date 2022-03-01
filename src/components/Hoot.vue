@@ -35,7 +35,10 @@
           <div class="col">
             <h6 class="text-secondary m-0">@{{ username }}</h6>
           </div>
-          <div class="col ms-auto position-relative">
+          <div
+            class="col ms-auto position-relative"
+            v-if="$route.path === '/user'"
+          >
             <button
               class="
                 border-0
@@ -58,7 +61,7 @@
         <!-- hoot content start-->
         <div class="row-cols-1 text-start my-1">
           <div class="col-12">
-            <slot name="content-text"></slot>
+            {{ hootText }}
           </div>
           <div class="col-12">
             <slot name="content-media"></slot>
@@ -80,7 +83,7 @@
                 row
                 p-0
                 flex-nowrap
-                justify-content-center
+                justify-content-around
                 align-items-center
               "
             >
@@ -102,7 +105,7 @@
                 </span>
               </a>
               <span
-                class="col-8 p-0 sub-text counter text-start ps-2"
+                class="col-6 p-0 sub-text counter text-start"
                 v-if="i < 3"
                 >{{ returnRespectiveCounts(action) }}</span
               >
@@ -154,9 +157,10 @@ export default {
     lastName: String,
     username: String,
     avatar: String,
+    hootText: String,
     rehoots: Number,
     likes: Number,
-    comments: Number,
+    comments: Array,
   },
   data() {
     return {
@@ -178,7 +182,7 @@ export default {
     returnRespectiveCounts(action) {
       switch (action) {
         case "mode_comment":
-          return this.comments;
+          return this.comments.length;
         case "loop":
           return this.rehoots;
         case "favorite_border":
