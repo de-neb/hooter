@@ -2,14 +2,18 @@ const mongoose = require("mongoose");
 const { hootSchema } = require("./Hoot");
 const userSchema = new mongoose.Schema(
   {
-    name: String,
-    bio: String,
-    username: String,
+    first_name: String,
+    last_name: String,
     email: String,
-    birthdate: Date,
+    username: String,
+    avatar: String,
     hoots: [hootSchema],
+    birthdate: Date,
+    followers: Number,
+    following: Number,
+    bio: String,
   },
   { timestamps: { createdAt: "created_at" } }
 );
 
-module.exports = new mongoose.model("user", userSchema);
+module.exports = mongoose.model("user", userSchema, "Users");
