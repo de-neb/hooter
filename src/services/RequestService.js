@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const userDbUrl = process.env.VUE_APP_HOOT_JSON_DB;
-export async function getHomeData() {
-  const res = await axios.get(userDbUrl);
+const dburl = "http://localhost:3000/api/hooter/users_db";
+
+export async function getHomeData(page) {
+  const res = await axios.get(`${dburl}?page=${page}`);
   const data = await res.data;
   return data;
 }
