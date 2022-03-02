@@ -91,21 +91,34 @@
                 class="position-relative fs-6 p-0"
                 :class="{ 'col-12': i === 3, 'col-3': i < 3 }"
               >
-                <span
+                <input
+                  type="checkbox"
+                  :id="action + '-' + hootId"
+                  v-if="i === 2"
+                  v-model="isLiked"
+                  class="heart-checkbox"
+                  hidden
+                />
+                <label
+                  :for="action + '-' + hootId"
+                  :class="{
+                    hearted: i === 2 && isLiked,
+                  }"
                   class="
                     material-icons-outlined
                     lh-1
                     fs-6
-                    text-secondary
                     align-middle
                     icons-bg-circle
+                    text-secondary
                   "
                 >
                   {{ action }}
-                </span>
+                </label>
               </a>
               <span
                 class="col-6 p-0 sub-text counter text-start"
+                :class="i === 2 ? counterAnimationName : ''"
                 v-if="i < 3"
                 >{{ returnRespectiveCounts(action) }}</span
               >
@@ -151,12 +164,15 @@
 </template>
 
 <script>
+import { updateHootStats } from "../services/RequestService";
 export default {
   props: {
+    uid: String,
     firstName: String,
     lastName: String,
     username: String,
     avatar: String,
+    hootId: String,
     hootText: String,
     rehoots: Number,
     likes: Number,
@@ -172,6 +188,9 @@ export default {
         },
         { name: "Pin to your profile", icon: "push_pin" },
       ],
+      isLiked: false,
+      counterAnimationName: "counter-initial",
+      newLikes: 0,
     };
   },
   methods: {
@@ -186,14 +205,41 @@ export default {
         case "loop":
           return this.rehoots;
         case "favorite_border":
-          return this.likes;
+          return this.likes > this.newLikes ? this.likes : this.newLikes;
       }
+    },
+    async updateHootLikes(action) {
+      const { hoot_status } = await updateHootStats(
+        this.uid,
+        this.hootId,
+        action
+      );
+      this.newLikes = hoot_status.likes;
+    },
+
+    playCounterAnimation(callback) {
+      // Old number goes up
+      setTimeout(() => (this.counterAnimationName = "counter-up"), 0);
+      // Incrementing the counter
+      setTimeout(() => {
+        callback;
+      }, 100);
+      //New number waits down
+      setTimeout(() => (this.counterAnimationName = "counter-down"), 100);
+      //New number stays in the middle
+      setTimeout(() => (this.counterAnimationName = "initial"), 200);
     },
   },
   computed: {
     randomProfileBg() {
       const hex = Math.floor(Math.random() * 16777215).toString(16);
       return `#${hex}`;
+    },
+  },
+  watch: {
+    isLiked(newVal) {
+      if (newVal) this.playCounterAnimation(this.updateHootLikes("like_hoot"));
+      else this.playCounterAnimation(this.updateHootLikes("unlike_hoot"));
     },
   },
 };
