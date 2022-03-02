@@ -164,16 +164,16 @@ select {
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  border: 3px solid #ffff;
+  border: 2px solid #ffff;
   color: #fff;
   position: relative;
 }
 
 .profile-icon-lg {
-  height: 46px;
-  width: 46px;
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
-  border: 3px solid #ffff;
+  border: 2px solid #ffff;
   color: #fff;
   position: relative;
 }
@@ -717,7 +717,7 @@ select {
 
 .profile-icon-xl {
   border-radius: 50%;
-  border: 3px solid #ffff;
+  border: 2px solid #ffff;
   color: #fff;
   position: relative;
   width: 100%;
@@ -749,5 +749,71 @@ select {
 
 .options-border {
   border-radius: 32px 32px 0 0;
+}
+
+.hearted {
+  width: 48px;
+  height: 16px;
+  position: relative;
+  left: -16px;
+  background: url("https://github.com/de-neb/hooter/blob/main/src/assets/heart.png?raw=true") no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+}
+
+.heart-checkbox:checked ~ .hearted {
+  font-size: 0 !important;
+  background-position: -1400px 0;
+  -webkit-animation: fave-heart 1s steps(28);
+          animation: fave-heart 1s steps(28);
+}
+
+.counter-up {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  opacity: 0;
+  -webkit-transform: translate3d(0, -20px, 0);
+          transform: translate3d(0, -20px, 0);
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+}
+
+.counter-down {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  opacity: 0;
+  -webkit-transform: translate3d(0, 20px, 0);
+          transform: translate3d(0, 20px, 0);
+}
+
+.counter-initial {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  opacity: 1;
+  -webkit-transform: translate3d(0, 0px, 0);
+          transform: translate3d(0, 0px, 0);
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+}
+
+@-webkit-keyframes fave-heart {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -1400px 0;
+  }
+}
+
+@keyframes fave-heart {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -1400px 0;
+  }
 }
 /*# sourceMappingURL=main.css.map */

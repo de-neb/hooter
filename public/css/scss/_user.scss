@@ -33,3 +33,49 @@
 .options-border {
   border-radius: 32px 32px 0 0;
 }
+
+.hearted {
+  width: 48px;
+  height: 16px;
+  position: relative;
+  left: -16px;
+  background: url("https://github.com/de-neb/hooter/blob/main/src/assets/heart.png?raw=true")
+    no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+}
+
+.heart-checkbox {
+  &:checked ~ .hearted {
+    font-size: 0 !important;
+    background-position: -1400px 0;
+    animation: fave-heart 1s steps(28);
+  }
+}
+
+.counter-up {
+  display: inline-flex;
+  opacity: 0;
+  transform: translate3d(0, -20px, 0);
+  transition: 0.1s ease-in-out;
+}
+.counter-down {
+  display: inline-flex;
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+.counter-initial {
+  display: inline-flex;
+  opacity: 1;
+  transform: translate3d(0, 0px, 0);
+  transition: 0.1s ease-in-out;
+}
+
+@keyframes fave-heart {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -1400px 0;
+  }
+}
