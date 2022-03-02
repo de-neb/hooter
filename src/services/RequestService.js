@@ -7,3 +7,11 @@ export async function getHomeData(page) {
   const data = await res.data;
   return data;
 }
+
+export async function updateHootStats(uid, hootId, actionName) {
+  const res = await axios.patch(
+    `${dburl}/${uid}/hoot/${hootId}?action=${actionName}`
+  );
+  const data = await res.data;
+  return data;
+}
