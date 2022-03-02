@@ -2,9 +2,10 @@
   <div class="container border-top border-bottom px-3">
     <Hoot
       v-for="user in usersDb"
-      :key="user._id.$oid"
+      :key="user._id"
       v-bind="
         hootProps(
+          user._id,
           user.first_name,
           user.last_name,
           user.username,
@@ -46,12 +47,14 @@ export default {
       const index = Math.floor(Math.random() * arr.length);
       return arr[index];
     },
-    hootProps(fname, lname, username, avatar, hoot) {
+    hootProps(uid, fname, lname, username, avatar, hoot) {
       return {
+        uid,
         firstName: fname,
         lastName: lname,
         username,
         avatar,
+        hootId: hoot._id,
         hootText: hoot.text,
         rehoots: hoot.rehoot,
         likes: hoot.likes,
@@ -64,7 +67,7 @@ export default {
           document.documentElement.scrollTop ===
           document.documentElement.scrollHeight -
             document.documentElement.offsetHeight;
-        if (bottomOfWindow && this.pageCounter <= 10) {
+        if (bottomOfWindow && this.pageCounter <= 20) {
           this.pageCounter++;
           this.isFetchingData = true;
           const data = await getHomeData(this.pageCounter);
