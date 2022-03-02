@@ -82,7 +82,7 @@
         class="container border-top border-bottom px-3"
         v-if="$route.path == '/user'"
       >
-        <Hoot />
+        <Hoot v-bind="hootProps" />
       </div>
       <router-view></router-view>
     </template>
@@ -140,6 +140,20 @@ export default {
           tab.isActive = false;
         }
       });
+    },
+  },
+  computed: {
+    hootProps() {
+      return {
+        firstName: "first",
+        lastName: "last",
+        username: "username",
+        avatar: "",
+        hootText: "sample",
+        rehoots: 1,
+        likes: 2,
+        comments: [],
+      };
     },
   },
 };
