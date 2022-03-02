@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const { commentSchema } = require("./Comment");
+
+const mediaSchema = new mongoose.Schema({
+  width: Number,
+  height: Number,
+});
+
 const hootSchema = new mongoose.Schema({
   text: String,
   has_media: Boolean,
-  media: [Number],
+  media: [mediaSchema],
   created_at: Date,
   rehoot: Number,
   likes: Number,
