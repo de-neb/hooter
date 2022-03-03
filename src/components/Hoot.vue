@@ -4,17 +4,21 @@
       <div class="col-2 p-0">
         <div
           class="profile-icon-lg"
-          :style="{ 'background-color': randomProfileBg }"
+          :style="{ 'background-color': avatar.img_bg }"
         >
-          <a role="button" aria-controls="offcanvasWithBothOptions">
+          <router-link
+            :to="'/' + username"
+            role="button"
+            aria-controls="offcanvasWithBothOptions"
+          >
             <img
-              :src="avatar"
+              :src="avatar.img_url"
               :alt="username + '-dp'"
               class="img-fluid"
               v-if="avatar"
             />
             <h6 class="uname-first-letter text-light" v-else>P</h6>
-          </a>
+          </router-link>
         </div>
       </div>
       <div class="col px-0 pb-2">
@@ -61,10 +65,16 @@
         <!-- hoot content start-->
         <div class="row-cols-1 text-start my-1">
           <div class="col-12">
-            {{ hootText }}
+            <p class="fs-7 m-0">
+              {{ hootText }}
+            </p>
           </div>
-          <div class="col-12">
-            <slot name="content-media"></slot>
+          <div class="col-12 media-max-size mt-2" v-if="media">
+            <img
+              :src="`https://picsum.photos/${media[0].width}/${media[0].height}`"
+              class="img-fluid"
+              alt=""
+            />
           </div>
         </div>
 
@@ -171,8 +181,9 @@ export default {
     firstName: String,
     lastName: String,
     username: String,
-    avatar: String,
+    avatar: Object,
     hootId: String,
+    media: Array,
     hootText: String,
     rehoots: Number,
     likes: Number,
@@ -216,7 +227,6 @@ export default {
       );
       this.newLikes = hoot_status.likes;
     },
-
     playCounterAnimation(callback) {
       // Old number goes up
       setTimeout(() => (this.counterAnimationName = "counter-up"), 0);
@@ -245,3 +255,11 @@ export default {
 };
 </script>
 
+<style scoped>
+.media-max-size {
+  max-height: 380px !important;
+  min-width: 284px;
+  overflow: hidden;
+  border-radius: 15px;
+}
+</style>
