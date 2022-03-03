@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
 const { hootSchema } = require("./Hoot");
+
+const avatarSchema = new mongoose.Schema({ any: {} });
+
 const userSchema = new mongoose.Schema(
   {
     first_name: String,
     last_name: String,
     email: String,
     username: String,
-    avatar: String,
+    avatar: avatarSchema,
     hoots: [hootSchema],
     birthdate: Date,
     followers: Number,
