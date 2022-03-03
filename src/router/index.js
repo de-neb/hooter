@@ -51,24 +51,33 @@ const routes = [
     component: () => import("../views/ComposeHoot.vue"),
   },
   {
-    path: "/user",
+    path: "/:username",
     name: "User",
     component: () => import("../views/user/UserProfile.vue"),
     children: [
       {
-        path: "/with-replies",
+        path: "",
+        name: "User-Hoots",
+        component: () => import("../views/user/Index.vue"),
+        props: true,
+      },
+      {
+        path: "with-replies",
         name: "HootsReplies",
         component: () => import("../views/user/HootsReplies.vue"),
+        props: true,
       },
       {
-        path: "/media",
+        path: "media",
         name: "Media",
         component: () => import("../views/user/Media.vue"),
+        props: true,
       },
       {
-        path: "/likes",
+        path: "likes",
         name: "Like",
         component: () => import("../views/user/Likes.vue"),
+        props: true,
       },
     ],
   },
