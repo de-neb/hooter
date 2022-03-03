@@ -55,6 +55,7 @@ export default {
         username,
         avatar,
         hootId: hoot._id,
+        media: hoot.media,
         hootText: hoot.text,
         rehoots: hoot.rehoot,
         likes: hoot.likes,
@@ -85,5 +86,3 @@ export default {
 };
 </script>
 
-<style>
-</style>

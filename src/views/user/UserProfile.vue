@@ -3,22 +3,31 @@
     <template #common-top-nav>
       <TopNav>
         <template #middle-content>
-          <h6 class="fw-bold m-0">User Name</h6>
-          <span class="text-start text-secondary sub-text">0 Hoots</span>
+          <h6 class="fw-bold m-0">{{ user.username }}</h6>
+          <span class="text-start text-secondary sub-text"
+            >{{ user.hoots.length }} Hoots</span
+          >
         </template>
       </TopNav>
     </template>
     <template #main>
       <div class="container">
         <div class="row profile-banner">
-          <img src="" alt="" class="img-fluid bg-secondary" />
+          <img src="" class="img-fluid bg-secondary" />
         </div>
         <div class="row justify-content-between p-3 gap-2">
           <div class="col-4 p-0">
             <div class="dp-container">
-              <div class="profile-icon-xl">
+              <div
+                class="profile-icon-xl"
+                :style="{ 'background-color': user.avatar.img_bg }"
+              >
                 <a role="button" aria-controls="offcanvasWithBothOptions">
-                  <h6 class="uname-first-letter text-light">P</h6>
+                  <img
+                    :src="user.avatar.img_url"
+                    :alt="user.username + '-display-profile'"
+                    class="img-fluid"
+                  />
                 </a>
               </div>
             </div>
@@ -39,19 +48,30 @@
           <div class="col-12 text-start p-0">
             <div class="row-cols-12 d-flex flex-column gap-2">
               <div class="col">
-                <h5 class="fw-bold m-0">User Name</h5>
-                <h6 class="text-secondary m-0">@username</h6>
+                <h5 class="fw-bold m-0">
+                  {{ user.first_name + " " + user.last_name }}
+                </h5>
+                <h6 class="text-secondary m-0">@{{ user.username }}</h6>
               </div>
-              <h6 class="text-secondary m-0">
+              <p class="fs-7 m-0">
+                {{ user.bio }}
+              </p>
+              <p class="fs-7 text-secondary m-0">
                 <span class="material-icons-outlined fs-6 lh-1 align-middle">
                   calendar_month
                 </span>
                 Joined January 2022
-              </h6>
-              <h6 class="text-secondary m-0">
-                <span class="fw-bold text-dark align-middle">0</span> Following
-                <span class="fw-bold text-dark align-middle">1</span> Followers
-              </h6>
+              </p>
+              <div class="col fs-7 text-secondary m-0">
+                <span class="fw-bold text-dark align-middle">{{
+                  user.followers
+                }}</span>
+                <span class="align-middle ms-1">Following</span>
+                <span class="fw-bold text-dark align-middle ms-3">{{
+                  user.following
+                }}</span>
+                <span class="align-middle ms-1">Followers</span>
+              </div>
             </div>
           </div>
         </div>
@@ -78,57 +98,47 @@
           </ul>
         </div>
       </div>
-      <div
-        class="container border-top border-bottom px-3"
-        v-if="$route.path == '/user'"
-      >
-        <Hoot v-bind="hootProps" />
-      </div>
-      <router-view></router-view>
+      <router-view v-bind="{ user: user }"></router-view>
     </template>
   </MainContent>
 </template>
 
 <script>
+import { getUser } from "@/services/RequestService.js";
 import MainContent from "@/components/MainContent.vue";
 import TopNav from "@/components/TopNav.vue";
-import Hoot from "@/components/Hoot.vue";
+
 export default {
   components: {
     MainContent,
     TopNav,
-    Hoot,
   },
+
   data() {
     return {
       profileTabs: [
         {
           name: "Hoots",
-          link: "/user",
+          link: `/${this.$route.params.username}`,
           isActive: true,
         },
         {
           name: "Hoots & Replies",
-          link: "/with-replies",
+          link: `/${this.$route.params.username}/with-replies`,
           isActive: false,
         },
         {
           name: "Media",
-          link: "/media",
+          link: `/${this.$route.params.username}/media`,
           isActive: false,
         },
         {
           name: "Likes",
-          link: "/likes",
+          link: `/${this.$route.params.username}/likes`,
           isActive: false,
         },
       ],
-      hoots: [
-        {
-          text: "",
-          date: "",
-        },
-      ],
+      user: {},
     };
   },
   methods: {
@@ -141,20 +151,14 @@ export default {
         }
       });
     },
-  },
-  computed: {
-    hootProps() {
-      return {
-        firstName: "first",
-        lastName: "last",
-        username: "username",
-        avatar: "",
-        hootText: "sample",
-        rehoots: 1,
-        likes: 2,
-        comments: [],
-      };
+    async getUser() {
+      const user = await getUser(this.$route.params.username);
+      this.user = user;
     },
+  },
+  computed: {},
+  created() {
+    this.getUser();
   },
 };
 </script>
