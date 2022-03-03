@@ -97,6 +97,10 @@ select {
           align-items: center !important;
 }
 
+.fs-7 {
+  font-size: 14px !important;
+}
+
 .sub-text {
   font-size: 12px !important;
 }
@@ -167,6 +171,11 @@ select {
   border: 2px solid #ffff;
   color: #fff;
   position: relative;
+}
+
+.profile-icon-sm img {
+  -webkit-clip-path: circle(50%);
+          clip-path: circle(50%);
 }
 
 .profile-icon-lg {
@@ -722,6 +731,11 @@ select {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.profile-icon-xl img {
+  -webkit-clip-path: circle(50%);
+          clip-path: circle(50%);
 }
 
 .active-tab {

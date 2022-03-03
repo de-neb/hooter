@@ -13,4 +13,7 @@
   border: 2px solid #ffff;
   color: #fff;
   position: relative;
+  img {
+    clip-path: circle(50%);
+  }
 }
