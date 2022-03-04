@@ -1,5 +1,5 @@
 <template>
-  <MainContent>
+  <MainContent v-if="user">
     <template #common-top-nav>
       <TopNav>
         <template #middle-content>
@@ -89,7 +89,9 @@
               >
                 <router-link
                   class="nav-link active p-0 align-self-center text-secondary"
-                  :to="tab.link"
+                  :to="{
+                    path: `/user/${$route.params.username}/` + tab.path,
+                  }"
                   @click="goToSelectedTab(tab.name)"
                   >{{ tab.name }}</router-link
                 >
@@ -98,7 +100,7 @@
           </ul>
         </div>
       </div>
-      <router-view v-bind="{ user: user }"></router-view>
+      <router-view v-bind="{ user }"></router-view>
     </template>
   </MainContent>
 </template>
@@ -118,29 +120,30 @@ export default {
     return {
       profileTabs: [
         {
-          name: "Hoots",
-          link: `/${this.$route.params.username}`,
+          name: "AllHoots",
+          path: "",
           isActive: true,
         },
         {
-          name: "Hoots & Replies",
-          link: `/${this.$route.params.username}/with-replies`,
+          name: "HootsReplies",
+          path: "with-replies",
           isActive: false,
         },
         {
           name: "Media",
-          link: `/${this.$route.params.username}/media`,
+          path: "media",
           isActive: false,
         },
         {
           name: "Likes",
-          link: `/${this.$route.params.username}/likes`,
+          path: "likes",
           isActive: false,
         },
       ],
-      user: {},
+      user: null,
     };
   },
+
   methods: {
     goToSelectedTab(name) {
       this.profileTabs.forEach((tab) => {
@@ -151,17 +154,13 @@ export default {
         }
       });
     },
-    async getUser() {
-      const user = await getUser(this.$route.params.username);
-      this.user = user;
-    },
   },
-  computed: {},
-  created() {
-    this.getUser();
+  async created() {
+    const user = await getUser(this.$route.params.username);
+    this.user = user;
   },
 };
 </script>
 
-<style scoped>
+<style>
 </style>

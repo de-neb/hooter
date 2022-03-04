@@ -51,14 +51,18 @@ const routes = [
     component: () => import("../views/ComposeHoot.vue"),
   },
   {
-    path: "/:username",
-    name: "User",
+    path: "/user",
+    redirect: "/home",
+  },
+  {
+    path: "/user/:username",
+    name: "UserProfile",
     component: () => import("../views/user/UserProfile.vue"),
     children: [
       {
         path: "",
-        name: "User-Hoots",
-        component: () => import("../views/user/Index.vue"),
+        name: "AllHoots",
+        component: () => import("../views/user/AllHoots.vue"),
         props: true,
       },
       {

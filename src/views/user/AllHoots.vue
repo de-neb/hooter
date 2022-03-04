@@ -36,6 +36,7 @@ export default {
   data() {
     return {};
   },
+  computed: {},
   methods: {
     hootProps(hootId, media, hootText, rehoots, likes, comments) {
       return {
@@ -48,7 +49,6 @@ export default {
       };
     },
   },
-  mounted() {},
 };
 </script>
 

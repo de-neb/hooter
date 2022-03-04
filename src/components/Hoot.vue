@@ -7,7 +7,7 @@
           :style="{ 'background-color': avatar.img_bg }"
         >
           <router-link
-            :to="'/' + username"
+            :to="{ name: 'AllHoots', params: { username: username } }"
             role="button"
             aria-controls="offcanvasWithBothOptions"
           >
@@ -41,7 +41,7 @@
           </div>
           <div
             class="col ms-auto position-relative"
-            v-if="$route.path === '/user'"
+            v-if="$route.path === '/user/' + username"
           >
             <button
               class="

@@ -12,7 +12,7 @@
           position-relative
         "
       >
-        <router-link to="/home" class="position-relative">
+        <router-link :to="{ path: '/home' }" class="position-relative">
           <span class="material-icons-outlined text-dark icons-bg-circle fs-5">
             arrow_back
           </span>
