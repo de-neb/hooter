@@ -12,7 +12,7 @@
             hoot._id,
             hoot.media,
             hoot.text,
-            hoot.rehoots,
+            hoot.rehoot,
             hoot.likes,
             hoot.comments
           )

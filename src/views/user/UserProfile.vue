@@ -10,10 +10,13 @@
         </template>
       </TopNav>
     </template>
-    <template #main>
+    <template #main v-if="$route.name !== 'Status'">
       <div class="container">
         <div class="row profile-banner">
-          <img src="" class="img-fluid bg-secondary" />
+          <img
+            src="https://picsum.photos/1200/400"
+            class="img-fluid bg-secondary p-0"
+          />
         </div>
         <div class="row justify-content-between p-3 gap-2">
           <div class="col-4 p-0">
@@ -100,6 +103,9 @@
           </ul>
         </div>
       </div>
+      <router-view v-bind="{ user }"></router-view>
+    </template>
+    <template #status v-else>
       <router-view v-bind="{ user }"></router-view>
     </template>
   </MainContent>
