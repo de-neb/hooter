@@ -87,7 +87,7 @@ export default {
         text: "",
         isMinimized: false,
         height: "",
-        minimizedHeight: 45,
+        minimizedHeight: 50,
         id: uuid(),
       });
     },
