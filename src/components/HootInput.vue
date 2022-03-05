@@ -208,7 +208,7 @@ export default {
     },
     textAreaSizes() {
       const result = [];
-      for (let i = 45; i < 252; i = i + 25) {
+      for (let i = 50; i < 252; i = i + 25) {
         result.push(i);
       }
       return result;

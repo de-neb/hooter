@@ -1,5 +1,31 @@
 import { createStore } from "vuex";
 
+const user = {
+  namespace: true,
+  state: {
+    uid: null,
+    firstName: null,
+    lastName: null,
+    username: null,
+    avatar: null,
+  },
+  getters: {
+    getHootById: (state) => (id) => {
+      return state.user.hoots.find((hoot) => hoot.id === id);
+    },
+  },
+  mutations: {
+    setUserInfo(state, payload) {
+      state.uid = payload._id;
+      state.firstName = payload.first_name;
+      state.lastName = payload.last_name;
+      state.username = payload.username;
+      state.avatar = payload.avatar;
+    },
+  },
+  actions: {},
+};
+
 export const store = createStore({
   state: {
     isSignUpVisible: false,
@@ -7,8 +33,8 @@ export const store = createStore({
     month: null,
     year: null,
     monthShortName: "",
-    userDbUrl: process.env.VUE_APP_HOOT_JSON_DB,
   },
+
   mutations: {
     changeSignUpState(state) {
       state.isSignUpVisible = true;
@@ -26,5 +52,7 @@ export const store = createStore({
       state.monthShortName = payload;
     },
   },
-  actions: {},
+  modules: {
+    user,
+  },
 });

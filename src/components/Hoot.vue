@@ -1,24 +1,26 @@
 <template>
-  <article class="container pt-2">
+  <article class="container pt-2" @click="handleHootClick">
     <div class="row flex-nowrap">
       <div class="col-2 p-0">
-        <div
-          class="profile-icon-lg"
-          :style="{ 'background-color': avatar.img_bg }"
-        >
-          <router-link
-            :to="{ name: 'AllHoots', params: { username: username } }"
-            role="button"
-            aria-controls="offcanvasWithBothOptions"
+        <div class="click-wrapper" @click.stop>
+          <div
+            class="profile-icon-lg"
+            :style="{ 'background-color': avatar.img_bg }"
           >
-            <img
-              :src="avatar.img_url"
-              :alt="username + '-dp'"
-              class="img-fluid"
-              v-if="avatar"
-            />
-            <h6 class="uname-first-letter text-light" v-else>P</h6>
-          </router-link>
+            <router-link
+              :to="{ name: 'AllHoots', params: { username: username } }"
+              role="button"
+              aria-controls="offcanvasWithBothOptions"
+            >
+              <img
+                :src="avatar.img_url"
+                :alt="username + '-dp'"
+                class="img-fluid"
+                v-if="avatar"
+              />
+              <h6 class="uname-first-letter text-light" v-else>P</h6>
+            </router-link>
+          </div>
         </div>
       </div>
       <div class="col px-0 pb-2">
@@ -73,68 +75,13 @@
             <img
               :src="`https://picsum.photos/${media[0].width}/${media[0].height}`"
               class="img-fluid"
-              alt=""
+              :alt="username + '-media'"
             />
           </div>
         </div>
 
         <!-- hoot content end -->
-
-        <ul
-          class="row flex-nowrap list-unstyled m-0 justify-content-between mb-1"
-        >
-          <div
-            :class="{ 'col-1': i === 3, 'col-3': i < 3 }"
-            v-for="(action, i) in hootActions"
-            :key="action + '-' + i"
-          >
-            <li
-              class="
-                row
-                p-0
-                flex-nowrap
-                justify-content-around
-                align-items-center
-              "
-            >
-              <a
-                class="position-relative fs-6 p-0"
-                :class="{ 'col-12': i === 3, 'col-3': i < 3 }"
-              >
-                <input
-                  type="checkbox"
-                  :id="action + '-' + hootId"
-                  v-if="i === 2"
-                  v-model="isLiked"
-                  class="heart-checkbox"
-                  hidden
-                />
-                <label
-                  :for="action + '-' + hootId"
-                  :class="{
-                    hearted: i === 2 && isLiked,
-                  }"
-                  class="
-                    material-icons-outlined
-                    lh-1
-                    fs-6
-                    align-middle
-                    icons-bg-circle
-                    text-secondary
-                  "
-                >
-                  {{ action }}
-                </label>
-              </a>
-              <span
-                class="col-6 p-0 sub-text counter text-start"
-                :class="i === 2 ? counterAnimationName : ''"
-                v-if="i < 3"
-                >{{ returnRespectiveCounts(action) }}</span
-              >
-            </li>
-          </div>
-        </ul>
+        <HootActions v-bind="actionProps" />
       </div>
     </div>
   </article>
@@ -174,8 +121,11 @@
 </template>
 
 <script>
-import { updateHootStats } from "../services/RequestService";
+import HootActions from "../components/HootActions.vue";
 export default {
+  components: {
+    HootActions,
+  },
   props: {
     uid: String,
     firstName: String,
@@ -191,7 +141,6 @@ export default {
   },
   data() {
     return {
-      hootActions: ["mode_comment", "loop", "favorite_border", "ios_share"],
       options: [
         {
           name: "Delete",
@@ -199,9 +148,6 @@ export default {
         },
         { name: "Pin to your profile", icon: "push_pin" },
       ],
-      isLiked: false,
-      counterAnimationName: "counter-initial",
-      newLikes: 0,
     };
   },
   methods: {
@@ -209,57 +155,21 @@ export default {
       const backdrops = document.querySelectorAll(".offcanvas-backdrop");
       backdrops.forEach((backdrop) => backdrop.remove());
     },
-    returnRespectiveCounts(action) {
-      switch (action) {
-        case "mode_comment":
-          return this.comments.length;
-        case "loop":
-          return this.rehoots;
-        case "favorite_border":
-          return this.likes > this.newLikes ? this.likes : this.newLikes;
-      }
-    },
-    async updateHootLikes(action) {
-      const { hoot_status } = await updateHootStats(
-        this.uid,
-        this.hootId,
-        action
-      );
-      this.newLikes = hoot_status.likes;
-    },
-    playCounterAnimation(callback) {
-      // Old number goes up
-      setTimeout(() => (this.counterAnimationName = "counter-up"), 0);
-      // Incrementing the counter
-      setTimeout(() => {
-        callback;
-      }, 100);
-      //New number waits down
-      setTimeout(() => (this.counterAnimationName = "counter-down"), 100);
-      //New number stays in the middle
-      setTimeout(() => (this.counterAnimationName = "initial"), 200);
+    handleHootClick() {
+      this.$router.push(`/user/${this.username}/status/${this.hootId}`);
     },
   },
   computed: {
-    randomProfileBg() {
-      const hex = Math.floor(Math.random() * 16777215).toString(16);
-      return `#${hex}`;
-    },
-  },
-  watch: {
-    isLiked(newVal) {
-      if (newVal) this.playCounterAnimation(this.updateHootLikes("like_hoot"));
-      else this.playCounterAnimation(this.updateHootLikes("unlike_hoot"));
+    actionProps() {
+      return {
+        uid: this.uid,
+        hootId: this.hootId,
+        comments: this.comments.length,
+        rehoots: this.rehoots,
+        likes: this.likes,
+      };
     },
   },
 };
 </script>
 
-<style scoped>
-.media-max-size {
-  max-height: 380px !important;
-  min-width: 284px;
-  overflow: hidden;
-  border-radius: 15px;
-}
-</style>

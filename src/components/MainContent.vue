@@ -5,6 +5,7 @@
     <main class="flex-grow-1">
       <div class="filler"></div>
       <slot name="main"></slot>
+      <slot name="status"></slot>
       <div class="filler"></div>
     </main>
     <ProfileOffCanvas />

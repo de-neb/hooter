@@ -1,6 +1,6 @@
 <template>
   <div class="home-header">
-    <nav class="row h-100 justify-content-between m-0 px-3 py-0">
+    <nav class="row h-100 flex-nowrap justify-content-between m-0 px-3 py-0">
       <div
         class="
           col-2
