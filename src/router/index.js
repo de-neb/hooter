@@ -83,6 +83,12 @@ const routes = [
         component: () => import("../views/user/Likes.vue"),
         props: true,
       },
+      {
+        path: "status/:hootId",
+        name: "Status",
+        component: () => import("../views/user/Status.vue"),
+        props: true,
+      },
     ],
   },
 ];
