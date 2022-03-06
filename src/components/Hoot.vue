@@ -71,7 +71,7 @@
               {{ hootText }}
             </p>
           </div>
-          <div class="col-12 media-max-size mt-2" v-if="media">
+          <div class="col-12 media-max-size mt-2" v-if="hasMedia">
             <img
               :src="`https://picsum.photos/${media[0].width}/${media[0].height}`"
               class="img-fluid"
@@ -133,6 +133,7 @@ export default {
     username: String,
     avatar: Object,
     hootId: String,
+    hasMedia: Boolean,
     media: Array,
     hootText: String,
     rehoots: Number,

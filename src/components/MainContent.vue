@@ -9,7 +9,7 @@
       <div class="filler"></div>
     </main>
     <ProfileOffCanvas />
-    <aside class="compose">
+    <aside class="compose" v-if="$route.name !== 'Status'">
       <router-link to="/compose" class="position-relative">
         <img src="../assets/feather.svg" />
       </router-link>
@@ -28,6 +28,5 @@ export default {
       isActive: false,
     };
   },
-  methods: {},
 };
 </script>

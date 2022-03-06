@@ -40,7 +40,7 @@
           <label
             :for="action + '-' + hootId"
             :class="{
-              hearted: i === 2 && isLiked,
+              'hearted overwrite': i === 2 && isLiked,
             }"
             class="material-icons-outlined fs-5 icons-bg-circle text-secondary"
           >
@@ -118,7 +118,7 @@ export default {
       actions: ["mode_comment", "loop", "favorite_border", "ios_share"],
       isLiked: false,
       counterAnimationName: "counter-initial",
-      newLikes: 0,
+      hootStatus: { likes: 0, rehoots: 0 },
     };
   },
   methods: {
@@ -129,7 +129,7 @@ export default {
         case "loop":
           return this.rehoots;
         case "favorite_border":
-          return this.likes > this.newLikes ? this.likes : this.newLikes;
+          return this.finalLikeCount;
       }
     },
     async updateHootLikes(action) {
@@ -138,7 +138,7 @@ export default {
         this.hootId,
         action
       );
-      this.newLikes = hoot_status.likes;
+      this.hootStatus = hoot_status;
     },
     playCounterAnimation(callback) {
       // Old number goes up
@@ -154,6 +154,11 @@ export default {
     },
   },
   computed: {
+    finalLikeCount() {
+      return this.likes > this.hootStatus.likes
+        ? this.likes
+        : this.hootStatus.likes;
+    },
     hootStatusCount() {
       return [
         {
@@ -166,7 +171,7 @@ export default {
         },
         {
           name: "Likes",
-          count: this.likes,
+          count: this.finalLikeCount,
         },
       ];
     },
@@ -180,5 +185,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.overwrite {
+  width: 48px;
+  height: 16px;
+  position: relative;
+  top: -8px;
+  left: 0;
+}
 </style>
