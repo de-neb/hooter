@@ -1,17 +1,17 @@
 <template>
-  <div class="row justify-content-between m-0">
+  <div class="row justify-content-between m-0 px-0">
     <div class="col-2 pe-2 ps-0">
       <div class="profile-icon-lg mb-1">
         <h3 class="uname-first-letter text-light">P</h3>
       </div>
       <div class="vertical-line" v-if="isMultipleHoot"></div>
     </div>
-    <div class="col-10 p-0">
+    <div class="col-10 p-0 position-relative">
       <div class="row-cols-1 d-flex flex-nowrap">
         <div class="col-11 d-flex" :class="{ 'col-12': !isCloseBtnShown }">
           <textarea
             type="text"
-            class="compose-input-text w-100"
+            class="compose-input-text w-100 fs-5"
             :placeholder="placeholder"
             @input="autoHeight('textarea-' + id)"
             @click="handleHeightAdjust('textarea-focused')"
@@ -32,7 +32,7 @@
           </button>
         </div>
       </div>
-      <div class="row d-flex">
+      <div class="row d-flex" v-if="!isStatusReply">
         <button
           class="
             btn
@@ -51,7 +51,7 @@
           <span class="align-middle lh-1">Everyone can reply</span>
         </button>
       </div>
-      <hr />
+      <hr v-if="!isStatusReply" />
       <div class="row-cols-1 d-flex flex-nowrap justify-content-between">
         <div class="col-7 d-flex">
           <button
@@ -67,12 +67,17 @@
           </button>
         </div>
         <div
-          class="col-3 d-flex justify-content-between align-items-center"
-          v-if="hootText"
+          class="d-flex justify-content-between align-items-center"
+          :class="{
+            'col-5': isStatusReply,
+            'col-3': !isStatusReply,
+            'floating-reply-btn': !isFocused && isStatusReply,
+          }"
         >
           <div
             class="circle-indicator"
             :class="{ 'circle-lg': charLeft <= 20 }"
+            v-if="hootText"
           >
             <span
               class="limit-counter"
@@ -104,15 +109,35 @@
               ></circle>
             </svg>
           </div>
-          <div class="divider-sm border mx-2"></div>
           <button
-            class="btn btn-sm p-0 border rounded-circle center-item"
-            @click="addAnotherHoot"
+            v-if="isStatusReply"
+            class="
+              btn btn-secondary
+              rounded-pill
+              fw-bold
+              text-light
+              px-3
+              py-1
+              text-nowrap
+              ms-auto
+            "
           >
-            <span class="material-icons-outlined fs-6 lh-1 text-teak">
-              add
-            </span>
+            Reply
           </button>
+          <div
+            class="col d-flex flex-row justify-content-center"
+            v-if="!isStatusReply && hootText"
+          >
+            <div class="divider-sm border mx-2"></div>
+            <button
+              class="btn btn-sm p-0 border rounded-circle center-item"
+              @click="addAnotherHoot"
+            >
+              <span class="material-icons-outlined fs-6 lh-1 text-teak">
+                add
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -126,10 +151,10 @@ export default {
     isMultipleHoot: Boolean,
     areCloseConditionsMet: Boolean,
     hootsLength: Number,
+    isStatusReply: Boolean,
   },
   data() {
     return {
-      icons: ["insert_photo", "gif_box", "poll", "schedule", "location_on"],
       hootText: "",
       teak: "#b4846c",
       yellow: "#FFED8F",
@@ -137,6 +162,7 @@ export default {
       minimizedHeight: "",
       textAreaHeight: 114,
       textAreaCharLimit: 280,
+      isFocused: false,
     };
   },
   methods: {
@@ -157,7 +183,7 @@ export default {
     },
     heightTrack(textLength) {
       if (textLength === 0) {
-        this.minimizedHeight = 45;
+        this.minimizedHeight = 50;
       } else
         for (let i = 0; i < textLength; i++) {
           if (textLength < this.charLengths[i]) {
@@ -168,12 +194,13 @@ export default {
     },
     handleHeightAdjust(eventName) {
       if (this.hootText.length === 0) {
-        this.minimizedHeight = 45;
+        this.minimizedHeight = 50;
       }
       this.$emit(eventName, {
         minimizedH: this.minimizedHeight,
         textAreaH: this.textAreaHeight,
       });
+      this.isFocused = true;
     },
     emitTextAreaValue(e) {
       this.$emit("update:hootText", e.target.value);
@@ -217,7 +244,14 @@ export default {
       return this.areCloseConditionsMet && this.hootText.length === 0;
     },
     placeholder() {
-      return this.hootsLength > 1 ? "Add another Hoot" : "What's happening?";
+      if (this.isStatusReply) return "Hoot your reply";
+      else
+        return this.hootsLength > 1 ? "Add another Hoot" : "What's happening?";
+    },
+    icons() {
+      if (this.isStatusReply) return ["insert_photo", "gif_box", "location_on"];
+      else
+        return ["insert_photo", "gif_box", "poll", "schedule", "location_on"];
     },
   },
   watch: {
@@ -237,7 +271,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .btn:focus {
   outline: none;
   box-shadow: none;
@@ -248,12 +282,21 @@ export default {
 
 .divider-sm {
   width: 1px;
-  height: 100%;
+  height: inherit;
 }
 
 .circle-lg {
   transform: scale(1.6) rotate(270deg);
   transform-origin: center;
   transition: transform 0.3s;
+}
+
+.floating-reply-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 50px;
+  width: auto;
+  opacity: 0.6;
 }
 </style>
