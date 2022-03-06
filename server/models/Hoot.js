@@ -10,7 +10,7 @@ const hootSchema = new mongoose.Schema({
   text: String,
   has_media: Boolean,
   media: [mediaSchema],
-  created_at: Date,
+  created_at: String,
   rehoot: Number,
   likes: Number,
   comments: [commentSchema],
