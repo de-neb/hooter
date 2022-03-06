@@ -10,6 +10,7 @@
         v-bind="
           hootProps(
             hoot._id,
+            hoot.has_media,
             hoot.media,
             hoot.text,
             hoot.rehoot,
@@ -38,9 +39,10 @@ export default {
   },
   computed: {},
   methods: {
-    hootProps(hootId, media, hootText, rehoots, likes, comments) {
+    hootProps(hootId, hasMedia, media, hootText, rehoots, likes, comments) {
       return {
         hootId,
+        hasMedia,
         media,
         hootText,
         rehoots,

@@ -63,7 +63,7 @@
                 <span class="material-icons-outlined fs-6 lh-1 align-middle">
                   calendar_month
                 </span>
-                Joined January 2022
+                Joined {{ user.joined_at }}
               </p>
               <div class="col fs-7 text-secondary m-0">
                 <span class="fw-bold text-dark align-middle">{{

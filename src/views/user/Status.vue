@@ -69,7 +69,7 @@
               {{ hoot.text }}
             </p>
           </div>
-          <div class="col-12 media-max-size mt-2" v-if="hoot.media">
+          <div class="col-12 media-max-size mt-2" v-if="hoot.has_media">
             <img
               :src="`https://picsum.photos/${hoot.media[0].width}/${hoot.media[0].height}`"
               class="img-fluid"
@@ -80,9 +80,28 @@
 
         <!-- hoot content end -->
         <div class="row m-0 px-0 py-3 text-start">
-          <h6 class="text-secondary m-0 p-0">{{ dateCreated }}</h6>
+          <h6 class="text-secondary m-0 p-0">
+            {{ hoot.time_created }} · {{ hoot.created_at }}
+          </h6>
         </div>
         <HootActions v-bind="hootStatus" />
+      </div>
+      <div class="row m-0 px-0 pt-2" v-if="isFocused">
+        <div class="col-2 pe-2"></div>
+        <div class="col-10 p-0 text-start">
+          <h6 class="fs-7 m-0 text-secondary">
+            Replying to <span class="fs-7 text-teak">@{{ user.username }}</span>
+          </h6>
+        </div>
+      </div>
+      <div
+        class="row m-0 p-0 transition-minimize overflow-hidden"
+        :class="{ 'tab-height': !isFocused }"
+      >
+        <HootInput
+          v-bind="hootInputProps"
+          @textarea-focused="handleTextareaFocus"
+        />
       </div>
     </div>
   </article>
@@ -90,24 +109,26 @@
 
 <script>
 import HootActions from "@/components/HootActions.vue";
+import HootInput from "@/components/HootInput.vue";
 export default {
   components: {
     HootActions,
+    HootInput,
   },
   props: {
     user: Object,
   },
-  computed: {
-    dateCreated() {
-      const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      };
-      const date = new Date(this.hoot.created_at);
-      return date.toLocaleDateString(date, options);
+  data() {
+    return {
+      isFocused: false,
+    };
+  },
+  methods: {
+    handleTextareaFocus() {
+      this.isFocused = true;
     },
+  },
+  computed: {
     hoot() {
       const result = this.user.hoots.filter(
         (hoot) => hoot._id === this.$route.params.hootId
@@ -117,11 +138,16 @@ export default {
     hootStatus() {
       return {
         uid: this.user._id,
-        hootId: this.hoot.id,
+        hootId: this.hoot._id,
         comments: this.hoot.comments.length,
         rehoots: this.hoot.rehoot,
         likes: this.hoot.likes,
         inStatus: true,
+      };
+    },
+    hootInputProps() {
+      return {
+        isStatusReply: true,
       };
     },
   },
