@@ -55,6 +55,7 @@ export default {
         username,
         avatar,
         hootId: hoot._id,
+        hasMedia: hoot.has_media,
         media: hoot.media,
         hootText: hoot.text,
         rehoots: hoot.rehoot,
