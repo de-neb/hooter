@@ -28,7 +28,7 @@
           class="
             row-cols-auto
             d-flex
-            flex-row flex-nowrap
+            flex-row flex-wrap
             align-items-center
             gap-1
           "
@@ -138,7 +138,8 @@ export default {
     hootText: String,
     rehoots: Number,
     likes: Number,
-    comments: Array,
+    comments: [Array, Number],
+    isComment: Boolean,
   },
   data() {
     return {
@@ -157,7 +158,9 @@ export default {
       backdrops.forEach((backdrop) => backdrop.remove());
     },
     handleHootClick() {
-      this.$router.push(`/user/${this.username}/status/${this.hootId}`);
+      if (!this.isComment)
+        this.$router.push(`/user/${this.username}/status/${this.hootId}`);
+      this.$emit("comment-clicked");
     },
   },
   computed: {
@@ -165,7 +168,9 @@ export default {
       return {
         uid: this.uid,
         hootId: this.hootId,
-        comments: this.comments.length,
+        comments: Array.isArray(this.comments)
+          ? this.comments.length
+          : this.comments,
         rehoots: this.rehoots,
         likes: this.likes,
       };

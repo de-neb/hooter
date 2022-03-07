@@ -79,7 +79,7 @@ const routes = [
       },
       {
         path: "likes",
-        name: "Like",
+        name: "Likes",
         component: () => import("../views/user/Likes.vue"),
         props: true,
       },

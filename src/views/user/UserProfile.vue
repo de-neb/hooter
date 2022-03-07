@@ -165,6 +165,11 @@ export default {
     const user = await getUser(this.$route.params.username);
     this.user = user;
   },
+  watch: {
+    "$route.name"(name) {
+      this.goToSelectedTab(name);
+    },
+  },
 };
 </script>
 

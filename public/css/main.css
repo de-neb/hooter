@@ -36,6 +36,10 @@ select {
   color: #b4846c !important;
 }
 
+.bg-teak {
+  background: #b4846c;
+}
+
 .btn-md {
   height: 42px !important;
 }
@@ -770,6 +774,20 @@ select {
 
 .options-border {
   border-radius: 32px 32px 0 0;
+}
+
+.error {
+  position: fixed;
+  z-index: 100;
+  bottom: 50px;
+  left: 0;
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: start;
+  padding: 15px;
+  -webkit-transition: ease 0.3s;
+  transition: ease 0.3s;
 }
 
 .hearted {

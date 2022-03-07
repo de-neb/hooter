@@ -103,15 +103,28 @@
           @textarea-focused="handleTextareaFocus"
         />
       </div>
+      <div class="row m-0 px-0 py-3">
+        <Hoot
+          v-for="comment in comments"
+          :key="comment.user._id"
+          v-bind="hootCommentProps(comment._id, comment.text, comment.user)"
+          @comment-clicked="cantNavigate"
+        />
+      </div>
+    </div>
+    <div class="bg-teak text-light error" v-if="showError">
+      This comment is just a placeholder.
     </div>
   </article>
 </template>
 
 <script>
+import Hoot from "@/components/Hoot.vue";
 import HootActions from "@/components/HootActions.vue";
 import HootInput from "@/components/HootInput.vue";
 export default {
   components: {
+    Hoot,
     HootActions,
     HootInput,
   },
@@ -121,19 +134,43 @@ export default {
   data() {
     return {
       isFocused: false,
+      showError: false,
     };
   },
   methods: {
     handleTextareaFocus() {
       this.isFocused = true;
     },
+    hootCommentProps(
+      uid,
+      text,
+      { _id, avatar, first_name, last_name, username }
+    ) {
+      return {
+        uid,
+        avatar,
+        firstName: first_name,
+        lastName: last_name,
+        hootId: _id,
+        hootText: text,
+        username: username,
+        isComment: true,
+      };
+    },
+    cantNavigate() {
+      this.showError = true;
+      setTimeout(() => (this.showError = false), 2000);
+    },
   },
   computed: {
     hoot() {
-      const result = this.user.hoots.filter(
+      const result = this.user.hoots.find(
         (hoot) => hoot._id === this.$route.params.hootId
       );
-      return result[0];
+      return result;
+    },
+    comments() {
+      return this.hoot.comments;
     },
     hootStatus() {
       return {
@@ -151,7 +188,6 @@ export default {
       };
     },
   },
-  mounted() {},
 };
 </script>
 

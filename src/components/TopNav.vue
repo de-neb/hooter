@@ -12,11 +12,11 @@
           position-relative
         "
       >
-        <router-link :to="{ path: '/home' }" class="position-relative">
+        <a @click="$router.go(-1)" class="position-relative">
           <span class="material-icons-outlined text-dark icons-bg-circle fs-5">
             arrow_back
           </span>
-        </router-link>
+        </a>
       </div>
       <div
         class="
@@ -37,4 +37,5 @@
     </nav>
   </div>
 </template>
+
 

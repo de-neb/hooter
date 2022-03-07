@@ -41,6 +41,19 @@
   border-radius: 32px 32px 0 0;
 }
 
+.error {
+  position: fixed;
+  z-index: 100;
+  bottom: 50px;
+  left: 0;
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: start;
+  padding: 15px;
+  transition: ease 0.3s;
+}
+
 .hearted {
   width: 48px;
   height: 16px;
