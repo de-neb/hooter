@@ -1,6 +1,8 @@
 <template>
-  <div class="spinner-border spinner-color" role="status">
-    <span class="visually-hidden">Loading...</span>
+  <div class="w-100 my-3">
+    <div class="spinner-border spinner-color" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
 </template>
 

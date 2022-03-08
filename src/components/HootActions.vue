@@ -3,9 +3,9 @@
     class="container flex-nowrap list-unstyled m-0 p-0 justify-content-between"
     v-if="inStatus"
   >
-    <div class="row m-0">
+    <div class="row m-0 gap-2">
       <div
-        class="col px-1 py-3 d-flex flex-row align-items-center gap-1"
+        class="col-auto px-1 py-3 d-flex flex-row align-items-center gap-1"
         v-for="(status, i) in hootStatusCount"
         :key="status + '-' + i"
       >
@@ -152,6 +152,9 @@ export default {
       //New number stays in the middle
       setTimeout(() => (this.counterAnimationName = "initial"), 200);
     },
+    checkCount(count, name) {
+      return count ? { name, count } : null;
+    },
   },
   computed: {
     finalLikeCount() {
@@ -161,19 +164,10 @@ export default {
     },
     hootStatusCount() {
       return [
-        {
-          name: "Comments",
-          count: this.comments,
-        },
-        {
-          name: "Rehoots",
-          count: this.rehoots,
-        },
-        {
-          name: "Likes",
-          count: this.finalLikeCount,
-        },
-      ];
+        this.checkCount(this.comments, "Comments"),
+        this.checkCount(this.rehoots, "Rehoots"),
+        this.checkCount(this.finalLikeCount, "Likes"),
+      ].filter((el) => el);
     },
   },
   watch: {
