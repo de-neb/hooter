@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const users_db = require("./routes/users_db");
+const trends = require("./routes/trends");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
 app.use("/api/hooter/users_db", users_db);
+app.use("/api/hooter/trends", trends);
 
 const port = process.env.PORT || 3000;
 
