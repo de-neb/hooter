@@ -37,6 +37,13 @@ const routes = [
         path: "/notifications",
         name: "Notifications",
         component: () => import("../views/home/Notifications.vue"),
+        children: [
+          {
+            path: "/notifications/mentions",
+            name: "Mentions",
+            redirect: "/notifications",
+          },
+        ],
       },
       {
         path: "/explore",
