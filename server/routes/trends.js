@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
   try {
     const aggregate = await trendModel.aggregate([
       { $match: { volume: { $ne: null } } },
-      { $sample: { size: 10 } },
+      { $sample: { size: 20 } },
     ]);
     res.send(aggregate);
   } catch (error) {
