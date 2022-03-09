@@ -79,28 +79,10 @@
           </div>
         </div>
         <div class="row tab-height">
-          <ul class="nav justify-content-between p-0 flex-nowrap">
-            <li
-              class="nav-item h-100 px-3"
-              :class="{ 'tab-hover': tab.isActive }"
-              v-for="(tab, i) in profileTabs"
-              :key="tab + '_' + i"
-            >
-              <span
-                class="h-100 d-inline-flex"
-                :class="{ 'active-tab': tab.isActive }"
-              >
-                <router-link
-                  class="nav-link active p-0 align-self-center text-secondary"
-                  :to="{
-                    path: `/user/${$route.params.username}/` + tab.path,
-                  }"
-                  @click="goToSelectedTab(tab.name)"
-                  >{{ tab.name }}</router-link
-                >
-              </span>
-            </li>
-          </ul>
+          <Tabs
+            :tabs="profileTabs"
+            :baseUrl="`/user/${$route.params.username}`"
+          ></Tabs>
         </div>
       </div>
       <router-view v-bind="{ user }"></router-view>
@@ -115,11 +97,12 @@
 import { getUser } from "@/services/RequestService.js";
 import MainContent from "@/components/MainContent.vue";
 import TopNav from "@/components/TopNav.vue";
-
+import Tabs from "@/components/Tabs.vue";
 export default {
   components: {
     MainContent,
     TopNav,
+    Tabs,
   },
 
   data() {
@@ -149,29 +132,9 @@ export default {
       user: null,
     };
   },
-
-  methods: {
-    goToSelectedTab(name) {
-      this.profileTabs.forEach((tab) => {
-        if (tab.name === name) {
-          tab.isActive = true;
-        } else {
-          tab.isActive = false;
-        }
-      });
-    },
-  },
   async created() {
     const user = await getUser(this.$route.params.username);
     this.user = user;
   },
-  watch: {
-    "$route.name"(name) {
-      this.goToSelectedTab(name);
-    },
-  },
 };
 </script>
-
-<style>
-</style>

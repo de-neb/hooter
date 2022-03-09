@@ -112,9 +112,7 @@
         />
       </div>
     </div>
-    <div class="bg-teak text-light error" v-if="showError">
-      This comment is just a placeholder.
-    </div>
+    <BottomError text="comment" :showError="showError" />
   </article>
 </template>
 
@@ -122,11 +120,13 @@
 import Hoot from "@/components/Hoot.vue";
 import HootActions from "@/components/HootActions.vue";
 import HootInput from "@/components/HootInput.vue";
+import BottomError from "@/components/BottomError.vue";
 export default {
   components: {
     Hoot,
     HootActions,
     HootInput,
+    BottomError,
   },
   props: {
     user: Object,

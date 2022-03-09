@@ -1,6 +1,6 @@
 <template>
   <section id="hoots">
-    <div class="container border-top border-bottom px-3">
+    <div class="container px-3">
       <Hoot
         :username="user.username"
         :firstName="user.first_name"
