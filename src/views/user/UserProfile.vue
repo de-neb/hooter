@@ -8,6 +8,22 @@
             >{{ user.hoots.length }} Hoots</span
           >
         </template>
+        <template #action-button>
+          <button
+            v-if="showBtn"
+            class="
+              sub-text
+              btn btn-dark
+              text-light
+              rounded-pill
+              px-3
+              fw-bold
+              float-end
+            "
+          >
+            Follow
+          </button>
+        </template>
       </TopNav>
     </template>
     <template #main v-if="$route.name !== 'Status'">
@@ -36,8 +52,9 @@
             </div>
           </div>
           <div class="col-4 p-0">
-            <button
+            <!-- <button
               class="
+                sub-text
                 btn btn-outline-secondary
                 rounded-pill
                 py-1
@@ -46,6 +63,19 @@
               "
             >
               Edit profile
+            </button> -->
+            <button
+              class="
+                sub-text
+                btn btn-dark
+                text-light
+                rounded-pill
+                px-3
+                fw-bold
+                float-end
+              "
+            >
+              Follow
             </button>
           </div>
           <div class="col-12 text-start p-0">
@@ -109,12 +139,12 @@ export default {
     return {
       profileTabs: [
         {
-          name: "AllHoots",
+          name: "Hoots",
           path: "",
           isActive: true,
         },
         {
-          name: "HootsReplies",
+          name: "Hoots & replies",
           path: "with-replies",
           isActive: false,
         },
@@ -130,11 +160,27 @@ export default {
         },
       ],
       user: null,
+      showBtn: false,
     };
+  },
+  methods: {
+    handleScroll() {
+      if (window.top.scrollY > 200) {
+        this.showBtn = true;
+      } else {
+        this.showBtn = false;
+      }
+    },
   },
   async created() {
     const user = await getUser(this.$route.params.username);
     this.user = user;
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>

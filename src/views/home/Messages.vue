@@ -5,7 +5,7 @@
         <h1 class="fw-bold my-0 mb-2 p-0">Send a message, get a message</h1>
         <h6 class="text-secondary fs-7 mb-4 p-0 m-0">
           Direct Messages are private conversations between you and other people
-          on Hooter. Share Tweets, media, and more!
+          on Hooter. Share Hoots, media, and more!
         </h6>
       </div>
       <div class="col p-0">

@@ -9,7 +9,7 @@
               :style="{ 'background-color': user.avatar.img_bg }"
             >
               <router-link
-                :to="{ name: 'AllHoots', params: { username: user.username } }"
+                :to="{ name: 'Hoots', params: { username: user.username } }"
                 role="button"
                 aria-controls="offcanvasWithBothOptions"
               >
