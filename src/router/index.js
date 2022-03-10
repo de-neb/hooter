@@ -4,39 +4,39 @@ const routes = [
   {
     path: "/",
     name: "LandingPage",
-    component: () => import("../views/LandingPage.vue"),
+    component: () => import("@/views/authentication/LandingPage.vue"),
     children: [
       {
         path: "/signup",
         name: "Signup",
-        component: () => import("../views/Signup.vue"),
+        component: () => import("@/views/authentication/Signup.vue"),
       },
     ],
   },
   {
     path: "/login",
     name: "Login",
-    component: () => import("../views/Login.vue"),
+    component: () => import("@/views/authentication/Login.vue"),
   },
   {
     path: "/home",
     name: "Home",
-    component: () => import("../views/home/Home.vue"),
+    component: () => import("@/views/home/Home.vue"),
     children: [
       {
         path: "",
         name: "Home",
-        component: () => import("../views/home/Index.vue"),
+        component: () => import("@/views/home/Index.vue"),
       },
       {
         path: "/messages",
         name: "Messages",
-        component: () => import("../views/home/Messages.vue"),
+        component: () => import("@/views/home/Messages.vue"),
       },
       {
         path: "/notifications",
         name: "Notifications",
-        component: () => import("../views/home/Notifications.vue"),
+        component: () => import("@/views/home/Notifications.vue"),
         children: [
           {
             path: "/notifications/mentions",
@@ -48,7 +48,7 @@ const routes = [
       {
         path: "/explore",
         name: "Explore",
-        component: () => import("../views/home/Explore.vue"),
+        component: () => import("@/views/home/Explore.vue"),
       },
     ],
   },
@@ -64,36 +64,36 @@ const routes = [
   {
     path: "/user/:username",
     name: "UserProfile",
-    component: () => import("../views/user/UserProfile.vue"),
+    component: () => import("@/views/user/UserProfile.vue"),
     children: [
       {
         path: "",
-        name: "AllHoots",
-        component: () => import("../views/user/AllHoots.vue"),
+        name: "Hoots",
+        component: () => import("@/views/user/AllHoots.vue"),
         props: true,
       },
       {
         path: "with-replies",
-        name: "HootsReplies",
-        component: () => import("../views/user/HootsReplies.vue"),
+        name: "Hoots & replies",
+        component: () => import("@/views/user/HootsReplies.vue"),
         props: true,
       },
       {
         path: "media",
         name: "Media",
-        component: () => import("../views/user/Media.vue"),
+        component: () => import("@/views/user/Media.vue"),
         props: true,
       },
       {
         path: "likes",
         name: "Likes",
-        component: () => import("../views/user/Likes.vue"),
+        component: () => import("@/views/user/Likes.vue"),
         props: true,
       },
       {
         path: "status/:hootId",
         name: "Status",
-        component: () => import("../views/user/Status.vue"),
+        component: () => import("@/views/user/Status.vue"),
         props: true,
       },
     ],
