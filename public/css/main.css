@@ -111,6 +111,7 @@ select {
 
 .profile-icon-lg,
 .profile-icon-xl,
+.profile-icon-md,
 .profile-icon-sm {
   background-color: #b4846c;
 }
@@ -178,6 +179,20 @@ select {
 }
 
 .profile-icon-sm img {
+  -webkit-clip-path: circle(50%);
+          clip-path: circle(50%);
+}
+
+.profile-icon-md {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffff;
+  color: #fff;
+  position: relative;
+}
+
+.profile-icon-md img {
   -webkit-clip-path: circle(50%);
           clip-path: circle(50%);
 }

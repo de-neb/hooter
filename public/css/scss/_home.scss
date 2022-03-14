@@ -46,6 +46,12 @@
   @include profile-icon;
 }
 
+.profile-icon-md {
+  height: $dp-icon-md;
+  width: $dp-icon-md;
+  @include profile-icon;
+}
+
 .profile-icon-lg {
   height: $dp-icon-lg;
   width: $dp-icon-lg;
