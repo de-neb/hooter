@@ -21,7 +21,7 @@
       <div class="modal-top">
         <div class="flex-fill position-relative h-100">
           <button type="button" class="btn circle-x" @click="closeLogin">
-            <span class="material-icons align-middle"> close </span>
+            <span class="material-icons align-middle lh-1"> close </span>
           </button>
         </div>
         <Logo class="logo-sm-login" />
