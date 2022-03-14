@@ -6,14 +6,16 @@ const mediaSchema = new mongoose.Schema({
   height: Number,
 });
 
-const hootSchema = new mongoose.Schema({
-  text: String,
-  has_media: Boolean,
-  media: [mediaSchema],
-  created_at: String,
-  rehoot: Number,
-  likes: Number,
-  comments: [commentSchema],
-});
+const hootSchema = new mongoose.Schema(
+  {
+    text: String,
+    has_media: Boolean,
+    media: [mediaSchema],
+    rehoot: Number,
+    likes: Number,
+    comments: [commentSchema],
+  },
+  { timestamps: { createdAt: "created_at", currentTime: "time_created" } }
+);
 
 module.exports = { hootSchema };
