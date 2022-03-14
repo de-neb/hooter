@@ -2,6 +2,7 @@ import axios from "axios";
 
 const dburl = "http://localhost:3000/api/hooter/users_db";
 const trendurl = "http://localhost:3000/api/hooter/trends";
+
 //all users
 export async function getHomeData(page) {
   const res = await axios.get(`${dburl}?page=${page}`);
@@ -23,6 +24,12 @@ export async function getUser(username) {
   const res = await axios.get(`${dburl}/user/${username}`);
   const user = await res.data;
   return user;
+}
+
+export async function createUser(user) {
+  const req = await axios.post(`${dburl}/signup`, user);
+  const res = await req.data;
+  return res;
 }
 
 //trends
