@@ -5,7 +5,7 @@
       <select
         class="form-select"
         id="month-selector"
-        v-model="month"
+        v-model="monthModel"
         @change="setMonthShortName($event)"
       >
         <option v-for="(month, i) in monthsArr" :key="month" :value="++i">
@@ -17,7 +17,7 @@
 
     <!-- date day -->
     <div class="form-floating my-2 flex-grow-1">
-      <select class="form-select" id="day-selector" v-model="day">
+      <select class="form-select" id="day-selector" v-model="dayModel">
         <option v-for="day in daysArr" :key="month + '-' + day" :value="day">
           {{ day }}
         </option>
@@ -27,7 +27,7 @@
 
     <!-- date year -->
     <div class="form-floating my-2 flex-grow-1">
-      <select class="form-select" id="year-selector" v-model="year">
+      <select class="form-select" id="year-selector" v-model="yearModel">
         <option v-for="year in yearArr" :key="month + '-' + year" :value="year">
           {{ year }}
         </option>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 export default {
   methods: {
     getMonth(format) {
@@ -46,42 +47,46 @@ export default {
       });
     },
     setMonthShortName(e) {
-      this.$store.commit(
-        "setMonthShortName",
-        this.getMonth("short")[e.target.value - 1]
-      );
+      this.SET_SHORT_MONTH(this.getMonth("short")[e.target.value - 1]);
     },
+    ...mapMutations("date", [
+      "SET_DAY",
+      "SET_MONTH",
+      "SET_YEAR",
+      "SET_SHORT_MONTH",
+    ]),
   },
   computed: {
-    day: {
+    ...mapState("date", ["day", "month", "year", "monthShortName"]),
+    dayModel: {
       get() {
-        return this.$store.state.day;
+        return this.day;
       },
       set(value) {
-        this.$store.commit("updateDay", value);
+        this.SET_DAY(value);
       },
     },
-    month: {
+    monthModel: {
       get() {
-        return this.$store.state.month;
+        return this.month;
       },
       set(value) {
-        this.$store.commit("updateMonth", value);
+        this.SET_MONTH(value);
       },
     },
-    year: {
+    yearModel: {
       get() {
-        return this.$store.state.year;
+        return this.year;
       },
       set(value) {
-        this.$store.commit("updateYear", value);
+        this.SET_YEAR(value);
       },
     },
     monthsArr() {
       return this.getMonth("long");
     },
     daysArr() {
-      const days = new Date(2000, this.month, 0).getDate();
+      const days = new Date(2000, this.monthModel, 0).getDate();
       return Array.from(Array(days), (e, i) => ++i);
     },
     yearArr() {
@@ -92,7 +97,7 @@ export default {
         (e, i) => 1902 + i
       ).reverse();
 
-      if (this.month === 2 && this.day === 29) {
+      if (this.monthModel === 2 && this.dayModel === 29) {
         return resultArr.filter(
           (year) => (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
         );
@@ -100,7 +105,7 @@ export default {
       return resultArr;
     },
     wholeDate() {
-      return this.day && this.month && this.year;
+      return this.dayModel && this.monthModel && this.yearModel;
     },
   },
 };

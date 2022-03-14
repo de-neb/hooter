@@ -9,7 +9,9 @@
             role="button"
             aria-controls="offcanvasWithBothOptions"
           >
-            <h6 class="uname-first-letter text-light">P</h6>
+            <h6 class="uname-first-letter text-light text-capitalize">
+              {{ firstName[0] }}
+            </h6>
           </a>
         </div>
       </div>
@@ -31,3 +33,10 @@
   </header>
 </template>
 
+<script>
+export default {
+  props: {
+    firstName: String,
+  },
+};
+</script>
