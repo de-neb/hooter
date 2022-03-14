@@ -1,6 +1,9 @@
 const express = require("express");
-const router = express.Router();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/User");
+const handleError = require("./error/handleError");
+const router = express.Router();
 
 //all users
 router.get("/", (req, res) => {
@@ -53,16 +56,65 @@ router.patch("/:uid/hoot/:hootId", async (req, res) => {
 router.get("/user/:username", (req, res) => {
   const username = req.params.username;
 
-  userModel.findOne({ username: username }, (err, user) => {
+  userModel.findOne(
+    { username: username },
+    {},
+    { select: "-password" },
+    (err, user) => {
+      if (err) {
+        res.send(err.message);
+      } else if (user) {
+        res.send(user);
+      } else {
+        const err = { message: "User not found." };
+        res.send({ error: err });
+      }
+    }
+  );
+});
+
+//delete user
+router.delete("/user/:username", (req, res) => {
+  userModel.deleteOne({ username: req.params.username }, (err) => {
     if (err) {
       res.send(err.message);
-    } else if (user) {
-      res.send(user);
     } else {
-      const err = { message: "User not found." };
-      res.send({ error: err });
+      res.send({ status: 200, message: "User deleted successfully." });
     }
   });
+});
+
+//create user
+///token
+const maxAge = 15 * 60;
+const createToken = (id) => {
+  return jwt.sign({ id }, process.env.SECRET_KEY, {
+    expiresIn: maxAge,
+  });
+};
+
+router.post("/signup", async (req, res) => {
+  const { email, username, name, password } = req.body;
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = await userModel.create({
+      first_name: name,
+      email: email,
+      username: username,
+      password: hashedPassword,
+    });
+    const token = createToken(user._id);
+    res.cookie("hooterJWT", token, {
+      httpOnly: true,
+      maxAge: maxAge * 1000,
+    });
+    res.status(201).send({ username: user.username });
+  } catch (err) {
+    const error = handleError(err);
+    console.log(err);
+    res.status(400).send({ error });
+  }
 });
 
 module.exports = router;
