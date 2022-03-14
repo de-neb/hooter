@@ -80,7 +80,7 @@ export default {
     },
   },
   computed: {},
-  mounted() {
+  created() {
     this.getHomeFeed();
     this.getNextUsers();
   },

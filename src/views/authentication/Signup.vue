@@ -12,17 +12,27 @@
           class="form-control"
           placeholder="Name"
           autofocus=""
-          v-model="name"
+          v-model="nameModel"
         /><label for="name">Name</label>
       </div>
       <div class="form-floating my-2">
         <input
+          v-if="userInput === 'email'"
+          type="email"
+          :name="userInput"
+          class="form-control"
+          :placeholder="userInput"
+          autofocus=""
+          v-model="emailModel"
+        />
+        <input
+          v-else
           type="text"
           :name="userInput"
           class="form-control"
           :placeholder="userInput"
           autofocus=""
-          v-model="userIdentifier"
+          v-model="usernameModel"
         /><label :for="userInput" class="text-capitalize">{{
           userInput
         }}</label>
@@ -103,10 +113,10 @@
       <h6 class="text-secondary text-start mb-3">
         Make sure it’s 8 characters or more.
       </h6>
-      <PasswordInput @emit-password="(val) => (password = val)" />
+      <PasswordInput @emit-password="(val) => (passwordModel = val)" />
     </div>
 
-    <!-- optional step set username -->
+    <!-- alternative step set username -->
     <div
       class="modal-body-cstm m-0 flex-grow-1 d-flex flex-column gap-2"
       v-else-if="isOptionalStep"
@@ -121,7 +131,7 @@
           class="form-control username-input"
           name="set-username"
           placeholder="Username"
-          v-model="setUsername"
+          v-model="usernameModel"
           minlength="6"
           required
         /><label for="set-username">Username</label>
@@ -170,7 +180,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 import ModalForm from "@/components/ModalForm.vue";
 import PasswordInput from "@/components/PasswordInput.vue";
 import DateInput from "@/components/DateInput.vue";
@@ -182,20 +192,24 @@ export default {
   },
   data() {
     return {
-      name: null,
-      userIdentifier: null,
       isInputEmail: false,
       isFirstStep: true,
       isNextStep: false,
       isFinalStep: false,
       isOptionalStep: false,
-      password: null,
-      setUsername: null,
     };
   },
   methods: {
+    ...mapMutations("user", [
+      "SET_NAME",
+      "SET_PASSWORD",
+      "SET_EMAIL",
+      "SET_USERNAME",
+    ]),
+    ...mapActions("user", ["signUp"]),
     emptyUserField() {
-      this.userIdentifier = null;
+      this.emailModel = null;
+      this.usernameModel = null;
     },
     showNextStep(bool1, bool2) {
       this.isNextStep = bool1;
@@ -225,11 +239,54 @@ export default {
         this.isOptionalStep = true;
       }
     },
-    finishSignUp() {
-      this.$router.push("/");
+    async finishSignUp() {
+      const info = {
+        name: this.name,
+        email: this.email,
+        username: this.username,
+        password: this.password,
+      };
+
+      const user = await this.signUp(info);
+      console.log("signed up", user);
+      this.$router.push({ path: "/home" });
     },
   },
   computed: {
+    ...mapState("date", ["monthShortName", "day", "year"]),
+    ...mapState("user", ["name", "email", "username", "password"]),
+    nameModel: {
+      get() {
+        return this.name;
+      },
+      set(value) {
+        this.SET_NAME(value);
+      },
+    },
+    emailModel: {
+      get() {
+        return this.email;
+      },
+      set(value) {
+        this.SET_EMAIL(value);
+      },
+    },
+    usernameModel: {
+      get() {
+        return this.username;
+      },
+      set(value) {
+        this.SET_USERNAME(value);
+      },
+    },
+    passwordModel: {
+      get() {
+        return this.password;
+      },
+      set(value) {
+        this.SET_PASSWORD(value);
+      },
+    },
     userInput() {
       return this.isInputEmail ? "email" : "username";
     },
@@ -239,19 +296,20 @@ export default {
       } else if (this.isFirstStep && !this.isFinalStep) {
         if (
           this.name &&
-          this.userIdentifier &&
+          (this.email || this.username) &&
           this.monthShortName &&
           this.day &&
           this.year
         ) {
           return false;
         }
-      } else if (this.isOptionalStep && this.setUsername) {
+      } else if (this.isOptionalStep && this.username) {
         return false;
       }
       return true;
     },
-    ...mapState("date", ["monthShortName", "day", "year"]),
   },
+
+  created() {},
 };
 </script>
