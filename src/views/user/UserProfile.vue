@@ -39,6 +39,7 @@
             <div class="dp-container">
               <div
                 class="profile-icon-xl"
+                v-if="user.avatar"
                 :style="{ 'background-color': user.avatar.img_bg }"
               >
                 <a role="button" aria-controls="offcanvasWithBothOptions">
@@ -48,6 +49,11 @@
                     class="img-fluid"
                   />
                 </a>
+              </div>
+              <div class="profile-icon-xl mb-1" v-else>
+                <h1 class="uname-first-letter text-light text-capitalize">
+                  {{ user.first_name[0] }}
+                </h1>
               </div>
             </div>
           </div>

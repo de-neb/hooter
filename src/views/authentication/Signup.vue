@@ -239,7 +239,7 @@ export default {
         this.isOptionalStep = true;
       }
     },
-    async finishSignUp() {
+    finishSignUp() {
       const info = {
         name: this.name,
         email: this.email,
@@ -247,9 +247,9 @@ export default {
         password: this.password,
       };
 
-      const user = await this.signUp(info);
-      console.log("signed up", user);
-      this.$router.push({ path: "/home" });
+      this.signUp(info).then(() => {
+        this.$router.push({ path: "/home" });
+      });
     },
   },
   computed: {
