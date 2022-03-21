@@ -1,7 +1,7 @@
 <template>
   <MainContent v-if="userObj">
     <template #home-header>
-      <Header :firstName="userObj.first_name" />
+      <Header :first-name="userObj.first_name" />
     </template>
     <template #main>
       <router-view></router-view>

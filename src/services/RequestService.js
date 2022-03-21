@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const dburl = "http://localhost:3000/api/hooter/users_db";
-const trendurl = "http://localhost:3000/api/hooter/trends";
+const dburl = "/api/hooter/users_db";
+const trendurl = "/api/hooter/trends";
 
 //all users
 export async function getHomeData(page) {

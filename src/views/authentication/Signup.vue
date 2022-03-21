@@ -246,7 +246,6 @@ export default {
         username: this.username,
         password: this.password,
       };
-
       this.signUp(info).then(() => {
         this.$router.push({ path: "/home" });
       });
