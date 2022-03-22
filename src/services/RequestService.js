@@ -2,6 +2,7 @@ import axios from "axios";
 
 const dburl = "/api/hooter/users_db";
 const trendurl = "/api/hooter/trends";
+const auth = "/api/auth";
 
 //all users
 export async function getHomeData(page) {
@@ -27,7 +28,13 @@ export async function getUser(username) {
 }
 
 export async function createUser(user) {
-  const req = await axios.post(`${dburl}/signup`, user);
+  const req = await axios.post(`${auth}/signup`, user);
+  const res = await req.data;
+  return res;
+}
+
+export async function loginUser(userObj) {
+  const req = await axios.post(`${auth}/login`, userObj);
   const res = await req.data;
   return res;
 }

@@ -1,4 +1,4 @@
-import { createUser, getUser } from "@/services/RequestService";
+import { createUser, getUser, loginUser } from "@/services/RequestService";
 
 export default {
   namespaced: true,
@@ -32,6 +32,17 @@ export default {
         const user = await createUser(payload);
         commit("SET_NAME", user.first_name);
         commit("SET_USERNAME", user.username);
+        console.log("user", user);
+        return user;
+      } catch (error) {
+        console.log("dispatch error", error);
+      }
+    },
+    async logIn({ commit }, payload) {
+      try {
+        const user = await loginUser(payload);
+        commit("SET_USERNAME", user.username);
+        console.log("user", user);
         return user;
       } catch (error) {
         console.log("dispatch error", error);

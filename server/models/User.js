@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcrypt");
 const { hootSchema } = require("./Hoot");
 
 const avatarSchema = new mongoose.Schema({ any: {} });
@@ -52,5 +53,24 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: { createdAt: "joined_at" } }
 );
+
+userSchema.static("login", async function (userIdentifier, password) {
+  let user = "";
+  if (validator.isEmail(userIdentifier)) {
+    user = await this.findOne({ email: userIdentifier }).exec();
+  } else {
+    user = await this.findOne({ username: userIdentifier }).exec();
+  }
+
+  //if username is found check if password matches in db
+  if (user) {
+    const authRes = await bcrypt.compare(password, user.password);
+    if (authRes) {
+      return user;
+    }
+    throw Error("Incorrect password");
+  }
+  throw Error("No user or email found");
+});
 
 module.exports = mongoose.model("user", userSchema, "Users");
