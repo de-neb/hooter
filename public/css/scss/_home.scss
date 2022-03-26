@@ -89,6 +89,14 @@
   background-color: #fff;
 }
 
+.btn-style-none {
+  outline: none;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+}
+
 .filler {
   height: 50px;
   width: 100%;

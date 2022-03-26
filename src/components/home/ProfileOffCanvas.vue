@@ -43,8 +43,13 @@
         <span class="material-icons-outlined sm-icon">{{ link.icon }}</span>
         <h6 class="text-start m-0 flex-grow-1">{{ link.name }}</h6>
       </div>
-      <div class="container p-15px text-start">
-        <h6 class="m-0">Log out</h6>
+      <div class="container p-0">
+        <button
+          class="btn-style-none w-100 h-100 p-15px text-start"
+          @click="logOut"
+        >
+          <h6 class="m-0">Log out</h6>
+        </button>
       </div>
     </div>
   </aside>
@@ -103,6 +108,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    logOut() {
+      this.$router.push({ path: "/logout" });
+    },
   },
   computed: {
     ...mapState("user", ["userObj"]),

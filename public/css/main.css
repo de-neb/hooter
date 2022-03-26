@@ -109,6 +109,10 @@ select {
   font-size: 12px !important;
 }
 
+.rounded-4 {
+  border-radius: 16px !important;
+}
+
 .profile-icon-lg,
 .profile-icon-xl,
 .profile-icon-md,
@@ -242,6 +246,14 @@ select {
   bottom: 0;
   left: 0;
   background-color: #fff;
+}
+
+.btn-style-none {
+  outline: none;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: inherit;
 }
 
 .filler {
@@ -804,7 +816,7 @@ select {
 .error {
   position: fixed;
   z-index: 100;
-  bottom: 50px;
+  bottom: 0px;
   left: 0;
   width: 100%;
   font-size: 14px;
@@ -813,6 +825,10 @@ select {
   padding: 15px;
   -webkit-transition: ease 0.3s;
   transition: ease 0.3s;
+}
+
+.error-bottom-50 {
+  bottom: 50px;
 }
 
 .hearted {
@@ -879,5 +895,9 @@ select {
   100% {
     background-position: -1400px 0;
   }
+}
+
+.modal-width-small {
+  width: 320px !important;
 }
 /*# sourceMappingURL=main.css.map */

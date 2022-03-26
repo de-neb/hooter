@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     closeLogin() {
-      this.$router.push("/");
+      this.$router.push({ path: "/" });
     },
     playSpinner(bool) {
       setTimeout(() => (this.isLoading = bool), 600);

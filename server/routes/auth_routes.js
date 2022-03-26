@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
   try {
     const user = await userModel.login(userIdentifier, password);
     const token = createToken(user._id);
-    res.cookie("todolistJWT", token, {
+    res.cookie("hooterJWT", token, {
       httpOnly: true,
       maxAge: maxAge * 1000,
     });
@@ -53,6 +53,28 @@ router.post("/login", async (req, res) => {
     console.log(err);
     const error = handleError(err);
     res.status(400).send({ error });
+  }
+});
+
+router.post("/logout", (req, res) => {
+  res.cookie("hooterJWT", "", { maxAge: 1 });
+  res.status(200).end();
+});
+
+router.post("/check-user", async (req, res) => {
+  const userIdentifier = req.body.user;
+
+  try {
+    const usernameExists = await userModel.exists({ username: userIdentifier });
+    const emailExists = await userModel.exists({ email: userIdentifier });
+    if (usernameExists || emailExists) {
+      res.status(200).send({ userExists: true });
+    } else {
+      throw new Error("No user or email found");
+    }
+  } catch (err) {
+    const error = handleError(err);
+    res.send({ error });
   }
 });
 

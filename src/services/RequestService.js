@@ -39,6 +39,17 @@ export async function loginUser(userObj) {
   return res;
 }
 
+export async function logoutUser(userObj) {
+  const res = await axios.post(`${auth}/logout`, userObj);
+  return res;
+}
+
+export async function userExists(user) {
+  const req = await axios.post(`${auth}/check-user`, user);
+  const res = await req.data;
+  return res;
+}
+
 //trends
 export async function getTrends() {
   const res = await axios.get(trendurl);

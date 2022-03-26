@@ -308,7 +308,5 @@ export default {
       return true;
     },
   },
-
-  created() {},
 };
 </script>

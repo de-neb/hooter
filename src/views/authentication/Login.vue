@@ -33,6 +33,7 @@
           type="button"
           class="btn btn-dark rounded-pill btn-max-width my-2 hover-dark"
           @click="loginNextStep"
+          :disabled="isDisabled"
         >
           Next
         </button>
@@ -69,7 +70,7 @@
         <label for="userCopy">Username or Email</label>
       </div>
 
-      <PasswordInput />
+      <PasswordInput @emit-password="(val) => (password = val)" />
 
       <a href="#" class="open-sans text-teak underline-hover text-start ps-2"
         >Forgot password?</a
@@ -80,6 +81,7 @@
       <button
         type="button"
         class="btn btn-dark rounded-pill my-3"
+        @click="logInPost"
         :disabled="!password"
       >
         Log In
@@ -94,42 +96,65 @@
   </ModalForm>
 
   <!-- Errors-->
-  <!-- <div class="valid-tooltip"></div>
-    <div class="invalid-tooltip"></div> -->
+  <BottomError :show-error="isError" :error-text="errorMessage"></BottomError>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import ModalForm from "@/components/ModalForm.vue";
 import PasswordInput from "@/components/PasswordInput.vue";
+import BottomError from "@/components/BottomError.vue";
 export default {
   name: "Login",
   components: {
     PasswordInput,
     ModalForm,
+    BottomError,
   },
   data() {
     return {
-      user: null,
-      password: null,
+      user: "",
+      password: "",
       isLoading: true,
       toNextStep: false,
+      errorMessage: "",
+      isError: false,
     };
   },
   methods: {
+    ...mapActions("user", ["logIn", "checkUser"]),
     closeLogin() {
       this.$router.push("/");
     },
     playSpinner(bool) {
       setTimeout(() => (this.isLoading = bool), 600);
     },
-    loginNextStep() {
-      //receive response from server
-
+    async loginNextStep() {
       //create function when user is empty or not found in db
-
+      const response = await this.checkUser({ user: this.user });
+      if (response.error) {
+        this.errorMessage = response.error.username;
+        this.isError = true;
+        setTimeout(() => (this.isError = false), 2000);
+      } else {
+        this.toNextStep = true;
+      }
       //when user exists in db
-      this.toNextStep = true;
-      console.log("bools", this.user, this.toNextStep);
+    },
+    logInPost() {
+      if (this.user && this.password) {
+        this.logIn({
+          userIdentifier: this.user,
+          password: this.password,
+        }).then(() => {
+          this.$router.push({ path: "/home" });
+        });
+      }
+    },
+  },
+  computed: {
+    isDisabled() {
+      return this.user == "" && this.password == "";
     },
   },
   mounted() {

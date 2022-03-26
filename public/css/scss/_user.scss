@@ -45,7 +45,7 @@
 .error {
   position: fixed;
   z-index: 100;
-  bottom: 50px;
+  bottom: 0px;
   left: 0;
   width: 100%;
   font-size: 14px;
@@ -53,6 +53,10 @@
   text-align: start;
   padding: 15px;
   transition: ease 0.3s;
+}
+
+.error-bottom-50 {
+  bottom: 50px;
 }
 
 .hearted {
@@ -99,4 +103,8 @@
   100% {
     background-position: -1400px 0;
   }
+}
+
+.modal-width-small {
+  width: 320px !important;
 }
