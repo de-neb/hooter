@@ -112,7 +112,7 @@
         />
       </div>
     </div>
-    <BottomError text="comment" :showError="showError" />
+    <BottomError name="comment" :showError="showError" />
   </article>
 </template>
 
