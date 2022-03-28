@@ -9,7 +9,7 @@
       <div class="filler"></div>
     </main>
     <ProfileOffCanvas />
-    <aside class="compose" v-if="$route.name !== 'Status'">
+    <aside class="compose" v-if="routeException">
       <router-link to="/compose" class="position-relative">
         <img src="../assets/feather.svg" />
       </router-link>
@@ -27,6 +27,15 @@ export default {
     return {
       isActive: false,
     };
+  },
+  computed: {
+    routeException() {
+      const routeName = this.$route.name;
+      if (routeName === "Status" || routeName === "PageNotFound") {
+        return false;
+      }
+      return true;
+    },
   },
 };
 </script>

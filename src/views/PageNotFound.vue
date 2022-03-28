@@ -1,0 +1,39 @@
+<template>
+  <MainContent>
+    <template #home-header>
+      <TopNav>
+        <template #middle-content>
+          <h6 class="fw-bold m-0">Not found</h6>
+        </template>
+      </TopNav>
+    </template>
+    <template #main>
+      <div class="container py-5">
+        <div class="row p-4 justify-content-center">
+          <p class="text-secondary fs-7">
+            Hmm...this page doesn't exist. Try searching for something else.
+          </p>
+          <div class="col-3 p-0">
+            <button
+              class="btn btn-secondary rounded-pill fs-7 px-3"
+              @click="$router.push('/explore')"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </MainContent>
+</template>
+
+<script>
+import TopNav from "@/components/TopNav.vue";
+import MainContent from "@/components/MainContent.vue";
+export default {
+  components: {
+    TopNav,
+    MainContent,
+  },
+};
+</script>

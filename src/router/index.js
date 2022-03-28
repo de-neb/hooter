@@ -112,6 +112,12 @@ const routes = [
     ],
     meta: { requiresAuth: true },
   },
+  {
+    path: "/:catchAll(.*)",
+    name: "PageNotFound",
+    component: () => import("@/views/PageNotFound.vue"),
+    meta: { requiresAuth: false },
+  },
 ];
 
 const router = createRouter({
@@ -128,11 +134,15 @@ router.beforeEach((to, from, next) => {
       next();
     } else if (checkMeta("guest")) {
       next({ path: "/home" });
+    } else {
+      next();
     }
   } else {
     if (checkMeta("requiresAuth")) {
       next({ path: "/login" });
     } else if (checkMeta("guest")) {
+      next();
+    } else {
       next();
     }
   }
