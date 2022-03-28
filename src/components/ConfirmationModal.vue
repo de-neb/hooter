@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import Logo from "@/components/Logo.vue";
 export default {
   components: {
@@ -44,9 +44,10 @@ export default {
   },
   methods: {
     ...mapActions("user", ["logOut"]),
+    ...mapMutations("user", ["SET_USERNAME"]),
     logOutUser() {
       this.logOut().then(() => {
-        console.log("log out");
+        this.SET_USERNAME(null);
         window.sessionStorage.clear();
         this.$router.push({ path: "/" });
       });

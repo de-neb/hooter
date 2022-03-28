@@ -1,27 +1,32 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "../store/store";
 
 const routes = [
   {
     path: "/",
-    name: "LandingPage",
+    name: "Landing Page",
     component: () => import("@/views/authentication/LandingPage.vue"),
     children: [
       {
         path: "/signup",
         name: "Signup",
         component: () => import("@/views/authentication/Signup.vue"),
+        meta: { guest: true },
       },
     ],
+    meta: { guest: true },
   },
   {
     path: "/login",
     name: "Login",
     component: () => import("@/views/authentication/Login.vue"),
+    meta: { guest: true },
   },
   {
     path: "/logout",
     name: "Logout",
     component: () => import("@/views/authentication/Logout.vue"),
+    meta: { requiresAuth: true },
   },
   {
     path: "/home",
@@ -56,19 +61,22 @@ const routes = [
         component: () => import("@/views/home/Explore.vue"),
       },
     ],
+    meta: { requiresAuth: true },
   },
   {
     path: "/compose",
     name: "Compose",
     component: () => import("../views/ComposeHoot.vue"),
+    meta: { requiresAuth: true },
   },
   {
     path: "/user",
     redirect: "/home",
+    meta: { requiresAuth: true },
   },
   {
     path: "/user/:username",
-    name: "UserProfile",
+    name: "User Profile",
     component: () => import("@/views/user/UserProfile.vue"),
     children: [
       {
@@ -102,12 +110,32 @@ const routes = [
         props: true,
       },
     ],
+    meta: { requiresAuth: true },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters["user/isAuthenticated"];
+  const checkMeta = (prop) => to.matched.some((record) => record.meta[prop]);
+
+  if (isAuthenticated) {
+    if (checkMeta("requiresAuth")) {
+      next();
+    } else if (checkMeta("guest")) {
+      next({ path: "/home" });
+    }
+  } else {
+    if (checkMeta("requiresAuth")) {
+      next({ path: "/login" });
+    } else if (checkMeta("guest")) {
+      next();
+    }
+  }
 });
 
 export default router;

@@ -14,3 +14,5 @@ export const store = createStore({
     user,
   },
 });
+
+export default store;

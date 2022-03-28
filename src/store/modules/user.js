@@ -15,6 +15,11 @@ export default {
     username: null,
     userObj: null,
   },
+  getters: {
+    isAuthenticated(state) {
+      return !!state.username;
+    },
+  },
   mutations: {
     SET_NAME(state, payload) {
       state.name = payload;
