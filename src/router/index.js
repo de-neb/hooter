@@ -130,22 +130,15 @@ router.beforeEach((to, from, next) => {
   const checkMeta = (prop) => to.matched.some((record) => record.meta[prop]);
 
   if (isAuthenticated) {
-    if (checkMeta("requiresAuth")) {
-      next();
-    } else if (checkMeta("guest")) {
-      next({ path: "/home" });
-    } else {
-      next();
-    }
-  } else {
-    if (checkMeta("requiresAuth")) {
-      next({ path: "/login" });
-    } else if (checkMeta("guest")) {
-      next();
-    } else {
-      next();
-    }
+    if (checkMeta("requiresAuth")) next();
+    else if (checkMeta("guest")) next({ path: "/home" });
+    else next();
+    return;
   }
+
+  if (checkMeta("requiresAuth")) next({ path: "/login" });
+  else if (checkMeta("guest")) next();
+  else next();
 });
 
 export default router;
