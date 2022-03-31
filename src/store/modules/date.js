@@ -6,7 +6,13 @@ export default {
     year: null,
     monthShortName: "",
   },
-
+  getters: {
+    getMonthName: () => (format) => {
+      return Array.from(Array(12), (e, i) => {
+        return new Date(25e8 * ++i).toLocaleString("en-US", { month: format });
+      });
+    },
+  },
   mutations: {
     SET_DAY(state, payload) {
       state.day = payload;

@@ -45,16 +45,16 @@ export default {
         commit("SET_USERNAME", user.username);
         return user;
       } catch (error) {
-        console.log("dispatch error", error);
+        return error;
       }
     },
     async logIn({ commit }, payload) {
       try {
-        const { user } = await loginUser(payload);
-        commit("SET_USERNAME", user.username);
-        return user;
+        const response = await loginUser(payload);
+        commit("SET_USERNAME", response.user.username);
+        return response;
       } catch (error) {
-        console.log("dispatch error", error);
+        return error;
       }
     },
     async logOut() {
