@@ -8,7 +8,7 @@
         v-model="monthModel"
         @change="setMonthShortName($event)"
       >
-        <option v-for="(month, i) in monthsArr" :key="month" :value="++i">
+        <option v-for="(month, i) in months" :key="month" :value="++i">
           {{ month }}
         </option>
       </select>
@@ -18,7 +18,7 @@
     <!-- date day -->
     <div class="form-floating my-2 flex-grow-1">
       <select class="form-select" id="day-selector" v-model="dayModel">
-        <option v-for="day in daysArr" :key="month + '-' + day" :value="day">
+        <option v-for="day in days" :key="month + '-' + day" :value="day">
           {{ day }}
         </option>
       </select>
@@ -28,7 +28,11 @@
     <!-- date year -->
     <div class="form-floating my-2 flex-grow-1">
       <select class="form-select" id="year-selector" v-model="yearModel">
-        <option v-for="year in yearArr" :key="month + '-' + year" :value="year">
+        <option
+          v-for="year in birthYears"
+          :key="month + '-' + year"
+          :value="year"
+        >
           {{ year }}
         </option>
       </select>
@@ -38,16 +42,16 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapGetters } from "vuex";
 export default {
+  data() {
+    return {
+      minimumYear: 1902,
+    };
+  },
   methods: {
-    getMonth(format) {
-      return Array.from(Array(12), (e, i) => {
-        return new Date(25e8 * ++i).toLocaleString("en-US", { month: format });
-      });
-    },
     setMonthShortName(e) {
-      this.SET_SHORT_MONTH(this.getMonth("short")[e.target.value - 1]);
+      this.SET_SHORT_MONTH(this.getMonthName("short")[e.target.value - 1]);
     },
     ...mapMutations("date", [
       "SET_DAY",
@@ -58,6 +62,7 @@ export default {
   },
   computed: {
     ...mapState("date", ["day", "month", "year", "monthShortName"]),
+    ...mapGetters("date", ["getMonthName"]),
     dayModel: {
       get() {
         return this.day;
@@ -82,27 +87,33 @@ export default {
         this.SET_YEAR(value);
       },
     },
-    monthsArr() {
-      return this.getMonth("long");
+    months() {
+      return this.getMonthName("long");
     },
-    daysArr() {
+    days() {
       const days = new Date(2000, this.monthModel, 0).getDate();
       return Array.from(Array(days), (e, i) => ++i);
     },
-    yearArr() {
-      const currentYear = new Date().getFullYear();
-      const yearRange = currentYear - 1902;
-      const resultArr = Array.from(
-        Array(yearRange),
-        (e, i) => 1902 + i
+    currentYear() {
+      return new Date().getFullYear();
+    },
+    birthYearRange() {
+      return this.currentYear - this.minimumYear;
+    },
+    allBirthYears() {
+      return Array.from(
+        Array(this.birthYearRange),
+        (e, i) => this.minimumYear + i
       ).reverse();
-
-      if (this.monthModel === 2 && this.dayModel === 29) {
-        return resultArr.filter(
-          (year) => (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
-        );
-      }
-      return resultArr;
+    },
+    leapYears() {
+      return this.allBirthYears.filter(
+        (year) => (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
+      );
+    },
+    birthYears() {
+      if (this.monthModel === 2 && this.dayModel === 29) return this.leapYears;
+      return this.allBirthYears;
     },
     wholeDate() {
       return this.dayModel && this.monthModel && this.yearModel;
@@ -110,6 +121,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

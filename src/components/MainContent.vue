@@ -8,13 +8,13 @@
       <slot name="status"></slot>
       <div class="filler"></div>
     </main>
-    <ProfileOffCanvas />
+    <ProfileOffCanvas v-if="isPageValid" />
     <aside class="compose" v-if="routeException">
       <router-link to="/compose" class="position-relative">
         <img src="../assets/feather.svg" />
       </router-link>
     </aside>
-    <Footer />
+    <Footer v-if="isPageValid" />
   </div>
 </template>
 
@@ -29,12 +29,18 @@ export default {
     };
   },
   computed: {
+    routeName() {
+      return this.$route.name;
+    },
+    isPageValid() {
+      return this.routeName !== "PageNotFound";
+    },
+    isPageStatus() {
+      return this.routeName === "Status";
+    },
     routeException() {
-      const routeName = this.$route.name;
-      if (routeName === "Status" || routeName === "PageNotFound") {
-        return false;
-      }
-      return true;
+      if (this.isPageValid && !this.isPageStatus) return true;
+      return false;
     },
   },
 };

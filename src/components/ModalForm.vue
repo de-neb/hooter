@@ -20,7 +20,7 @@
     >
       <div class="modal-top">
         <div class="flex-fill position-relative h-100">
-          <button type="button" class="btn circle-x" @click="closeLogin">
+          <button type="button" class="btn circle-x" @click="closeModal">
             <span class="material-icons align-middle lh-1"> close </span>
           </button>
         </div>
@@ -49,7 +49,8 @@ export default {
     };
   },
   methods: {
-    closeLogin() {
+    closeModal() {
+      window.sessionStorage.clear();
       this.$router.push({ path: "/" });
     },
     playSpinner(bool) {
