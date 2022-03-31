@@ -8,6 +8,26 @@
       </TopNav>
     </template>
     <template #main>
+      <div class="container my-2">
+        <div class="row justify-content-center px-3 gap-2">
+          <div class="col d-grid p-0">
+            <router-link
+              :to="{ path: '/login' }"
+              class="btn btn-outline-teak rounded-pill fw-bold fs-7"
+            >
+              Log in
+            </router-link>
+          </div>
+          <div class="col d-grid p-0">
+            <router-link
+              :to="{ path: '/signup' }"
+              class="btn btn-secondary rounded-pill fw-bold fs-7"
+            >
+              Sign up
+            </router-link>
+          </div>
+        </div>
+      </div>
       <div class="container py-5">
         <div class="row p-4 justify-content-center">
           <p class="text-secondary fs-7">

@@ -58,18 +58,20 @@
             </div>
           </div>
           <div class="col-4 p-0">
-            <!-- <button
+            <button
               class="
                 sub-text
                 btn btn-outline-secondary
                 rounded-pill
-                py-1
+                py-2
+                px-3
                 text-dark
                 float-end
               "
+              v-if="isAuthenticatedUser"
             >
               Edit profile
-            </button> -->
+            </button>
             <button
               class="
                 sub-text
@@ -80,6 +82,7 @@
                 fw-bold
                 float-end
               "
+              v-else
             >
               Follow
             </button>
@@ -88,7 +91,7 @@
             <div class="row-cols-12 d-flex flex-column gap-2">
               <div class="col">
                 <h5 class="fw-bold m-0">
-                  {{ user.first_name + " " + user.last_name }}
+                  {{ userFullName }}
                 </h5>
                 <h6 class="text-secondary m-0">@{{ user.username }}</h6>
               </div>
@@ -99,7 +102,7 @@
                 <span class="material-icons-outlined fs-6 lh-1 align-middle">
                   calendar_month
                 </span>
-                Joined {{ user.joined_at }}
+                Joined {{ formattedJoinedDate }}
               </p>
               <div class="col fs-7 text-secondary m-0">
                 <span class="fw-bold text-dark align-middle">{{
@@ -130,6 +133,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
 import { getUser } from "@/services/RequestService.js";
 import MainContent from "@/components/MainContent.vue";
 import TopNav from "@/components/TopNav.vue";
@@ -176,6 +180,24 @@ export default {
       } else {
         this.showBtn = false;
       }
+    },
+  },
+  computed: {
+    ...mapState("user", ["username"]),
+    ...mapGetters("date", ["getMonthName"]),
+    userFullName() {
+      if (this.user.last_name)
+        return this.user.first_name + " " + this.user.last_name;
+      else return this.user.first_name;
+    },
+    formattedJoinedDate() {
+      const date = new Date(this.user.joined_at);
+      const monthName = this.getMonthName("long")[date.getMonth()];
+      const fullYear = date.getFullYear();
+      return `${monthName} ${fullYear}`;
+    },
+    isAuthenticatedUser() {
+      return this.username === this.user.username;
     },
   },
   async created() {
