@@ -23,7 +23,7 @@ function requireAuth(req, res, next) {
 
 //check current user
 function checkUser(req, res, next) {
-  const token = req.cookies.todolistJWT;
+  const token = req.cookies.hooterJWT;
 
   if (token) {
     jwt.verify(token, process.env.SECRET_KEY, async (err, verifiedToken) => {

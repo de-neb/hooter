@@ -33,7 +33,6 @@ router.post("/signup", async (req, res) => {
     res.status(201).send({ username: user.username });
   } catch (err) {
     const error = handleError(err);
-    console.log(err);
     res.status(400).send({ error });
   }
 });
@@ -48,11 +47,13 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
       maxAge: maxAge * 1000,
     });
-    res.status(201).send({ user: { id: user._id, username: user.username } });
+    res
+      .status(200)
+      .send({ code: 200, user: { id: user._id, username: user.username } });
   } catch (err) {
     console.log(err);
     const error = handleError(err);
-    res.status(400).send({ error });
+    res.status(401).send({ error });
   }
 });
 
@@ -68,13 +69,13 @@ router.post("/check-user", async (req, res) => {
     const usernameExists = await userModel.exists({ username: userIdentifier });
     const emailExists = await userModel.exists({ email: userIdentifier });
     if (usernameExists || emailExists) {
-      res.status(200).send({ userExists: true });
+      res.status(200).send({ code: 200, userExists: true });
     } else {
       throw new Error("No user or email found");
     }
   } catch (err) {
     const error = handleError(err);
-    res.send({ error });
+    res.status(401).send({ error });
   }
 });
 
