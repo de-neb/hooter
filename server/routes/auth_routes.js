@@ -69,7 +69,7 @@ router.post("/check-user", async (req, res) => {
     const usernameExists = await userModel.exists({ username: userIdentifier });
     const emailExists = await userModel.exists({ email: userIdentifier });
     if (usernameExists || emailExists) {
-      res.status(200).send({ code: 200, userExists: true });
+      res.status(200).send({ code: 200, userExists: true, message: "Us" });
     } else {
       throw new Error("No user or email found");
     }

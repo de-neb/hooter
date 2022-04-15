@@ -101,11 +101,13 @@
 
 <script>
 import { mapActions } from "vuex";
+import HandleResponse from "@/mixins/HandleResponse";
 import ModalForm from "@/components/ModalForm.vue";
 import PasswordInput from "@/components/PasswordInput.vue";
 import BottomError from "@/components/BottomError.vue";
 export default {
   name: "Login",
+  mixins: [HandleResponse],
   components: {
     PasswordInput,
     ModalForm,
@@ -117,8 +119,8 @@ export default {
       password: "",
       isLoading: true,
       toNextStep: false,
-      errorMessage: "",
-      isError: false,
+      // errorMessage: "",
+      // isError: false,
     };
   },
   methods: {
@@ -130,25 +132,26 @@ export default {
       setTimeout(() => (this.isLoading = bool), 600);
     },
     async loginNextStep() {
-      //create function when user is empty or not found in db
-      const response = await this.checkUser({ user: this.user });
-      if (response.error) {
-        this.errorMessage = response.error.username;
-        this.isError = true;
-        setTimeout(() => (this.isError = false), 2000);
-      } else {
-        this.toNextStep = true;
+      try {
+        const response = await this.checkUser({ user: this.user });
+        this.handleSuccess(response, () => (this.toNextStep = true));
+      } catch ({ error }) {
+        this.handleError(error.username);
       }
-      //when user exists in db
     },
-    logInPost() {
+    async logInPost() {
       if (this.user && this.password) {
-        this.logIn({
-          userIdentifier: this.user,
-          password: this.password,
-        }).then(() => {
-          this.$router.push({ path: "/home" });
-        });
+        try {
+          const response = await this.logIn({
+            userIdentifier: this.user,
+            password: this.password,
+          });
+          this.handleSuccess(response, () =>
+            this.$router.push({ path: "/home" })
+          );
+        } catch ({ error }) {
+          this.handleError(error.password);
+        }
       }
     },
   },

@@ -16,26 +16,18 @@
         /><label for="name">Name</label>
       </div>
       <div class="form-floating my-2">
-        <input
-          v-if="userInput === 'email'"
-          type="email"
-          :name="userInput"
-          class="form-control"
-          :placeholder="userInput"
-          autofocus=""
+        <UserInput
+          v-if="userInputType === 'email'"
+          :input-type="userInputType"
+          :is-invalid="!isEmailValid && !!emailModel"
           v-model="emailModel"
-        />
-        <input
+        ></UserInput>
+        <UserInput
           v-else
-          type="text"
-          :name="userInput"
-          class="form-control"
-          :placeholder="userInput"
-          autofocus=""
+          :input-type="userInputType"
+          :is-invalid="!isUsernameValid && !!usernameModel"
           v-model="usernameModel"
-        /><label :for="userInput" class="text-capitalize">{{
-          userInput
-        }}</label>
+        ></UserInput>
       </div>
 
       <!--first step  -->
@@ -180,12 +172,17 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from "vuex";
+import { isEmail, isAlphanumeric } from "validator";
+import { mapState, mapActions } from "vuex";
+import UserVModels from "@/mixins/UserVModels";
+import UserInput from "@/components/UserInput.vue";
 import ModalForm from "@/components/ModalForm.vue";
 import PasswordInput from "@/components/PasswordInput.vue";
 import DateInput from "@/components/DateInput.vue";
 export default {
+  mixins: [UserVModels],
   components: {
+    UserInput,
     ModalForm,
     PasswordInput,
     DateInput,
@@ -200,43 +197,35 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("user", [
-      "SET_NAME",
-      "SET_PASSWORD",
-      "SET_EMAIL",
-      "SET_USERNAME",
-    ]),
     ...mapActions("user", ["signUp"]),
     emptyUserField() {
       this.emailModel = null;
       this.usernameModel = null;
     },
+    assignBooleanInSteps({ first, next, final, optional }) {
+      this.isFirstStep = first || this.isFirstStep;
+      this.isNextStep = next;
+      this.isFinalStep = final || this.isFinalStep;
+      this.isOptionalStep = optional || this.isOptionalStep;
+    },
     showNextStep(bool1, bool2) {
-      this.isNextStep = bool1;
-      this.isFinalStep = bool2;
+      this.assignBooleanInSteps({ next: bool1, final: bool2 });
     },
     showPrevStepToEdit() {
-      this.isFirstStep = true;
-      this.isNextStep = false;
+      this.assignBooleanInSteps({ first: true, next: false });
     },
     handleOptionalStep() {
-      this.isOptionalStep = true;
-      this.isFirstStep = false;
-      this.isFinalStep = false;
+      this.assignBooleanInSteps({ first: false, final: false, optional: true });
     },
     handleSteps() {
       if (this.isFirstStep && !this.isNextStep) {
-        this.isNextStep = true;
+        this.assignBooleanInSteps({ next: true });
       } else if (this.isNextStep && this.isFirstStep) {
-        this.isFinalStep = true;
-        this.isFirstStep = false;
-        this.isNextStep = false;
+        this.assignBooleanInSteps({ first: false, next: false, final: true });
       } else if (this.isFinalStep) {
-        this.isFinalStep = false;
-        this.isNextStep = false;
-        this.isFirstStep = false;
+        this.assignBooleanInSteps({ first: false, next: false, final: false });
       } else if (this.isInputEmail && this.isFinalStep) {
-        this.isOptionalStep = true;
+        this.assignBooleanInSteps({ optional: true });
       }
     },
     finishSignUp() {
@@ -253,59 +242,36 @@ export default {
   },
   computed: {
     ...mapState("date", ["monthShortName", "day", "year"]),
-    ...mapState("user", ["name", "email", "username", "password"]),
-    nameModel: {
-      get() {
-        return this.name;
-      },
-      set(value) {
-        this.SET_NAME(value);
-      },
-    },
-    emailModel: {
-      get() {
-        return this.email;
-      },
-      set(value) {
-        this.SET_EMAIL(value);
-      },
-    },
-    usernameModel: {
-      get() {
-        return this.username;
-      },
-      set(value) {
-        this.SET_USERNAME(value);
-      },
-    },
-    passwordModel: {
-      get() {
-        return this.password;
-      },
-      set(value) {
-        this.SET_PASSWORD(value);
-      },
-    },
-    userInput() {
+    userInputType() {
       return this.isInputEmail ? "email" : "username";
+    },
+    areAllInputsFilled() {
+      if (
+        this.name &&
+        (this.emailModel || this.usernameModel) &&
+        (this.isEmailValid || this.isUsernameValid) &&
+        this.monthShortName &&
+        this.day &&
+        this.year
+      )
+        return true;
+      return false;
     },
     isSetToDisable() {
       if (this.isFinalStep && this.password) {
         return false;
       } else if (this.isFirstStep && !this.isFinalStep) {
-        if (
-          this.name &&
-          (this.email || this.username) &&
-          this.monthShortName &&
-          this.day &&
-          this.year
-        ) {
-          return false;
-        }
-      } else if (this.isOptionalStep && this.username) {
-        return false;
-      }
+        if (this.areAllInputsFilled) return false;
+      } else if (this.isOptionalStep && this.usernameModel) return false;
       return true;
+    },
+    isEmailValid() {
+      if (this.emailModel) return isEmail(this.emailModel);
+      return false;
+    },
+    isUsernameValid() {
+      if (this.usernameModel) return isAlphanumeric(this.usernameModel);
+      return false;
     },
   },
 };
