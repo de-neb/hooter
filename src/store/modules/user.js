@@ -12,7 +12,7 @@ export default {
     name: null,
     email: null,
     password: null,
-    username: null,
+    username: "",
     userObj: null,
   },
   getters: {
@@ -70,6 +70,7 @@ export default {
         const user = await userExists(payload);
         return user;
       } catch (error) {
+        console.log(error);
         return error;
       }
     },

@@ -122,10 +122,7 @@
   @extend .input-icon-style;
   opacity: 0;
   left: 10px;
-}
-.check-circle {
-  @extend .input-icon-style;
-  right: 10px;
+  bottom: 15% !important;
 }
 
 //login media

@@ -6,14 +6,7 @@
     >
       <h4 class="my-3 text-start fw-bold">Create your account</h4>
       <div class="form-floating my-2">
-        <input
-          type="text"
-          name="name"
-          class="form-control"
-          placeholder="Name"
-          autofocus=""
-          v-model="nameModel"
-        /><label for="name">Name</label>
+        <UserInput input-type="Name" v-model="nameModel"></UserInput>
       </div>
       <div class="form-floating my-2">
         <UserInput
@@ -25,7 +18,8 @@
         <UserInput
           v-else
           :input-type="userInputType"
-          :is-invalid="!isUsernameValid && !!usernameModel"
+          :is-invalid="isUsernameInvalid"
+          :is-existing="userExists"
           v-model="usernameModel"
         ></UserInput>
       </div>
@@ -117,8 +111,15 @@
       <h6 class="text-secondary text-start mb-3">
         Your @username is unique you can always change it later.
       </h6>
-      <div class="form-floating my-2">
-        <input
+      <div class="form-floating my-2 postion-relative">
+        <UserInput
+          input-type="username"
+          :is-invalid="isUsernameInvalid"
+          :is-existing="userExists"
+          showAtSymbol="true"
+          v-model="usernameModel"
+        ></UserInput>
+        <!-- <input
           type="text"
           class="form-control username-input"
           name="set-username"
@@ -126,9 +127,13 @@
           v-model="usernameModel"
           minlength="6"
           required
-        /><label for="set-username">Username</label>
-        <span class="material-icons-outlined alt-email"> alternate_email </span>
-        <span class="material-icons check-circle"> check_circle </span>
+        /><label for="set-username">Username</label> -->
+        <div
+          :class="{ 'visually-hidden': !!isUsernameInvalid }"
+          class="material-icons-outlined alt-email"
+        >
+          alternate_email
+        </div>
       </div>
     </div>
 
@@ -162,7 +167,7 @@
         type="button"
         class="btn btn-dark btn-md rounded-pill my-3"
         v-else-if="isOptionalStep || !isInputEmail"
-        :disabled="!password"
+        :disabled="!password || !isUsernameInvalid"
         @click="finishSignUp"
       >
         Finish
@@ -194,10 +199,11 @@ export default {
       isNextStep: false,
       isFinalStep: false,
       isOptionalStep: false,
+      userExists: false,
     };
   },
   methods: {
-    ...mapActions("user", ["signUp"]),
+    ...mapActions("user", ["signUp", "checkUser"]),
     emptyUserField() {
       this.emailModel = null;
       this.usernameModel = null;
@@ -215,6 +221,9 @@ export default {
       this.assignBooleanInSteps({ first: true, next: false });
     },
     handleOptionalStep() {
+      //overwrite true values to false
+      this.isFirstStep = false;
+      this.isFinalStep = false;
       this.assignBooleanInSteps({ first: false, final: false, optional: true });
     },
     handleSteps() {
@@ -235,9 +244,23 @@ export default {
         username: this.username,
         password: this.password,
       };
-      this.signUp(info).then(() => {
-        this.$router.push({ path: "/home" });
-      });
+      this.signUp(info)
+        .then(() => {
+          this.$router.push({ path: "/home" });
+        })
+        .catch((error) => {
+          console.log("sign up error", error);
+        });
+    },
+    checkUserAvailability(isInvalid, user, condition) {
+      if (!isInvalid && user) {
+        if (condition) {
+          this.checkUser({ user: user }).then((res) => {
+            this.userExists = res.userExists;
+            console.log(res.userExists);
+          });
+        } else this.userExists = false;
+      } else this.userExists = false;
     },
   },
   computed: {
@@ -249,7 +272,7 @@ export default {
       if (
         this.name &&
         (this.emailModel || this.usernameModel) &&
-        (this.isEmailValid || this.isUsernameValid) &&
+        (this.isEmailValid || this.isUsernameAlphanumeric) &&
         this.monthShortName &&
         this.day &&
         this.year
@@ -269,9 +292,30 @@ export default {
       if (this.emailModel) return isEmail(this.emailModel);
       return false;
     },
-    isUsernameValid() {
+    isUsernameAlphanumeric() {
       if (this.usernameModel) return isAlphanumeric(this.usernameModel);
       return false;
+    },
+    isUsernameInvalid() {
+      return !this.isUsernameAlphanumeric && !!this.usernameModel;
+    },
+  },
+  watch: {
+    usernameModel(username) {
+      if (username) {
+        const minCharLength = 6;
+        const isGreaterThanMinLength = this.username.length > minCharLength;
+        this.checkUserAvailability(
+          this.isUsernameInvalid,
+          this.username,
+          isGreaterThanMinLength
+        );
+      }
+    },
+    email(email) {
+      const regEx = /@[a-zA-Z\d]+.[a-zAz]+$/;
+      const containsFormat = regEx.test(email);
+      this.checkUserAvailability(this.isEmailValid, this.email, containsFormat);
     },
   },
 };

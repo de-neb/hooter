@@ -726,7 +726,7 @@ select {
   opacity: 1;
 }
 
-.input-icon-style, .alt-email, .check-circle {
+.input-icon-style, .alt-email {
   position: absolute;
   bottom: 11px;
   color: #b4846c;
@@ -736,10 +736,7 @@ select {
 .alt-email {
   opacity: 0;
   left: 10px;
-}
-
-.check-circle {
-  right: 10px;
+  bottom: 15% !important;
 }
 
 @media (max-width: 769px) {

@@ -136,6 +136,7 @@ export default {
         const response = await this.checkUser({ user: this.user });
         this.handleSuccess(response, () => (this.toNextStep = true));
       } catch ({ error }) {
+        console.log(error);
         this.handleError(error.username);
       }
     },
