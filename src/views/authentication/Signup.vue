@@ -13,6 +13,7 @@
           v-if="userInputType === 'email'"
           :input-type="userInputType"
           :is-invalid="!isEmailValid && !!emailModel"
+          :at-min-length="true"
           v-model="emailModel"
         ></UserInput>
         <UserInput
@@ -20,6 +21,7 @@
           :input-type="userInputType"
           :is-invalid="isUsernameInvalid"
           :is-existing="userExists"
+          :at-min-length="usernameAtGreaterLength"
           v-model="usernameModel"
         ></UserInput>
       </div>
@@ -99,7 +101,10 @@
       <h6 class="text-secondary text-start mb-3">
         Make sure it’s 8 characters or more.
       </h6>
-      <PasswordInput @emit-password="(val) => (passwordModel = val)" />
+      <PasswordInput
+        v-model="passwordModel"
+        :at-min-length="passwordAtMinLength"
+      />
     </div>
 
     <!-- alternative step set username -->
@@ -118,18 +123,13 @@
           :is-existing="userExists"
           showAtSymbol="true"
           v-model="usernameModel"
+          :at-min-length="usernameAtGreaterLength"
         ></UserInput>
-        <!-- <input
-          type="text"
-          class="form-control username-input"
-          name="set-username"
-          placeholder="Username"
-          v-model="usernameModel"
-          minlength="6"
-          required
-        /><label for="set-username">Username</label> -->
         <div
-          :class="{ 'visually-hidden': !!isUsernameInvalid }"
+          :class="{
+            'visually-hidden':
+              userExists || isUsernameInvalid || !usernameAtGreaterLength,
+          }"
           class="material-icons-outlined alt-email"
         >
           alternate_email
@@ -157,7 +157,7 @@
         type="button"
         class="btn btn-dark btn-md rounded-pill my-3"
         v-else-if="isFinalStep && isInputEmail"
-        :disabled="!password"
+        :disabled="!isPasswordValid"
         @click="handleOptionalStep"
       >
         Next
@@ -167,7 +167,12 @@
         type="button"
         class="btn btn-dark btn-md rounded-pill my-3"
         v-else-if="isOptionalStep || !isInputEmail"
-        :disabled="!password || !isUsernameInvalid"
+        :disabled="
+          !isPasswordValid ||
+          userExists ||
+          isUsernameInvalid ||
+          !usernameAtGreaterLength
+        "
         @click="finishSignUp"
       >
         Finish
@@ -257,7 +262,6 @@ export default {
         if (condition) {
           this.checkUser({ user: user }).then((res) => {
             this.userExists = res.userExists;
-            console.log(res.userExists);
           });
         } else this.userExists = false;
       } else this.userExists = false;
@@ -272,7 +276,7 @@ export default {
       if (
         this.name &&
         (this.emailModel || this.usernameModel) &&
-        (this.isEmailValid || this.isUsernameAlphanumeric) &&
+        (this.isEmailValid || this.noErrorUsername) &&
         this.monthShortName &&
         this.day &&
         this.year
@@ -299,16 +303,31 @@ export default {
     isUsernameInvalid() {
       return !this.isUsernameAlphanumeric && !!this.usernameModel;
     },
+    noErrorUsername() {
+      return (
+        !this.userExists &&
+        this.usernameAtGreaterLength &&
+        !this.isUsernameInvalid
+      );
+    },
+    usernameAtGreaterLength() {
+      const minCharLength = 6;
+      return this.username && this.username.length >= minCharLength;
+    },
+    passwordAtMinLength() {
+      return this.password && this.password.length >= 6;
+    },
+    isPasswordValid() {
+      return this.passwordAtMinLength && this.password;
+    },
   },
   watch: {
     usernameModel(username) {
       if (username) {
-        const minCharLength = 6;
-        const isGreaterThanMinLength = this.username.length > minCharLength;
         this.checkUserAvailability(
           this.isUsernameInvalid,
           this.username,
-          isGreaterThanMinLength
+          this.usernameAtGreaterLength
         );
       }
     },

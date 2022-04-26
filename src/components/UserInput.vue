@@ -4,7 +4,7 @@
     :name="inputType"
     class="form-control"
     :class="{
-      'is-invalid': isInvalid || isExisting,
+      'is-invalid': invalid,
       'username-input': showAtSymbol,
     }"
     :placeholder="inputType"
@@ -14,12 +14,23 @@
     required
   />
   <label :for="inputType" class="text-capitalize">{{ inputType }}</label>
-  <div v-if="!isExisting" class="invalid-feedback text-start sub-text">
-    Please enter a valid {{ inputType }}
-  </div>
-  <div v-if="isExisting" class="invalid-feedback text-start sub-text">
-    {{ capitalizedInput }} already exists.
-  </div>
+  <template v-if="!isANameInput">
+    <div v-if="isExisting" class="invalid-feedback text-start sub-text">
+      {{ capitalizedInput }} already exists.
+    </div>
+    <div
+      v-if="!isExisting && !isInvalid && isUsernameInput"
+      class="invalid-feedback text-start sub-text"
+    >
+      Username minimum length is 6 characters
+    </div>
+    <div
+      v-if="isInvalid && !isExisting && !atMinLength"
+      class="invalid-feedback text-start sub-text"
+    >
+      Please enter a valid {{ inputType }}
+    </div>
+  </template>
 </template>
 
 <script>
@@ -30,6 +41,7 @@ export default {
     modelValue: String,
     isExisting: Boolean,
     showAtSymbol: Boolean,
+    atMinLength: Boolean,
   },
   computed: {
     type() {
@@ -39,6 +51,18 @@ export default {
     capitalizedInput() {
       const input = this.inputType;
       return input[0].toUpperCase() + input.slice(1);
+    },
+    isANameInput() {
+      return this.inputType === "Name";
+    },
+    isUsernameInput() {
+      return this.inputType === "username";
+    },
+    invalid() {
+      return (
+        (this.isInvalid || this.isExisting || !this.atMinLength) &&
+        !this.isANameInput
+      );
     },
   },
 };
