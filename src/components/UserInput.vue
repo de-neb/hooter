@@ -4,7 +4,7 @@
     :name="inputType"
     class="form-control"
     :class="{
-      'is-invalid': invalid,
+      'is-invalid': isInvalid,
       'username-input': showAtSymbol,
     }"
     :placeholder="inputType"
@@ -57,12 +57,6 @@ export default {
     },
     isUsernameInput() {
       return this.inputType === "username";
-    },
-    invalid() {
-      return (
-        (this.isInvalid || this.isExisting || !this.atMinLength) &&
-        !this.isANameInput
-      );
     },
   },
 };

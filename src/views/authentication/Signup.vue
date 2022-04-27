@@ -12,14 +12,14 @@
         <UserInput
           v-if="userInputType === 'email'"
           :input-type="userInputType"
-          :is-invalid="!isEmailValid && !!emailModel"
-          :at-min-length="true"
+          :is-invalid="!noErrorEmail && !!emailModel"
+          :is-existing="userExists"
           v-model="emailModel"
         ></UserInput>
         <UserInput
           v-else
           :input-type="userInputType"
-          :is-invalid="isUsernameInvalid"
+          :is-invalid="!noErrorUsername && !!usernameModel"
           :is-existing="userExists"
           :at-min-length="usernameAtGreaterLength"
           v-model="usernameModel"
@@ -276,7 +276,7 @@ export default {
       if (
         this.name &&
         (this.emailModel || this.usernameModel) &&
-        (this.isEmailValid || this.noErrorUsername) &&
+        (this.noErrorEmail || this.noErrorUsername) &&
         this.monthShortName &&
         this.day &&
         this.year
@@ -310,6 +310,9 @@ export default {
         !this.isUsernameInvalid
       );
     },
+    noErrorEmail() {
+      return !this.userExists && this.isEmailValid;
+    },
     usernameAtGreaterLength() {
       const minCharLength = 6;
       return this.username && this.username.length >= minCharLength;
@@ -334,7 +337,11 @@ export default {
     email(email) {
       const regEx = /@[a-zA-Z\d]+.[a-zAz]+$/;
       const containsFormat = regEx.test(email);
-      this.checkUserAvailability(this.isEmailValid, this.email, containsFormat);
+      this.checkUserAvailability(
+        !this.isEmailValid,
+        this.email,
+        containsFormat
+      );
     },
   },
 };

@@ -70,7 +70,7 @@
         <label for="userCopy">Username or Email</label>
       </div>
 
-      <PasswordInput @emit-password="(val) => (password = val)" />
+      <PasswordInput v-model="password" :at-min-length="passwordAtMinLength" />
 
       <a href="#" class="open-sans text-teak underline-hover text-start ps-2"
         >Forgot password?</a
@@ -119,8 +119,6 @@ export default {
       password: "",
       isLoading: true,
       toNextStep: false,
-      // errorMessage: "",
-      // isError: false,
     };
   },
   methods: {
@@ -159,6 +157,9 @@ export default {
   computed: {
     isDisabled() {
       return this.user == "" && this.password == "";
+    },
+    passwordAtMinLength() {
+      return this.password && this.password.length >= 6;
     },
   },
   mounted() {
