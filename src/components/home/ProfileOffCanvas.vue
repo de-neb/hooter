@@ -18,10 +18,13 @@
     <div class="offcanvas-body pb-5 px-0 pt-0">
       <div class="container p-2">
         <router-link :to="'/user/' + userObj.username">
-          <div class="profile-icon-md mb-1">
-            <h3 class="uname-first-letter text-light text-capitalize">
+          <div
+            class="profile-icon-md mb-1"
+            :style="{ 'background-color': '#' + userObj.avatar.img_bg }"
+          >
+            <h4 class="uname-first-letter text-light text-capitalize">
               {{ userObj.first_name[0] }}
-            </h3>
+            </h4>
           </div>
         </router-link>
       </div>

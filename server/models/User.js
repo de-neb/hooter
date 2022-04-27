@@ -3,7 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const { hootSchema } = require("./Hoot");
 
-const avatarSchema = new mongoose.Schema({ any: {} });
+const avatarSchema = new mongoose.Schema({ img_url: String, img_bg: String });
 
 const userSchema = new mongoose.Schema(
   {

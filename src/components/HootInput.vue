@@ -1,8 +1,13 @@
 <template>
   <div class="row justify-content-between m-0 px-0">
     <div class="col-2 pe-2 ps-0">
-      <div class="profile-icon-lg mb-1">
-        <h3 class="uname-first-letter text-light">P</h3>
+      <div
+        class="profile-icon-lg mb-1"
+        :style="{ 'background-color': '#' + imgBg }"
+      >
+        <h3 class="uname-first-letter text-light">
+          {{ firstName[0].toUpperCase() }}
+        </h3>
       </div>
       <div class="vertical-line" v-if="isMultipleHoot"></div>
     </div>
@@ -253,6 +258,12 @@ export default {
       else
         return ["insert_photo", "gif_box", "poll", "schedule", "location_on"];
     },
+    imgBg() {
+      return this.$store.state.user.userObj.avatar.img_bg;
+    },
+    firstName() {
+      return this.$store.state.user.userObj.first_name;
+    },
   },
   watch: {
     hootText(newVal) {
@@ -260,7 +271,6 @@ export default {
       this.handleHeightAdjust("textarea-focused");
     },
   },
-
   directives: {
     focus: {
       mounted: function (el) {

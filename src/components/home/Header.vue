@@ -2,7 +2,10 @@
   <header class="home-header">
     <nav class="row h-100 justify-content-between m-0 px-3 py-0">
       <div class="col-2 p-0 d-flex align-items-center position-relative">
-        <div class="profile-icon-sm">
+        <div
+          class="profile-icon-sm"
+          :style="{ 'background-color': '#' + imgBg }"
+        >
           <a
             data-bs-toggle="offcanvas"
             href="#profile-offcanvas"
@@ -37,6 +40,7 @@
 export default {
   props: {
     firstName: String,
+    imgBg: String,
   },
 };
 </script>

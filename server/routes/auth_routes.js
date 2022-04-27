@@ -5,6 +5,9 @@ const userModel = require("../models/User");
 const handleError = require("../helper/handleError");
 const router = express.Router();
 
+//user profile-bg color
+const generateColor = () => Math.floor(Math.random() * 16777215).toString(16);
+
 //create user
 ///token
 const maxAge = 15 * 60;
@@ -19,12 +22,14 @@ router.post("/signup", async (req, res) => {
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await userModel.create({
+    const user = new userModel({
       first_name: name,
       email: email,
       username: username,
       password: hashedPassword,
+      avatar: { img_bg: generateColor() },
     });
+    user.save();
     const token = createToken(user._id);
     res.cookie("hooterJWT", token, {
       httpOnly: true,
@@ -33,6 +38,7 @@ router.post("/signup", async (req, res) => {
     res.status(201).send({ username: user.username });
   } catch (err) {
     const error = handleError(err);
+    console.log(error);
     res.status(400).send({ error });
   }
 });

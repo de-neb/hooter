@@ -1,7 +1,10 @@
 <template>
   <MainContent v-if="userObj">
     <template #home-header>
-      <Header :first-name="userObj.first_name" />
+      <Header
+        :first-name="userObj.first_name"
+        :img-bg="userObj.avatar.img_bg"
+      />
     </template>
     <template #main>
       <router-view></router-view>
