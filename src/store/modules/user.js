@@ -70,7 +70,6 @@ export default {
         const user = await userExists(payload);
         return user;
       } catch (error) {
-        console.log(error);
         return error;
       }
     },

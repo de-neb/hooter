@@ -13,7 +13,7 @@
     @input="$emit('update:modelValue', $event.target.value)"
     required
   />
-  <label :for="inputType" class="text-capitalize">{{ inputType }}</label>
+  <label :for="inputType" class="text-capitalize">{{ label }}</label>
   <template v-if="!isANameInput">
     <div v-if="isExisting" class="invalid-feedback text-start sub-text">
       {{ capitalizedInput }} already exists.
@@ -42,6 +42,7 @@ export default {
     isExisting: Boolean,
     showAtSymbol: Boolean,
     atMinLength: Boolean,
+    label: String,
   },
   computed: {
     type() {

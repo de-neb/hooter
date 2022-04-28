@@ -80,7 +80,12 @@ router.post("/check-user", async (req, res) => {
       throw new Error("No user or email found");
     }
   } catch (err) {
-    res.send({ code: 400, userExists: false });
+    const error = handleError(err);
+    res.status(400).send({
+      code: 400,
+      userExists: false,
+      error: error.username || error.email,
+    });
   }
 });
 

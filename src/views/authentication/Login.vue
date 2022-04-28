@@ -19,15 +19,12 @@
           <span class="horizontal"></span>
         </div>
         <div class="form-floating">
-          <input
-            type="text"
-            name="user"
-            class="form-control"
-            placeholder="Username or email"
-            autofocus=""
+          <UserInput
+            label="Email or Username"
+            input-type="user"
+            :is-existing="userExists"
             v-model="user"
-          />
-          <label for="user">Username or Email</label>
+          ></UserInput>
         </div>
         <button
           type="button"
@@ -101,6 +98,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import UserInput from "@/components/UserInput.vue";
 import HandleResponse from "@/mixins/HandleResponse";
 import ModalForm from "@/components/ModalForm.vue";
 import PasswordInput from "@/components/PasswordInput.vue";
@@ -112,6 +110,7 @@ export default {
     PasswordInput,
     ModalForm,
     BottomError,
+    UserInput,
   },
   data() {
     return {
@@ -119,6 +118,7 @@ export default {
       password: "",
       isLoading: true,
       toNextStep: false,
+      userExists: null,
     };
   },
   methods: {
@@ -131,11 +131,11 @@ export default {
     },
     async loginNextStep() {
       try {
-        const response = await this.checkUser({ user: this.user });
-        this.handleSuccess(response, () => (this.toNextStep = true));
+        const res = await this.checkUser({ user: this.user });
+        this.userExists = res.userExists;
+        this.handleSuccess(res, () => (this.toNextStep = true));
       } catch ({ error }) {
-        console.log(error);
-        this.handleError(error.username);
+        this.handleError(error);
       }
     },
     async logInPost() {

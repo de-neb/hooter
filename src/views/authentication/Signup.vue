@@ -6,11 +6,16 @@
     >
       <h4 class="my-3 text-start fw-bold">Create your account</h4>
       <div class="form-floating my-2">
-        <UserInput input-type="Name" v-model="nameModel"></UserInput>
+        <UserInput
+          input-type="Name"
+          label="Name"
+          v-model="nameModel"
+        ></UserInput>
       </div>
       <div class="form-floating my-2">
         <UserInput
           v-if="userInputType === 'email'"
+          label="Email"
           :input-type="userInputType"
           :is-invalid="!noErrorEmail && !!emailModel"
           :is-existing="userExists"
@@ -18,6 +23,7 @@
         ></UserInput>
         <UserInput
           v-else
+          label="Username"
           :input-type="userInputType"
           :is-invalid="!noErrorUsername && !!usernameModel"
           :is-existing="userExists"
