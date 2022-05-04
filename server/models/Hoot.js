@@ -15,7 +15,7 @@ const hootSchema = new mongoose.Schema(
     likes: Number,
     comments: [commentSchema],
   },
-  { timestamps: { createdAt: "created_at", currentTime: "time_created" } }
+  { timestamps: { createdAt: "created_at", currentTime: () => "time_created" } }
 );
 
 module.exports = { hootSchema };

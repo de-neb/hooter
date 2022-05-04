@@ -73,4 +73,7 @@ userSchema.static("login", async function (userIdentifier, password) {
   throw Error("No user or email found");
 });
 
-module.exports = mongoose.model("user", userSchema, "Users");
+module.exports = {
+  userModel: mongoose.model("user", userSchema, "Users"),
+  userSchema,
+};

@@ -1,5 +1,5 @@
 const express = require("express");
-const userModel = require("../models/User");
+const { userModel } = require("../models/User");
 const router = express.Router();
 
 //all users
@@ -24,13 +24,16 @@ router.patch("/:uid/hoot/:hootId", async (req, res) => {
   const uid = req.params.uid;
   const hootId = req.params.hootId;
   const action = req.query.action;
+  const { otherData } = req.body;
 
   userModel.findById(uid, "hoots", { new: true }, (err, doc) => {
     if (err) {
+      console.log(err.message);
       res.send(err.message);
     } else {
       const hoots = doc.hoots;
       const foundHoot = hoots.id(hootId);
+
       switch (action) {
         case "like_hoot":
           foundHoot.likes++;
@@ -41,10 +44,22 @@ router.patch("/:uid/hoot/:hootId", async (req, res) => {
         case "rehoot":
           foundHoot.rehoot++;
           break;
+        case "add_comment":
+          foundHoot.comments.push(otherData);
+          break;
+        case "delete_comment":
+          foundHoot.comments.id(otherData._id).remove();
+          break;
+        case "get_comments":
+          break;
       }
       doc.save();
-      const { rehoot, likes } = foundHoot;
-      res.status(200).send({ hoot_status: { rehoot, likes } });
+      if (!action.includes("comment")) {
+        const { rehoot, likes } = foundHoot;
+        res.status(200).send({ hoot_status: { rehoot, likes } });
+      } else {
+        res.status(200).send(foundHoot.comments);
+      }
     }
   });
 });
