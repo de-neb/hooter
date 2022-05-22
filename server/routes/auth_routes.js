@@ -53,9 +53,7 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
       maxAge: maxAge * 1000,
     });
-    res
-      .status(200)
-      .send({ code: 200, user: { id: user._id, username: user.username } });
+    res.status(200).send({ code: 200, user });
   } catch (err) {
     console.log(err);
     const error = handleError(err);
