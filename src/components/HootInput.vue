@@ -116,6 +116,7 @@
           </div>
           <button
             v-if="isStatusReply"
+            @click="replyToHoot"
             class="
               btn btn-secondary
               rounded-pill
@@ -209,6 +210,10 @@ export default {
     },
     emitTextAreaValue(e) {
       this.$emit("update:hootText", e.target.value);
+    },
+    replyToHoot() {
+      console.log("working");
+      this.$emit("post-reply-hoot", this.hootText);
     },
   },
   computed: {

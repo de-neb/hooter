@@ -52,6 +52,9 @@ export default {
       try {
         const response = await loginUser(payload);
         commit("SET_USERNAME", response.user.username);
+        console.log("committed?");
+        console.log("login response", response);
+        commit("SET_USER_FULL_INFO", response.user);
         return response;
       } catch (error) {
         return error;

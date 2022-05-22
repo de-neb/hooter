@@ -101,6 +101,7 @@
         <HootInput
           v-bind="hootInputProps"
           @textarea-focused="handleTextareaFocus"
+          @post-reply-hoot="handleReplyHoot"
         />
       </div>
       <div class="row m-0 px-0 py-3">
@@ -117,6 +118,8 @@
 </template>
 
 <script>
+import { updateHootStats } from "@/services/RequestService.js";
+import { mapState } from "vuex";
 import Hoot from "@/components/Hoot.vue";
 import HootActions from "@/components/HootActions.vue";
 import HootInput from "@/components/HootInput.vue";
@@ -161,8 +164,27 @@ export default {
       this.showError = true;
       setTimeout(() => (this.showError = false), 2000);
     },
+    async handleReplyHoot(replyHootText) {
+      const replyHootData = {
+        text: replyHootText,
+        user: {
+          username: this.userObj.username,
+          first_name: this.userObj.first_name,
+          avatar: this.userObj.avatar,
+          _id: this.userObj._id,
+        },
+      };
+      const res = await updateHootStats(
+        this.user._id,
+        this.hoot._id,
+        "add_comment",
+        replyHootData
+      );
+      console.log("response", res);
+    },
   },
   computed: {
+    ...mapState("user", ["userObj"]),
     hoot() {
       const result = this.user.hoots.find(
         (hoot) => hoot._id === this.$route.params.hootId
@@ -184,7 +206,7 @@ export default {
     },
     hootInputProps() {
       return {
-        isStatusReply: true,
+        "is-status-reply": true,
       };
     },
   },
