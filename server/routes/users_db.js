@@ -64,6 +64,23 @@ router.patch("/:uid/hoot/:hootId", async (req, res) => {
   });
 });
 
+//get hoot comments
+router.get("/:uid/hoot/:hootId/comments", (req, res) => {
+  const uid = req.params.uid;
+  const hootId = req.params.hootId;
+
+  userModel.findById(uid, "hoots", { new: true }, (err, doc) => {
+    if (err) {
+      console.log(err.message);
+      res.send(err.message);
+    } else {
+      const hoots = doc.hoots;
+      const foundHoot = hoots.id(hootId);
+      res.status(200).send(foundHoot.comments);
+    }
+  });
+});
+
 //user
 router.get("/user/:username", (req, res) => {
   const username = req.params.username;

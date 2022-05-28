@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { updateHootStats } from "@/services/RequestService.js";
+import { updateHootStats, getHootComments } from "@/services/RequestService.js";
 import { mapState } from "vuex";
 import Hoot from "@/components/Hoot.vue";
 import HootActions from "@/components/HootActions.vue";
@@ -209,6 +209,11 @@ export default {
         "is-status-reply": true,
       };
     },
+  },
+  mounted() {
+    getHootComments(this.user._id, this.hoot._id)
+      .then((res) => console.log("hoot comments", res))
+      .catch((err) => console.log("err", err));
   },
 };
 </script>

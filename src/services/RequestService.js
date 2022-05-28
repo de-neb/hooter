@@ -12,10 +12,6 @@ const auth = axios.create({
   baseURL: "/api/auth",
 });
 
-// const dburl = "/api/hooter/users_db";
-// const trendurl = "/api/hooter/trends";
-// const auth = "/api/auth";
-
 //all users
 export async function getHomeData(page) {
   const res = await db.get(`?page=${page}`);
@@ -25,9 +21,17 @@ export async function getHomeData(page) {
 
 //hoot status
 export async function updateHootStats(uid, hootId, actionName, otherData) {
+  //uid of the user where 'comment' is added
   const res = await db.patch(`/${uid}/hoot/${hootId}?action=${actionName}`, {
     otherData,
   });
+  const data = await res.data;
+  return data;
+}
+
+export async function getHootComments(uid, hootId) {
+  //uid of the user where 'comment' is added
+  const res = await db.get(`/${uid}/hoot/${hootId}/comments`);
   const data = await res.data;
   return data;
 }
