@@ -81,7 +81,7 @@ router.get("/:uid/hoot/:hootId/comments", (req, res) => {
   });
 });
 
-//user
+//user by username
 router.get("/user/:username", (req, res) => {
   const username = req.params.username;
 
@@ -100,6 +100,18 @@ router.get("/user/:username", (req, res) => {
       }
     }
   );
+});
+
+router.get("/user", (req, res) => {
+  const id = req.query.id;
+
+  userModel.findById(id, (err, user) => {
+    if (err) {
+      res.send({ error: err });
+    } else {
+      res.send({ user });
+    }
+  });
 });
 
 //delete user

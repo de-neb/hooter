@@ -138,6 +138,7 @@ export default {
     return {
       isFocused: false,
       showError: false,
+      comments: [],
     };
   },
   methods: {
@@ -164,6 +165,14 @@ export default {
       this.showError = true;
       setTimeout(() => (this.showError = false), 2000);
     },
+    async getComments() {
+      try {
+        const res = await getHootComments(this.user._id, this.hoot._id);
+        this.comments = res.reverse();
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
     async handleReplyHoot(replyHootText) {
       const replyHootData = {
         text: replyHootText,
@@ -181,6 +190,7 @@ export default {
         replyHootData
       );
       console.log("response", res);
+      this.getComments();
     },
   },
   computed: {
@@ -190,9 +200,6 @@ export default {
         (hoot) => hoot._id === this.$route.params.hootId
       );
       return result;
-    },
-    comments() {
-      return this.hoot.comments;
     },
     hootStatus() {
       return {
@@ -211,9 +218,7 @@ export default {
     },
   },
   mounted() {
-    getHootComments(this.user._id, this.hoot._id)
-      .then((res) => console.log("hoot comments", res))
-      .catch((err) => console.log("err", err));
+    this.getComments();
   },
 };
 </script>
