@@ -16,8 +16,15 @@ export default {
     userObj: null,
   },
   getters: {
-    isAuthenticated(state) {
-      return !!state.username;
+    isAuthenticated() {
+      const uidCookie = decodeURIComponent(document.cookie)
+        .substr(6)
+        .replace(/"/g, "");
+      if (uidCookie) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   mutations: {

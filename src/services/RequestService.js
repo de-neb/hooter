@@ -36,9 +36,16 @@ export async function getHootComments(uid, hootId) {
   return data;
 }
 
-//user
+//user by username
 export async function getUser(username) {
   const res = await db.get(`/user/${username}`);
+  const user = await res.data;
+  return user;
+}
+
+//user by uid
+export async function getUserById(uid) {
+  const res = await db.get(`/user?id=${uid}`);
   const user = await res.data;
   return user;
 }

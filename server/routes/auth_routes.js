@@ -53,7 +53,9 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
       maxAge: maxAge * 1000,
     });
-    res.cookie("hooter_user_id", user._id);
+    res.cookie("uid", user._id, {
+      maxAge: maxAge * 1000,
+    });
     res.status(200).send({ code: 200, user });
   } catch (err) {
     console.log(err);
