@@ -125,11 +125,12 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = store.getters["user/isAuthenticated"];
+router.beforeEach(async (to, from, next) => {
+  const hasCookieUid = await store.dispatch("user/checkCookieUid");
+  const isAuthenticated = store.state.user.isAuthenticated;
   const checkMeta = (prop) => to.matched.some((record) => record.meta[prop]);
 
-  if (isAuthenticated) {
+  if (isAuthenticated && hasCookieUid) {
     if (checkMeta("requiresAuth")) next();
     else if (checkMeta("guest")) next({ path: "/home" });
     else next();

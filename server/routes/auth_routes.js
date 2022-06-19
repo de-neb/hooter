@@ -66,6 +66,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/logout", (req, res) => {
   res.cookie("hooterJWT", "", { maxAge: 1 });
+  res.cookie("uid", "", { maxAge: 1 });
   res.status(200).end();
 });
 

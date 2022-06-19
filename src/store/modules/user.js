@@ -14,18 +14,19 @@ export default {
     password: null,
     username: "",
     userObj: null,
+    isAuthenticated: false,
   },
   getters: {
-    isAuthenticated() {
-      const uidCookie = decodeURIComponent(document.cookie)
-        .substr(6)
-        .replace(/"/g, "");
-      if (uidCookie) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    // isAuthenticated() {
+    //   const uidCookie = decodeURIComponent(document.cookie)
+    //     .substr(6)
+    //     .replace(/"/g, "");
+    //   if (uidCookie) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // },
   },
   mutations: {
     SET_NAME(state, payload) {
@@ -43,6 +44,9 @@ export default {
     SET_USER_FULL_INFO(state, payload) {
       state.userObj = payload;
     },
+    SET_IS_AUTHENTICATED(state, payload) {
+      state.isAuthenticated = payload;
+    },
   },
   actions: {
     async signUp({ commit }, payload) {
@@ -59,17 +63,17 @@ export default {
       try {
         const response = await loginUser(payload);
         commit("SET_USERNAME", response.user.username);
-        console.log("committed?");
-        console.log("login response", response);
+        commit("SET_IS_AUTHENTICATED", true);
         commit("SET_USER_FULL_INFO", response.user);
         return response;
       } catch (error) {
         return error;
       }
     },
-    async logOut() {
+    async logOut({ commit }) {
       try {
         const res = await logoutUser();
+        commit("SET_IS_AUTHENTICATED", false);
         return res;
       } catch (error) {
         console.log("dispatch error", error);
@@ -92,6 +96,14 @@ export default {
       } catch (error) {
         console.log("error");
       }
+    },
+    checkCookieUid({ state }) {
+      if (document.cookie.includes("uid")) {
+        const uidCookie = decodeURIComponent(document.cookie)
+          .substr(6)
+          .replace(/"/g, "");
+        return uidCookie === state.userObj._id;
+      } else return false;
     },
   },
 };

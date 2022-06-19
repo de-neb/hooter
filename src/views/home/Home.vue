@@ -37,7 +37,7 @@ export default {
       },
     },
   },
-  async created() {
+  async mounted() {
     this.userObjModel = await this.getUser(this.username);
   },
 };

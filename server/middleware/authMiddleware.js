@@ -39,9 +39,7 @@ function checkUser(req, res, next) {
       }
     });
   } else {
-    res.cookie("uid", "", {
-      maxAge: maxAge * 1000,
-    });
+    res.cookie("uid", "", { maxAge: 1 });
     next();
   }
 }
