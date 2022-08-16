@@ -34,7 +34,7 @@
             "
           >
             <h6 class="text-dark m-0 fw-bold">
-              {{ `${user.first_name} ${user.last_name}` }}
+              {{ `${user.first_name} ${user.last_name ? user.last_name : ""}` }}
             </h6>
             <h6 class="text-secondary m-0">@{{ user.username }}</h6>
             <div
@@ -169,6 +169,7 @@ export default {
       try {
         const res = await getHootComments(this.user._id, this.hoot._id);
         this.comments = res.reverse();
+        console.log("comments", this.comments);
       } catch (error) {
         console.log("error", error);
       }

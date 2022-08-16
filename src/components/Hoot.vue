@@ -16,9 +16,11 @@
                 :src="avatar.img_url"
                 :alt="username + '-dp'"
                 class="img-fluid"
-                v-if="avatar"
+                v-if="avatar.img_url"
               />
-              <h6 class="uname-first-letter text-light" v-else>P</h6>
+              <h3 class="uname-first-letter text-light" v-else>
+                {{ firstName[0].toUpperCase() }}
+              </h3>
             </router-link>
           </div>
         </div>
@@ -35,7 +37,7 @@
         >
           <div class="col">
             <h6 class="text-dark m-0 fw-bold">
-              {{ `${firstName} ${lastName}` }}
+              {{ `${firstName} ${lastName ? lastName : ""}` }}
             </h6>
           </div>
           <div class="col">

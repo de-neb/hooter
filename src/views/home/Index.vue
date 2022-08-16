@@ -66,7 +66,7 @@ export default {
     getNextUsers() {
       window.onscroll = async () => {
         const bottomOfWindow =
-          document.documentElement.scrollTop ===
+          parseInt(document.documentElement.scrollTop) ===
           document.documentElement.scrollHeight -
             document.documentElement.offsetHeight;
         if (bottomOfWindow && this.pageCounter <= 20) {
