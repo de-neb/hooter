@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password minimum length is 6 characters"],
     },
     avatar: avatarSchema,
-    hoots: [hootSchema],
+    // hoots: [hootSchema],
     birthdate: Date,
     followers: {
       type: Number,
@@ -76,4 +76,5 @@ userSchema.static("login", async function (userIdentifier, password) {
 module.exports = {
   userModel: mongoose.model("user", userSchema, "Users"),
   userSchema,
+  avatarSchema,
 };

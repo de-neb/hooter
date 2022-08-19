@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const userSchemaAlt = new mongoose.Schema({
+const commenterSchema = new mongoose.Schema({
   username: String,
   first_name: String,
   last_name: String,
@@ -8,10 +8,15 @@ const userSchemaAlt = new mongoose.Schema({
     img_bg: String,
   },
 });
+const ObjectId = mongoose.Schema.ObjectId;
 
 const commentSchema = new mongoose.Schema({
-  text: String,
-  user: userSchemaAlt,
+  comment: String,
+  post_id: ObjectId,
+  commenter: commenterSchema,
 });
 
-module.exports = { commentSchema };
+module.exports = {
+  commentModel: mongoose.model("comment", commentSchema, "Comments"),
+  commentSchema,
+};

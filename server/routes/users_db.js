@@ -1,25 +1,58 @@
 const express = require("express");
 const { userModel } = require("../models/User");
+const { postModel } = require("../models/Posts");
+const { commentModel } = require("../models/Comment");
+const { compileTemplate } = require("@vue/compiler-sfc");
 const router = express.Router();
-
-//all users
+const mongoose = require("mongoose");
+//home feed
 router.get("/", (req, res) => {
   const page = parseInt(req.query.page);
-  const query = {
-    skip: 10 * page,
-    limit: 10,
-  };
+  const toSkip = 10 * page;
 
-  userModel.find({}, {}, query, (err, users) => {
-    if (err) {
-      res.send(err.message);
-    } else {
-      res.status(200).send(users);
-    }
-  });
+  postModel
+    .aggregate()
+    .skip(toSkip)
+    .sample(10)
+    .exec(async (err, posts) => {
+      if (err) {
+        res.send(err.message);
+      } else {
+        const postsCopy = JSON.parse(JSON.stringify(posts));
+        for (let post of postsCopy) {
+          const [authorInfo] = await userModel
+            .find({
+              username: post.author.username,
+            })
+            .select("first_name last_name -_id");
+          const comments = await commentModel.find({ post_id: post._id });
+          post.author.first_name = authorInfo.first_name;
+          post.author.last_name = authorInfo.last_name;
+          post.total_comments = comments.length;
+        }
+        res.status(200).send(postsCopy);
+      }
+    });
 });
 
 //hoot status
+router.get("/hoot/:hootId", (req, res) => {
+  const id = req.params.hootId;
+
+  postModel
+    .find({ _id: id })
+    .lean()
+    .exec(async (err, [post]) => {
+      if (err) {
+        res.send(err.message);
+      } else {
+        const comments = await commentModel.find({ post_id: post._id });
+        post.total_comments = comments.length;
+        res.send(post);
+      }
+    });
+});
+
 router.patch("/:uid/hoot/:hootId", async (req, res) => {
   const uid = req.params.uid;
   const hootId = req.params.hootId;
@@ -65,18 +98,14 @@ router.patch("/:uid/hoot/:hootId", async (req, res) => {
 });
 
 //get hoot comments
-router.get("/:uid/hoot/:hootId/comments", (req, res) => {
-  const uid = req.params.uid;
-  const hootId = req.params.hootId;
-
-  userModel.findById(uid, "hoots", { new: true }, (err, doc) => {
+router.get("/hoot/:hootId/comments", (req, res) => {
+  const id = req.params.hootId;
+  commentModel.find({ post_id: id }, (err, comment) => {
     if (err) {
       console.log(err.message);
       res.send(err.message);
     } else {
-      const hoots = doc.hoots;
-      const foundHoot = hoots.id(hootId);
-      res.status(200).send(foundHoot.comments);
+      res.status(200).send(comment);
     }
   });
 });
