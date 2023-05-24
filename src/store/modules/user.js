@@ -16,18 +16,7 @@ export default {
     userObj: null,
     isAuthenticated: false,
   },
-  getters: {
-    // isAuthenticated() {
-    //   const uidCookie = decodeURIComponent(document.cookie)
-    //     .substr(6)
-    //     .replace(/"/g, "");
-    //   if (uidCookie) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // },
-  },
+  getters: {},
   mutations: {
     SET_NAME(state, payload) {
       state.name = payload;

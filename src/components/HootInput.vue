@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-content-between m-0 px-0">
+  <div class="row justify-content-between m-0 px-0" ref="hoot-input">
     <div class="col-2 pe-2 ps-0">
       <div
         class="profile-icon-lg mb-1"
@@ -117,6 +117,7 @@
           <button
             v-if="isStatusReply"
             @click="replyToHoot"
+            type="button"
             class="
               btn btn-secondary
               rounded-pill
@@ -127,6 +128,7 @@
               text-nowrap
               ms-auto
             "
+            :disabled="!hootText.length"
           >
             Reply
           </button>
@@ -212,8 +214,9 @@ export default {
       this.$emit("update:hootText", e.target.value);
     },
     replyToHoot() {
-      console.log("working");
+      this.$refs["hoot-input"].classList.value = "minimize-input";
       this.$emit("post-reply-hoot", this.hootText);
+      console.log("class list", this.$refs["hoot-input"].classList.value);
     },
   },
   computed: {

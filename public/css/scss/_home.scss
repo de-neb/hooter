@@ -213,6 +213,11 @@
   transition: all 0.2s ease-in-out;
 }
 
+.minimize-input {
+  height: 60px;
+  transition: height 0.2s ease-out;
+}
+
 .low-opacity {
   opacity: 0.5;
 }

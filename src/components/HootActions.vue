@@ -133,11 +133,7 @@ export default {
       }
     },
     async updateHootLikes(action) {
-      const { hoot_status } = await updateHootStats(
-        this.uid,
-        this.hootId,
-        action
-      );
+      const { hoot_status } = await updateHootStats(this.hootId, action);
       this.hootStatus = hoot_status;
     },
     playCounterAnimation(callback) {

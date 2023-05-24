@@ -71,7 +71,7 @@
           </div>
           <div class="col-12 media-max-size mt-2" v-if="hoot.has_media">
             <img
-              :src="`https://picsum.photos/${hoot.media[0].width}/${hoot.media[0].height}`"
+              :src="`https://picsum.photos/${hoot.media.width}/${hoot.media.length}`"
               class="img-fluid"
               :alt="user.username + '-media'"
             />
@@ -81,7 +81,7 @@
         <!-- hoot content end -->
         <div class="row m-0 px-0 py-3 text-start">
           <h6 class="text-secondary m-0 p-0">
-            {{ hoot.time_created }} · {{ hoot.created_at }}
+            {{ postTimeStamp }}
           </h6>
         </div>
         <HootActions v-bind="hootStatus" />
@@ -107,9 +107,10 @@
       <div class="row m-0 px-0 py-3">
         <Hoot
           v-for="comment in comments"
-          :key="comment.user._id"
-          v-bind="hootCommentProps(comment._id, comment.text, comment.user)"
+          :key="comment._id"
+          v-bind="hootCommentProps(comment)"
           @comment-clicked="cantNavigate"
+          @comment-deleted="getComments"
         />
       </div>
     </div>
@@ -118,7 +119,12 @@
 </template>
 
 <script>
-import { updateHootStats, getHootComments } from "@/services/RequestService.js";
+import dateFormat from "dateformat";
+import {
+  updateHootStats,
+  getHootComments,
+  getStatus,
+} from "@/services/RequestService.js";
 import { mapState } from "vuex";
 import Hoot from "@/components/Hoot.vue";
 import HootActions from "@/components/HootActions.vue";
@@ -139,25 +145,22 @@ export default {
       isFocused: false,
       showError: false,
       comments: [],
+      hoot: {},
     };
   },
   methods: {
     handleTextareaFocus() {
       this.isFocused = true;
     },
-    hootCommentProps(
-      uid,
-      text,
-      { _id, avatar, first_name, last_name, username }
-    ) {
+    hootCommentProps(comment) {
       return {
-        uid,
-        avatar,
-        firstName: first_name,
-        lastName: last_name,
-        hootId: _id,
-        hootText: text,
-        username: username,
+        commentId: comment._id,
+        avatar: comment.commenter.avatar,
+        firstName: comment.commenter.first_name,
+        lastName: comment.commenter.last_name,
+        hootId: comment.post_id,
+        hootText: comment.comment,
+        username: comment.commenter.username,
         isComment: true,
       };
     },
@@ -165,48 +168,51 @@ export default {
       this.showError = true;
       setTimeout(() => (this.showError = false), 2000);
     },
+    async loadStatus() {
+      try {
+        const post = await getStatus(this.hootId);
+        this.hoot = post;
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
     async getComments() {
       try {
-        const res = await getHootComments(this.user._id, this.hoot._id);
-        this.comments = res.reverse();
+        const res = await getHootComments(this.hootId);
+        this.comments = res;
         console.log("comments", this.comments);
       } catch (error) {
         console.log("error", error);
       }
     },
     async handleReplyHoot(replyHootText) {
-      const replyHootData = {
-        text: replyHootText,
-        user: {
+      const comment = {
+        comment: replyHootText,
+        post_id: this.hootId,
+        created_at: new Date(),
+        commenter: {
           username: this.userObj.username,
           first_name: this.userObj.first_name,
+          last_name: this.userObj.last_name,
           avatar: this.userObj.avatar,
           _id: this.userObj._id,
         },
       };
-      const res = await updateHootStats(
-        this.user._id,
-        this.hoot._id,
-        "add_comment",
-        replyHootData
-      );
+      const res = await updateHootStats(this.hootId, "add_comment", comment);
       console.log("response", res);
       this.getComments();
     },
   },
   computed: {
     ...mapState("user", ["userObj"]),
-    hoot() {
-      const result = this.user.hoots.find(
-        (hoot) => hoot._id === this.$route.params.hootId
-      );
-      return result;
+    hootId() {
+      return this.$route.params.hootId;
     },
     hootStatus() {
       return {
         uid: this.user._id,
         hootId: this.hoot._id,
-        comments: this.hoot.comments.length,
+        comments: this.hoot.total_comments,
         rehoots: this.hoot.rehoot,
         likes: this.hoot.likes,
         inStatus: true,
@@ -217,8 +223,12 @@ export default {
         "is-status-reply": true,
       };
     },
+    postTimeStamp() {
+      return dateFormat(this.hoot.created_at, "h:MM TT · mmm d, yyyy");
+    },
   },
-  mounted() {
+  created() {
+    this.loadStatus();
     this.getComments();
   },
 };

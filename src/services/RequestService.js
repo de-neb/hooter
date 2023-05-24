@@ -20,18 +20,22 @@ export async function getHomeData(page) {
 }
 
 //hoot status
-export async function updateHootStats(uid, hootId, actionName, otherData) {
-  //uid of the user where 'comment' is added
-  const res = await db.patch(`/${uid}/hoot/${hootId}?action=${actionName}`, {
+export async function getStatus(id) {
+  const res = await db.get(`/hoot/${id}`);
+  const data = await res.data;
+  return data;
+}
+
+export async function updateHootStats(id, actionName, otherData) {
+  const res = await db.patch(`/hoot/${id}?action=${actionName}`, {
     otherData,
   });
   const data = await res.data;
   return data;
 }
 
-export async function getHootComments(uid, hootId) {
-  //uid of the user where 'comment' is added
-  const res = await db.get(`/${uid}/hoot/${hootId}/comments`);
+export async function getHootComments(id) {
+  const res = await db.get(`/hoot/${id}/comments`);
   const data = await res.data;
   return data;
 }

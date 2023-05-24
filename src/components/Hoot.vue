@@ -5,7 +5,11 @@
         <div class="click-wrapper" @click.stop>
           <div
             class="profile-icon-lg"
-            :style="{ 'background-color': avatar.img_bg }"
+            :style="{
+              'background-color': avatar.img_bg.includes('#')
+                ? avatar.img_bg
+                : '#' + avatar.img_bg,
+            }"
           >
             <router-link
               :to="{ name: 'Hoots', params: { username: username } }"
@@ -43,10 +47,7 @@
           <div class="col">
             <h6 class="text-secondary m-0">@{{ username }}</h6>
           </div>
-          <div
-            class="col ms-auto position-relative"
-            v-if="$route.path === '/user/' + username"
-          >
+          <div class="col ms-auto position-relative" v-if="hootBelongsToUser">
             <button
               class="
                 border-0
@@ -75,7 +76,7 @@
           </div>
           <div class="col-12 media-max-size mt-2" v-if="hasMedia">
             <img
-              :src="`https://picsum.photos/${media[0].width}/${media[0].height}`"
+              :src="`https://picsum.photos/${media.width}/${media.length}`"
               class="img-fluid"
               :alt="username + '-media'"
             />
@@ -95,16 +96,19 @@
       id="offcanvasBottom"
       aria-labelledby="offcanvasBottomLabel"
     >
-      <div class="offcanvas-body small">
+      <div class="offcanvas-body small px-2 pt-2">
         <h6
-          class="offcanvas-title text-start"
-          :class="{ 'text-danger': i === 0 }"
-          v-for="(option, i) in options"
-          :key="option + '-' + i"
+          class="offcanvas-title text-start text-danger"
+          @click="handleDelete"
         >
-          <span class="material-icons-outlined align-middle fs-5 px-2">
-            {{ option.icon }} </span
-          >{{ option.name }}
+          <span class="material-icons-outlined align-middle fs-5 px-3 py-2">
+            delete_outline </span
+          >Delete
+        </h6>
+        <h6 class="offcanvas-title text-start">
+          <span class="material-icons-outlined align-middle fs-5 px-3 py-2">
+            push_pin </span
+          >Pin to your profile
         </h6>
       </div>
       <div class="offcanvas-footer p-3">
@@ -123,6 +127,7 @@
 </template>
 
 <script>
+import { updateHootStats } from "@/services/RequestService.js";
 import HootActions from "../components/HootActions.vue";
 export default {
   components: {
@@ -140,19 +145,12 @@ export default {
     hootText: String,
     rehoots: Number,
     likes: Number,
-    comments: [Array, Number],
+    totalComments: Number,
     isComment: Boolean,
+    commentId: String,
   },
   data() {
-    return {
-      options: [
-        {
-          name: "Delete",
-          icon: "delete_outline ",
-        },
-        { name: "Pin to your profile", icon: "push_pin" },
-      ],
-    };
+    return {};
   },
   methods: {
     removeDoubleBackdrop() {
@@ -164,18 +162,34 @@ export default {
         this.$router.push(`/user/${this.username}/status/${this.hootId}`);
       this.$emit("comment-clicked");
     },
+    async handleDelete() {
+      console.log("delete comment id", this.commentId);
+      const comment = {
+        comment_id: this.commentId,
+      };
+      const res = await updateHootStats(this.hootId, "delete_comment", comment);
+      console.log("response", res);
+      this.$emit("comment-deleted");
+    },
   },
   computed: {
+    loggedInUser() {
+      return this.$store.state.user.username;
+    },
     actionProps() {
       return {
         uid: this.uid,
         hootId: this.hootId,
-        comments: Array.isArray(this.comments)
-          ? this.comments.length
-          : this.comments,
+        comments: this.total_comments,
         rehoots: this.rehoots,
         likes: this.likes,
       };
+    },
+    hootBelongsToUser() {
+      return (
+        this.$route.path === "/user/" + this.username ||
+        this.username === this.loggedInUser
+      );
     },
   },
 };

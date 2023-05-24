@@ -5,7 +5,7 @@
         <template #middle-content>
           <h6 class="fw-bold m-0">{{ user.username }}</h6>
           <span class="text-start text-secondary sub-text"
-            >{{ user.hoots.length }} Hoots</span
+            >{{ user.hoots }} Hoots</span
           >
         </template>
         <template #action-button>

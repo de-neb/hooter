@@ -1,16 +1,21 @@
 <template>
   <div class="container border-top border-bottom px-3">
     <Hoot
-      v-for="user in usersDb"
-      :key="user._id"
+      v-for="post in feed"
+      :key="post._id"
       v-bind="
         hootProps(
-          user._id,
-          user.first_name,
-          user.last_name,
-          user.username,
-          user.avatar,
-          randomHoot(user.hoots)
+          post._id,
+          post.author.first_name,
+          post.author.last_name,
+          post.author.username,
+          post.author.avatar,
+          post.has_media,
+          post.media,
+          post.likes,
+          post.rehoot,
+          post.text,
+          post.total_comments
         )
       "
     >
@@ -31,7 +36,7 @@ export default {
   },
   data() {
     return {
-      usersDb: [],
+      feed: [],
       randomIndex: 1,
       isFetchingData: false,
       pageCounter: 0,
@@ -40,27 +45,42 @@ export default {
   methods: {
     async getHomeFeed() {
       this.isFetchingData = true;
-      this.usersDb = await getHomeData(1);
+      this.feed = await getHomeData(1);
+      console.log("data", this.feed);
       this.isFetchingData = false;
     },
     randomHoot(arr) {
-      const index = Math.floor(Math.random() * arr.length);
-      return arr[index];
+      if (arr) {
+        const index = Math.floor(Math.random() * arr.length);
+        return arr[index];
+      }
     },
-    hootProps(uid, fname, lname, username, avatar, hoot) {
+    hootProps(
+      _id,
+      fname,
+      lname,
+      username,
+      avatar,
+      has_media,
+      media,
+      likes,
+      rehoot,
+      text,
+      total_comments
+    ) {
       return {
-        uid,
+        // uid,
         firstName: fname,
         lastName: lname,
         username,
         avatar,
-        hootId: hoot._id,
-        hasMedia: hoot.has_media,
-        media: hoot.media,
-        hootText: hoot.text,
-        rehoots: hoot.rehoot,
-        likes: hoot.likes,
-        comments: hoot.comments,
+        hootId: _id,
+        hasMedia: has_media,
+        media: media,
+        hootText: text,
+        rehoots: rehoot,
+        likes,
+        totalComments: total_comments,
       };
     },
     getNextUsers() {
@@ -73,7 +93,8 @@ export default {
           this.pageCounter++;
           this.isFetchingData = true;
           const data = await getHomeData(this.pageCounter);
-          this.usersDb = this.usersDb.concat(data);
+          console.log("data", data);
+          this.feed = this.feed.concat(data);
           this.isFetchingData = false;
         }
       };
