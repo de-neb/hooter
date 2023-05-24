@@ -10,11 +10,14 @@ const commenterSchema = new mongoose.Schema({
 });
 const ObjectId = mongoose.Schema.ObjectId;
 
-const commentSchema = new mongoose.Schema({
-  comment: String,
-  post_id: ObjectId,
-  commenter: commenterSchema,
-});
+const commentSchema = new mongoose.Schema(
+  {
+    comment: String,
+    post_id: ObjectId,
+    commenter: commenterSchema,
+  },
+  { timestamps: { createdAt: "created_at", currentTime: () => "time_created" } }
+);
 
 module.exports = {
   commentModel: mongoose.model("comment", commentSchema, "Comments"),

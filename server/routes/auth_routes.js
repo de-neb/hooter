@@ -10,7 +10,7 @@ const generateColor = () => Math.floor(Math.random() * 16777215).toString(16);
 
 //create user
 ///token
-const maxAge = 15 * 60;
+const maxAge = 15 * 120;
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_KEY, {
     expiresIn: maxAge,

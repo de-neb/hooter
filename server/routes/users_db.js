@@ -5,6 +5,7 @@ const { commentModel } = require("../models/Comment");
 const { compileTemplate } = require("@vue/compiler-sfc");
 const router = express.Router();
 const mongoose = require("mongoose");
+
 //home feed
 router.get("/", (req, res) => {
   const page = parseInt(req.query.page);
@@ -40,9 +41,9 @@ router.get("/hoot/:hootId", (req, res) => {
   const id = req.params.hootId;
 
   postModel
-    .find({ _id: id })
+    .findById(id)
     .lean()
-    .exec(async (err, [post]) => {
+    .exec(async (err, post) => {
       if (err) {
         res.send(err.message);
       } else {
@@ -53,45 +54,48 @@ router.get("/hoot/:hootId", (req, res) => {
     });
 });
 
-router.patch("/:uid/hoot/:hootId", async (req, res) => {
-  const uid = req.params.uid;
-  const hootId = req.params.hootId;
+router.patch("/hoot/:hootId", async (req, res) => {
+  const id = req.params.hootId;
   const action = req.query.action;
   const { otherData } = req.body;
 
-  userModel.findById(uid, "hoots", { new: true }, (err, doc) => {
+  postModel.findById(id).exec(async (err, post) => {
     if (err) {
       console.log(err.message);
       res.send(err.message);
     } else {
-      const hoots = doc.hoots;
-      const foundHoot = hoots.id(hootId);
-
+      let newComment;
+      let commentRes;
       switch (action) {
         case "like_hoot":
-          foundHoot.likes++;
+          post.likes++;
           break;
         case "unlike_hoot":
-          foundHoot.likes--;
+          post.likes--;
           break;
         case "rehoot":
-          foundHoot.rehoot++;
+          post.rehoot++;
           break;
         case "add_comment":
-          foundHoot.comments.push(otherData);
+          newComment = new commentModel(otherData);
+          newComment.save();
           break;
         case "delete_comment":
-          foundHoot.comments.id(otherData._id).remove();
-          break;
-        case "get_comments":
+          commentRes = await commentModel.deleteOne({
+            _id: otherData.comment_id,
+          });
           break;
       }
-      doc.save();
+      post.save();
       if (!action.includes("comment")) {
-        const { rehoot, likes } = foundHoot;
+        const { rehoot, likes } = post;
         res.status(200).send({ hoot_status: { rehoot, likes } });
       } else {
-        res.status(200).send(foundHoot.comments);
+        if (action.includes("add")) {
+          res.status(200).send(newComment);
+        } else {
+          res.status(200).send(commentRes);
+        }
       }
     }
   });
@@ -100,14 +104,17 @@ router.patch("/:uid/hoot/:hootId", async (req, res) => {
 //get hoot comments
 router.get("/hoot/:hootId/comments", (req, res) => {
   const id = req.params.hootId;
-  commentModel.find({ post_id: id }, (err, comment) => {
-    if (err) {
-      console.log(err.message);
-      res.send(err.message);
-    } else {
-      res.status(200).send(comment);
-    }
-  });
+  commentModel
+    .find({ post_id: id })
+    .sort({ created_at: -1 })
+    .exec((err, comments) => {
+      if (err) {
+        console.log(err.message);
+        res.send(err.message);
+      } else {
+        res.status(200).send(comments);
+      }
+    });
 });
 
 //user by username
