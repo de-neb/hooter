@@ -2,12 +2,18 @@ const express = require("express");
 const { userModel } = require("../models/User");
 const { postModel } = require("../models/Posts");
 const { commentModel } = require("../models/Comment");
-const { compileTemplate } = require("@vue/compiler-sfc");
 const router = express.Router();
-const mongoose = require("mongoose");
+// const flatten = require("flat");
+
+// const supabase = require("../helper/supabaseConn.js");
+// const { createClient } = require("@supabase/supabase-js");
+
+// const supabaseUrl = process.env.SUPABASE_URL;
+// const supabaseKey = process.env.SUPABASE_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
 
 //home feed
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   const page = parseInt(req.query.page);
   const toSkip = 10 * page;
 
