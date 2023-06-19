@@ -83,14 +83,15 @@ export default {
         commit("SET_USER_FULL_INFO", user);
         return user;
       } catch (error) {
-        console.log("error");
+        return error;
       }
     },
     checkCookieUid({ state }) {
       if (document.cookie.includes("uid")) {
         const uidCookie = decodeURIComponent(document.cookie)
           .substr(6)
-          .replace(/"/g, "");
+          .replace(/"/g, "")
+          .split("uid=j:")[1];
         return uidCookie === state.userObj._id;
       } else return false;
     },
